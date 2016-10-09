@@ -1,5 +1,10 @@
 ﻿(function (global) {
 
+    var paths = {
+        // paths serve as alias
+        'npm:': 'node_modules/'
+    };
+
     // map tells the System loader where to look for things
     var map = {
         'app': 'app',
@@ -31,6 +36,7 @@
     });
 
     var config = {
+        paths: paths,
         map: map,
         packages: packages
     }
