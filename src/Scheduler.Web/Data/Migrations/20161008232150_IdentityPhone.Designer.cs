@@ -8,9 +8,10 @@ using Scheduler.Web.Data;
 namespace Scheduler.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161008232150_IdentityPhone")]
+    partial class IdentityPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -149,8 +150,7 @@ namespace Scheduler.Web.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("Phone")
-                        .HasAnnotation("MaxLength", 10);
+                    b.Property<string>("Phone");
 
                     b.Property<string>("PhoneNumber");
 

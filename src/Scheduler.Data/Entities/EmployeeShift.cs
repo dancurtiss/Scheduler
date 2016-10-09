@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +15,9 @@ namespace Scheduler.Data
 
         public int ConfirmationNumber { get; set; }
 
+        [Required]
         public DateTime ShiftStartTime { get; set; }
+        [Required]
         public DateTime ShiftEndTime { get; set; }
 
         public DateTime AdjustedStartTime { get; set; }
