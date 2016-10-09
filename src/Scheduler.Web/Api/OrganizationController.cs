@@ -3,19 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.AspNetCore.Authorization;
+using Scheduler.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
     public class OrganizationController : Controller
     {
+        SchedulerContext _context = null;
+
+        public OrganizationController(SchedulerContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            OrganizationRepository repository = new OrganizationRepository(_context);
+
+
+            return _context.Organizations.Select(o => o.Name).ToList();
         }
 
         // GET api/values/5

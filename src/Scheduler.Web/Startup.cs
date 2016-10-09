@@ -92,7 +92,7 @@ namespace Scheduler.Web
                 if (context.Response.StatusCode == 404
                     && !Path.HasExtension(context.Request.Path.Value))
                 {
-                    context.Request.Path = "/index.html";
+                    context.Request.Path = "/Index";
                     await next();
                 }
             });
