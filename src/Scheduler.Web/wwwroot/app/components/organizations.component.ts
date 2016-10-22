@@ -13,6 +13,7 @@ export class OrganizationsComponent implements OnInit {
 
     organizations: Organization[];
     selectedOrganization: Organization;
+    showAdd: boolean = false;
     
     constructor(
         private organizationService: OrganizationService,
@@ -28,9 +29,28 @@ export class OrganizationsComponent implements OnInit {
         this.getOrganizations();
     }
 
-    addOrganization(name: string, contactName: string, contactPhone: string, message: string): void {
-        this.organizationService.create({ organizationId: 0, name: name, contactName: contactName, contactPhone: contactPhone, message: message}).then((organization) => {
-            //this.organizations = Organizations;
+    onAddOrganization(): void {
+        this.selectedOrganization = { organizationId: 0, name: null, contactName: null, contactPhone: null, message: null};
+    }
+
+    onSaveOrganization(organizationId: number, name: string, contactName: string, contactPhone: string, message: string): void {
+        if (this.selectedOrganization.organizationId) {
+            this.organizationService.update(this.selectedOrganization).then((organization) => {
+                this.selectedOrganization = null;
+                this.getOrganizations();
+            });
+        } else {
+            this.organizationService.create(this.selectedOrganization).then((organization) => {
+                this.selectedOrganization = null;
+                this.getOrganizations();
+            });
+        }
+    }
+
+    onDeleteOrganization(organizationId: number) {
+        this.organizationService.delete(organizationId).then(() => {
+            this.selectedOrganization = null;
+            this.getOrganizations();
         });
     }
 
@@ -38,7 +58,7 @@ export class OrganizationsComponent implements OnInit {
         this.selectedOrganization = organization;
     }
 
-    gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedOrganization.organizationId]);
-    }
+    //gotoDetail(): void {
+    //    this.router.navigate(['/detail', this.selectedOrganization.organizationId]);
+    //}
 }

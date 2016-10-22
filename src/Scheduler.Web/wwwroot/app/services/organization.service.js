@@ -25,17 +25,13 @@ var OrganizationService = (function () {
         })
             .catch(this.handleError);
     };
-    //getHero(id: number): Promise<Hero> {
-    //    return this.getOrganizations()
-    //        .then(heroes => heroes.filter(hero => hero.id === id)[0]);
-    //}
-    //delete(id: number): Promise<void> {
-    //    const url = `${this.heroesUrl}/${id}`;
-    //    return this.http.delete(url, { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => null)
-    //        .catch(this.handleError);
-    //}
+    OrganizationService.prototype.delete = function (id) {
+        var url = this.organizationsUrl + "/" + id;
+        return this.http.delete(url, { headers: this.headers })
+            .toPromise()
+            .then(function () { return null; })
+            .catch(this.handleError);
+    };
     OrganizationService.prototype.create = function (organization) {
         return this.http
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
@@ -43,14 +39,14 @@ var OrganizationService = (function () {
             .then(function (res) { return res.json(); })
             .catch(this.handleError);
     };
-    //update(hero: Hero): Promise<Hero> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
+    OrganizationService.prototype.update = function (organization) {
+        var url = this.organizationsUrl + "/" + organization.organizationId;
+        return this.http
+            .put(url, JSON.stringify(organization), { headers: this.headers })
+            .toPromise()
+            .then(function () { return organization; })
+            .catch(this.handleError);
+    };
     OrganizationService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);

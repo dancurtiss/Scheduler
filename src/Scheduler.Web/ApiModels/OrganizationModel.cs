@@ -32,14 +32,17 @@ namespace Scheduler.Web.ApiModels
 
         public Organization Export()
         {
-            return new Organization
-            {
-                OrganizationId = this.OrganizationId,
-                Name = this.Name,
-                ContactName = this.ContactName,
-                ContactPhone = this.ContactPhone,
-                Message = this.Message
-            };
+            return Export(new Organization());
+        }
+
+        public Organization Export(Organization organization)
+        {
+            organization.Name = this.Name;
+            organization.ContactName = this.ContactName;
+            organization.ContactPhone = this.ContactPhone;
+            organization.Message = this.Message;
+
+            return organization;
         }
 
     }

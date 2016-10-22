@@ -15,6 +15,7 @@ var OrganizationsComponent = (function () {
     function OrganizationsComponent(organizationService, router) {
         this.organizationService = organizationService;
         this.router = router;
+        this.showAdd = false;
     }
     OrganizationsComponent.prototype.getOrganizations = function () {
         var _this = this;
@@ -25,16 +26,33 @@ var OrganizationsComponent = (function () {
     OrganizationsComponent.prototype.ngOnInit = function () {
         this.getOrganizations();
     };
-    OrganizationsComponent.prototype.addOrganization = function (name, contactName, contactPhone, message) {
-        this.organizationService.create({ organizationId: 0, name: name, contactName: contactName, contactPhone: contactPhone, message: message }).then(function (organization) {
-            //this.organizations = Organizations;
+    OrganizationsComponent.prototype.onAddOrganization = function () {
+        this.selectedOrganization = { organizationId: 0, name: null, contactName: null, contactPhone: null, message: null };
+    };
+    OrganizationsComponent.prototype.onSaveOrganization = function (organizationId, name, contactName, contactPhone, message) {
+        var _this = this;
+        if (this.selectedOrganization.organizationId) {
+            this.organizationService.update(this.selectedOrganization).then(function (organization) {
+                _this.selectedOrganization = null;
+                _this.getOrganizations();
+            });
+        }
+        else {
+            this.organizationService.create(this.selectedOrganization).then(function (organization) {
+                _this.selectedOrganization = null;
+                _this.getOrganizations();
+            });
+        }
+    };
+    OrganizationsComponent.prototype.onDeleteOrganization = function (organizationId) {
+        var _this = this;
+        this.organizationService.delete(organizationId).then(function () {
+            _this.selectedOrganization = null;
+            _this.getOrganizations();
         });
     };
     OrganizationsComponent.prototype.onSelect = function (organization) {
         this.selectedOrganization = organization;
-    };
-    OrganizationsComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedOrganization.organizationId]);
     };
     OrganizationsComponent = __decorate([
         core_1.Component({

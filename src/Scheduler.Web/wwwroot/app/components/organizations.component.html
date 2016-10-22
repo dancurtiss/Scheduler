@@ -1,15 +1,5 @@
 ﻿<h2>Organizations</h2>
 
-<div>
-    <label>Name:</label> <input #organizationName />
-    <label>Contact Name:</label> <input #organizationContactName />
-    <label>Contact Phone:</label> <input #organizationContactPhone />
-    <label>Message:</label> <input #organizationMessage />
-
-    <button (click)="addOrganization(organizationName.value, organizationContactName.value, organizationContactPhone.value, organizationMessage.value);">
-        Add Organization
-    </button>
-</div>
 
 <ul class="heroes">
     <li *ngFor="let organization of organizations" (click)="onSelect(organization)"
@@ -18,15 +8,27 @@
         <span class="badge">{{organization.organizationId}}</span>
         <span>{{organization.name}}</span>
         <button class="delete"
-                (click)="delete(organization); $event.stopPropagation()">
+                (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">
             x
         </button>
     </li>
 </ul>
 
+<button (click)="onAddOrganization();">
+    Add
+</button>
+
 <div *ngIf="selectedOrganization">
-    <h2>
-        {{selectedOrganization.name | uppercase}} is my hero
-    </h2>
-    <button (click)="gotoDetail()">View Details</button>
+    <label>Name:</label> <input [(ngModel)]="selectedOrganization.name" />
+    <label>Contact Name:</label> <input [(ngModel)]="selectedOrganization.contactName" />
+    <label>Contact Phone:</label> <input  [(ngModel)]="selectedOrganization.contactPhone" />
+    <label>Message:</label> <input  [(ngModel)]="selectedOrganization.message" />
+
+    <button (click)="onSaveOrganization();">
+        Save
+    </button>
+    <button (click)="selectOrganization = null;">
+        Save
+    </button>
 </div>
+

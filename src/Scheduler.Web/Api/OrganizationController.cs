@@ -26,12 +26,12 @@ namespace Scheduler.Web.Api
             return _context.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// GET api/values/5
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         // POST api/values
         [HttpPost]
@@ -57,14 +57,32 @@ namespace Scheduler.Web.Api
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]OrganizationModel organization)
         {
+            if (organization == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new ObjectResult(ModelState);
+            }
+
+            var organizationEntity = _context.Organizations.Single(o => o.OrganizationId == id);
+            organization.Export(organizationEntity);
+            _context.SaveChanges();
+
+            return new ObjectResult(organization);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            var organizationEntity = _context.Organizations.Single(o => o.OrganizationId == id);
+            _context.Organizations.Remove(organizationEntity);
+            _context.SaveChanges();
         }
     }
 }

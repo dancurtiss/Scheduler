@@ -21,18 +21,13 @@ export class OrganizationService {
             .catch(this.handleError);
     }
 
-    //getHero(id: number): Promise<Hero> {
-    //    return this.getOrganizations()
-    //        .then(heroes => heroes.filter(hero => hero.id === id)[0]);
-    //}
-
-    //delete(id: number): Promise<void> {
-    //    const url = `${this.heroesUrl}/${id}`;
-    //    return this.http.delete(url, { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => null)
-    //        .catch(this.handleError);
-    //}
+    delete(id: number): Promise<void> {
+        const url = `${this.organizationsUrl}/${id}`;
+        return this.http.delete(url, { headers: this.headers })
+            .toPromise()
+            .then(() => null)
+            .catch(this.handleError);
+    }
 
     create(organization: Organization): Promise<Organization> {
         return this.http
@@ -42,14 +37,14 @@ export class OrganizationService {
             .catch(this.handleError);
     }
 
-    //update(hero: Hero): Promise<Hero> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
+    update(organization: Organization): Promise<Organization> {
+        const url = `${this.organizationsUrl}/${organization.organizationId}`;
+        return this.http
+            .put(url, JSON.stringify(organization), { headers: this.headers })
+            .toPromise()
+            .then(() => organization)
+            .catch(this.handleError);
+    }
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
