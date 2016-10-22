@@ -1,0 +1,12 @@
+﻿<h2>Organizations</h2>
+
+<div>
+    <label>Name:</label> <input #organizationName />
+    <label>Contact Name:</label> <input #organizationContactName />
+    <label>Contact Phone:</label> <input #organizationContactPhone />
+    <label>Message:</label> <input #organizationMessage />
+
+    <button (click)="addOrganization(organizationName.value, organizationContactName.value, organizationContactPhone.value, organizationMessage.value);">
+        Add Organization
+    </button>
+</div>

@@ -16,9 +16,11 @@ var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 var app_component_1 = require('./app.component');
 //import { DashboardComponent }   from './dashboard.component';
-var heroes_component_1 = require('./heroes.component');
+var heroes_component_1 = require('./components/heroes.component');
+var organizations_component_1 = require('./components/organizations.component');
 //import { HeroDetailComponent }  from './hero-detail.component';
-var hero_service_1 = require('./hero.service');
+var hero_service_1 = require('./services/hero.service');
+var organization_service_1 = require('./services/organization.service');
 //import { HeroSearchComponent }  from './hero-search.component';
 var AppModule = (function () {
     function AppModule() {
@@ -46,6 +48,10 @@ var AppModule = (function () {
                     {
                         path: 'heroes',
                         component: heroes_component_1.HeroesComponent
+                    },
+                    {
+                        path: 'organizations',
+                        component: organizations_component_1.OrganizationsComponent
                     }
                 ])
             ],
@@ -54,9 +60,11 @@ var AppModule = (function () {
                 //DashboardComponent,
                 //HeroDetailComponent,
                 heroes_component_1.HeroesComponent,
+                organizations_component_1.OrganizationsComponent,
             ],
             providers: [
                 hero_service_1.HeroService,
+                organization_service_1.OrganizationService
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
+using Scheduler.Web.ApiModels;
 
 namespace Scheduler.Web.Api
 {
@@ -20,12 +21,9 @@ namespace Scheduler.Web.Api
 
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<OrganizationModel> Get()
         {
-            OrganizationRepository repository = new OrganizationRepository(_context);
-
-
-            return _context.Organizations.Select(o => o.Name).ToList();
+            return _context.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
         }
 
         // GET api/values/5
@@ -37,8 +35,14 @@ namespace Scheduler.Web.Api
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post(OrganizationModel organization)
         {
+            if (string.IsNullOrEmpty(organization.Name))
+            {
+                throw new InvalidOperationException("Name required.");
+            }
+
+            _context.Organizations.Add(organization.Export());
         }
 
         // PUT api/values/5
