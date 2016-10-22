@@ -1,34 +1,61 @@
-﻿<h2>Organizations</h2>
-
-
-<ul class="heroes">
-    <li *ngFor="let organization of organizations" (click)="onSelect(organization)"
-        [class.selected]="organization === selectedOrganization">
-        <pre>{{organization | json}}</pre>
-        <span class="badge">{{organization.organizationId}}</span>
-        <span>{{organization.name}}</span>
-        <button class="delete"
-                (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">
-            x
+﻿<div class="row">
+    <div class="col-md-6">
+        <h2>Organizations</h2>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-success pull-right" (click)="onAddOrganization();">
+            Add Organization
         </button>
-    </li>
-</ul>
+    </div>
+</div>
 
-<button (click)="onAddOrganization();">
-    Add
-</button>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Contact Name</th>
+                    <th>Contact Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let organization of organizations" (click)="onSelect(organization)" [class.selected]="organization === selectedOrganization">
+                    <th scope="row">{{organization.organizationId}}</th>
+                    <td>{{organization.name}}</td>
+                    <td>{{organization.contactName}}</td>
+                    <td>{{organization.contactPhone}}</td>
+                    <td><button class="btn btn-danger" (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<div *ngIf="selectedOrganization">
-    <label>Name:</label> <input [(ngModel)]="selectedOrganization.name" />
-    <label>Contact Name:</label> <input [(ngModel)]="selectedOrganization.contactName" />
-    <label>Contact Phone:</label> <input  [(ngModel)]="selectedOrganization.contactPhone" />
-    <label>Message:</label> <input  [(ngModel)]="selectedOrganization.message" />
-
-    <button (click)="onSaveOrganization();">
-        Save
-    </button>
-    <button (click)="selectOrganization = null;">
-        Save
-    </button>
+<div class="row" *ngIf="selectedOrganization">
+    <div class="col-md-6">
+        <form name="organizationForm">
+            <div class="form-group">
+                <label for="organizationName">Name</label>
+                <input type="text" class="form-control" id="organizationName" placeholder="" name="name" [(ngModel)]="selectedOrganization.name">
+            </div>
+            <div class="form-group">
+                <label for="contactName">Contact Name</label>
+                <input type="text" class="form-control" id="contactName" placeholder="" name="contactName" [(ngModel)]="selectedOrganization.contactName">
+            </div>
+            <div class="form-group">
+                <label for="contactPhone">Contact Phone</label>
+                <input type="text" class="form-control" id="contactPhone" placeholder="" name="contactPhone" [(ngModel)]="selectedOrganization.contactPhone">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <input type="text" class="form-control" id="message" placeholder="Message to staff" name="message" [(ngModel)]="selectedOrganization.message">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Submit</button>
+            <button class="btn btn-default" (click)="selectOrganization = null;">Cancel</button>
+        </form>
+    </div>
 </div>
 

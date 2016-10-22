@@ -34,9 +34,6 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Scheduler</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
@@ -45,7 +42,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2016 - Scheduler.Web</p>
+            <p>&copy; 2016 - Scheduler</p>
         </footer>
     </div>
 

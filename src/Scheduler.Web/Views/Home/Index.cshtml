@@ -4,7 +4,13 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <my-app>Loading...</my-app>
+    <my-app>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Loading...</h2>
+            </div>
+        </div>
+    </my-app>
 }
 else
 {

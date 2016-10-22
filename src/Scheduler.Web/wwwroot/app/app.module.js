@@ -8,20 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-//import './rxjs-extensions';
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 var app_component_1 = require('./app.component');
-//import { DashboardComponent }   from './dashboard.component';
-var heroes_component_1 = require('./components/heroes.component');
+var dashboard_component_1 = require('./components/dashboard.component');
 var organizations_component_1 = require('./components/organizations.component');
-//import { HeroDetailComponent }  from './hero-detail.component';
 var hero_service_1 = require('./services/hero.service');
 var organization_service_1 = require('./services/organization.service');
-//import { HeroSearchComponent }  from './hero-search.component';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -34,20 +30,12 @@ var AppModule = (function () {
                 router_1.RouterModule.forRoot([
                     {
                         path: '',
-                        redirectTo: '/heroes',
+                        redirectTo: '/dashboard',
                         pathMatch: 'full'
                     },
-                    //{
-                    //    path: 'dashboard',
-                    //    component: DashboardComponent
-                    //},
-                    //{
-                    //    path: 'detail/:id',
-                    //    component: HeroDetailComponent
-                    //},
                     {
-                        path: 'heroes',
-                        component: heroes_component_1.HeroesComponent
+                        path: 'dashboard',
+                        component: dashboard_component_1.DashboardComponent
                     },
                     {
                         path: 'organizations',
@@ -57,9 +45,7 @@ var AppModule = (function () {
             ],
             declarations: [
                 app_component_1.AppComponent,
-                //DashboardComponent,
-                //HeroDetailComponent,
-                heroes_component_1.HeroesComponent,
+                dashboard_component_1.DashboardComponent,
                 organizations_component_1.OrganizationsComponent,
             ],
             providers: [
