@@ -1,6 +1,7 @@
 ﻿using Scheduler.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace Scheduler.Web.ApiModels
         }
 
         public int OrganizationId { get; set; }
+        [Required]
         public string Name { get; set; }
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }

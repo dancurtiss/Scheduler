@@ -18,15 +18,15 @@ var OrganizationsComponent = (function () {
     }
     OrganizationsComponent.prototype.getOrganizations = function () {
         var _this = this;
-        this.organizationService.getOrganizations().then(function (Organizations) {
-            _this.organizations = Organizations;
+        this.organizationService.getOrganizations().then(function (organizations) {
+            _this.organizations = organizations;
         });
     };
     OrganizationsComponent.prototype.ngOnInit = function () {
         this.getOrganizations();
     };
     OrganizationsComponent.prototype.addOrganization = function (name, contactName, contactPhone, message) {
-        this.organizationService.create({ OrganizationId: null, Name: name, ContactName: contactName, ContactPhone: contactPhone, Message: message }).then(function (organization) {
+        this.organizationService.create({ organizationId: 0, name: name, contactName: contactName, contactPhone: contactPhone, message: message }).then(function (organization) {
             //this.organizations = Organizations;
         });
     };
@@ -34,7 +34,7 @@ var OrganizationsComponent = (function () {
         this.selectedOrganization = organization;
     };
     OrganizationsComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedOrganization.OrganizationId]);
+        this.router.navigate(['/detail', this.selectedOrganization.organizationId]);
     };
     OrganizationsComponent = __decorate([
         core_1.Component({

@@ -35,14 +35,24 @@ namespace Scheduler.Web.Api
 
         // POST api/values
         [HttpPost]
-        public void Post(OrganizationModel organization)
+        public IActionResult Post([FromBody]OrganizationModel organization)
         {
-            if (string.IsNullOrEmpty(organization.Name))
+            if (organization == null)
             {
-                throw new InvalidOperationException("Name required.");
+                return BadRequest();
             }
 
-            _context.Organizations.Add(organization.Export());
+            if (!ModelState.IsValid)
+            {
+                return new ObjectResult(ModelState);
+            }
+
+            var organizationEntity = organization.Export();
+
+            _context.Organizations.Add(organizationEntity);
+            _context.SaveChanges();
+
+            return new ObjectResult(organization);
         }
 
         // PUT api/values/5

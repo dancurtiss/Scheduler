@@ -15,7 +15,9 @@ export class OrganizationService {
     getOrganizations(): Promise<Organization[]> {
         return this.http.get(this.organizationsUrl)
             .toPromise()
-            .then(response => response.json().data as Organization[])
+            .then((response) => {
+                return response.json() as Organization[];
+            })
             .catch(this.handleError);
     }
 
@@ -36,7 +38,7 @@ export class OrganizationService {
         return this.http
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
-            .then(res => res.json().data)
+            .then(res => res.json())
             .catch(this.handleError);
     }
 

@@ -1,7 +1,7 @@
 ﻿export class Organization {
-    OrganizationId: number;
-    Name: string;
-    ContactName: string;
-    ContactPhone: string;
-    Message: string;
+    organizationId: number;
+    name: string;
+    contactName: string;
+    contactPhone: string;
+    message: string;
 }

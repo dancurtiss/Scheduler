@@ -19,8 +19,8 @@ export class OrganizationsComponent implements OnInit {
         private router: Router) { }
 
     getOrganizations(): void {
-        this.organizationService.getOrganizations().then((Organizations) => {
-            this.organizations = Organizations;
+        this.organizationService.getOrganizations().then((organizations) => {
+            this.organizations = organizations;
         });
     }
 
@@ -29,7 +29,7 @@ export class OrganizationsComponent implements OnInit {
     }
 
     addOrganization(name: string, contactName: string, contactPhone: string, message: string): void {
-        this.organizationService.create({ OrganizationId: null, Name: name, ContactName: contactName, ContactPhone: contactPhone, Message: message}).then((organization) => {
+        this.organizationService.create({ organizationId: 0, name: name, contactName: contactName, contactPhone: contactPhone, message: message}).then((organization) => {
             //this.organizations = Organizations;
         });
     }
@@ -39,6 +39,6 @@ export class OrganizationsComponent implements OnInit {
     }
 
     gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedOrganization.OrganizationId]);
+        this.router.navigate(['/detail', this.selectedOrganization.organizationId]);
     }
 }

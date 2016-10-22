@@ -20,7 +20,9 @@ var OrganizationService = (function () {
     OrganizationService.prototype.getOrganizations = function () {
         return this.http.get(this.organizationsUrl)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) {
+            return response.json();
+        })
             .catch(this.handleError);
     };
     //getHero(id: number): Promise<Hero> {
@@ -38,7 +40,7 @@ var OrganizationService = (function () {
         return this.http
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
-            .then(function (res) { return res.json().data; })
+            .then(function (res) { return res.json(); })
             .catch(this.handleError);
     };
     //update(hero: Hero): Promise<Hero> {
