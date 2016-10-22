@@ -15,7 +15,7 @@ var HeroService = (function () {
     function HeroService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.heroesUrl = 'app/heroes'; // URL to web api
+        this.heroesUrl = 'api/heroes'; // URL to web api
     }
     HeroService.prototype.getHeroes = function () {
         return this.http.get(this.heroesUrl)

@@ -12,7 +12,7 @@ else
 }
 
 
-@section Scripts {
+@section headScripts {
     @if (User.Identity.IsAuthenticated)
     {
         <script src="~/libs/shim.min.js"></script>
@@ -23,7 +23,9 @@ else
         <script src="~/systemjs.config.js"></script>
         <script>
         System.import('app')
-            .catch(function (err) { console.error(err); });
+            .catch(function (err) {
+                console.error(err);
+            });
         </script>
 
     }

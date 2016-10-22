@@ -6,9 +6,7 @@ gulp.task('default', function () {
 
 gulp.task('restore', function () {
     gulp.src([
-        './node_modules/@angular/**/*.js',
         './node_modules/angular2-in-memory-web-api/*.js',
-        './node_modules/rxjs/**/*.js',
         './node_modules/systemjs/dist/*.js',
         './node_modules/zone.js/dist/*.js',
         './node_modules/core-js/client/*.js',
@@ -16,4 +14,14 @@ gulp.task('restore', function () {
         './node_modules/jquery/dist/*.js',
         './node_modules/bootstrap/dist/**/*.*'
     ]).pipe(gulp.dest('./wwwroot/libs'));
+
+
+    gulp.src([
+    './node_modules/rxjs/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/rxjs'));
+
+    gulp.src([
+    './node_modules/@angular/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/@angular'));
+
 });

@@ -13,12 +13,12 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
-//import { InMemoryDataService }  from './in-memory-data.service';
+var router_1 = require('@angular/router');
 var app_component_1 = require('./app.component');
 //import { DashboardComponent }   from './dashboard.component';
-//import { HeroesComponent }      from './heroes.component';
+var heroes_component_1 = require('./heroes.component');
 //import { HeroDetailComponent }  from './hero-detail.component';
-//import { HeroService }          from './hero.service';
+var hero_service_1 = require('./hero.service');
 //import { HeroSearchComponent }  from './hero-search.component';
 var AppModule = (function () {
     function AppModule() {
@@ -29,11 +29,35 @@ var AppModule = (function () {
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
                 http_1.HttpModule,
+                router_1.RouterModule.forRoot([
+                    {
+                        path: '',
+                        redirectTo: '/heroes',
+                        pathMatch: 'full'
+                    },
+                    //{
+                    //    path: 'dashboard',
+                    //    component: DashboardComponent
+                    //},
+                    //{
+                    //    path: 'detail/:id',
+                    //    component: HeroDetailComponent
+                    //},
+                    {
+                        path: 'heroes',
+                        component: heroes_component_1.HeroesComponent
+                    }
+                ])
             ],
             declarations: [
                 app_component_1.AppComponent,
+                //DashboardComponent,
+                //HeroDetailComponent,
+                heroes_component_1.HeroesComponent,
             ],
-            providers: [],
+            providers: [
+                hero_service_1.HeroService,
+            ],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
