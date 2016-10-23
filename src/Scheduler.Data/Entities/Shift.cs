@@ -17,7 +17,10 @@ namespace Scheduler.Data
         [MaxLength(10)]
         public string EndTime { get; set; }
 
+        [Required]
         public Position Position { get; set; }
+
+        [Required]
         public Schedule Schedule { get; set; }
     }
 }

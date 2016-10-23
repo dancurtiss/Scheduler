@@ -26,6 +26,10 @@ namespace Scheduler.Data
         [MaxLength(10)]
         public string PhoneNumber { get; set; }
 
+        public bool IsActive { get; set; }
+
+        [Required]
         public Organization Organization { get; set; }
+
     }
 }

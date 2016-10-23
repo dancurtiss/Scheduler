@@ -56,7 +56,7 @@
                 <input type="text" class="form-control" id="message" placeholder="Message to staff" name="message" [(ngModel)]="selectedOrganization.message">
             </div>
             <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Submit</button>
-            <button class="btn btn-default" (click)="selectedOrganization = null;">Cancel</button>
+            <button type="reset" class="btn btn-default" (click)="selectedOrganization = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
 </div>

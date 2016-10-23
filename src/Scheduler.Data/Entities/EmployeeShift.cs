@@ -10,9 +10,6 @@ namespace Scheduler.Data
     {
         public int EmployeeShiftId { get; set; }
 
-        public Employee Employee { get; set; }
-        public Shift Shift { get; set; }
-
         public int ConfirmationNumber { get; set; }
 
         [Required]
@@ -23,5 +20,12 @@ namespace Scheduler.Data
         public DateTime AdjustedStartTime { get; set; }
         public DateTime AdjustedEndTime { get; set; }
 
+        public bool Canceled { get; set; }
+        public string CancelReason { get; set; }
+
+        [Required]
+        public Employee Employee { get; set; }
+        [Required]
+        public Shift Shift { get; set; }
     }
 }

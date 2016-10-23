@@ -85,11 +85,11 @@ export class OrganizationDetailComponent implements OnInit {
         });
     }
 
-    onSelect(position: Position): void {
+    onPositionSelect(position: Position): void {
         this.selectedPosition = position;
     }
 
-    gotoDetail(scheduleId: number): void {
+    onScheduleSelect(scheduleId: number): void {
         this.router.navigate(['/schedule', scheduleId]);
     }
 }

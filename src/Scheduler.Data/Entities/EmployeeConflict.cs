@@ -18,6 +18,7 @@ namespace Scheduler.Data
         [MaxLength(100)]
         public string Reason { get; set; }
 
+        [Required]
         public Employee Employee { get; set; }
     }
 }

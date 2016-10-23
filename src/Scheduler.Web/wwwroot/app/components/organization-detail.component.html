@@ -38,7 +38,7 @@
                 <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="addSchedule.name">
             </div>
             <button type="submit" class="btn btn-primary" (click)="onSaveSchedule();">Submit</button>
-            <button class="btn btn-default" (click)="addSchedule = null;">Cancel</button>
+            <button type="reset" class="btn btn-default" (click)="addSchedule = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
 </div>
@@ -77,19 +77,19 @@
     </div>
 </div>
 
-<div class="row" *ngIf="addPosition">
+<div class="row" *ngIf="selectedPosition">
     <div class="col-md-6">
         <form name="addPositionForm">
             <div class="form-group">
                 <label for="positionName">Name</label>
-                <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="addPosition.name">
+                <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name">
             </div>
             <div class="form-group">
                 <label for="positionCategory">Category</label>
-                <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="addPosition.category">
+                <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category">
             </div>
             <button type="submit" class="btn btn-primary" (click)="onSavePosition();">Submit</button>
-            <button class="btn btn-default" (click)="addPosition = null;">Cancel</button>
+            <button type="reset" class="btn btn-default" (click)="selectedPosition = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
 </div>

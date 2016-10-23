@@ -75,10 +75,10 @@ var OrganizationDetailComponent = (function () {
             _this.getPositions();
         });
     };
-    OrganizationDetailComponent.prototype.onSelect = function (position) {
+    OrganizationDetailComponent.prototype.onPositionSelect = function (position) {
         this.selectedPosition = position;
     };
-    OrganizationDetailComponent.prototype.gotoDetail = function (scheduleId) {
+    OrganizationDetailComponent.prototype.onScheduleSelect = function (scheduleId) {
         this.router.navigate(['/schedule', scheduleId]);
     };
     OrganizationDetailComponent = __decorate([
