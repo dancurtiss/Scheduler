@@ -1,0 +1,96 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h2>Schedule Details: {{scheduleName}}</h2>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-success pull-right" (click)="onAddSchedule();">
+            Add Schedule
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let schedule of schedules" (click)="onScheduleSelect(schedule)">
+                    <th scope="row">{{schedule.scheduleId}}</th>
+                    <td>{{schedule.name}}</td>
+                    <td><button class="btn btn-danger" (click)="onDeleteSchedule(schedule.scheduleId); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf="addSchedule">
+    <div class="col-md-6">
+        <form name="addScheduleForm">
+            <div class="form-group">
+                <label for="scheduleName">Name</label>
+                <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="addSchedule.name">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSaveSchedule();">Submit</button>
+            <button type="reset" class="btn btn-default" (click)="addSchedule = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Positions</h2>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-success pull-right" (click)="onAddPosition();">
+            Add Position
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let position of positions" (click)="onPositionSelect(position)">
+                    <th scope="row">{{position.positionId}}</th>
+                    <td>{{position.name}}</td>
+                    <td>{{position.category}}</td>
+                    <td><button class="btn btn-danger" (click)="onDeletePosition(position.positionId); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf="selectedPosition">
+    <div class="col-md-6">
+        <form name="addPositionForm">
+            <div class="form-group">
+                <label for="positionName">Name</label>
+                <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name">
+            </div>
+            <div class="form-group">
+                <label for="positionCategory">Category</label>
+                <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSavePosition();">Submit</button>
+            <button type="reset" class="btn btn-default" (click)="selectedPosition = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+</div>
+

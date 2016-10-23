@@ -1,14 +1,20 @@
 ﻿export class Schedule {
     scheduleId: number;
     name: string;
+}
+
+export class ScheduleDetails {
+    scheduleId: number;
+    name: string;
     shifts: Shift[];
+    positions: Position[];
 }
 
 export class Shift {
     shiftId: number;
     startTime: string;
     endTime: string;
-    positions: Position[];
+    positionId: number;
 }
 
 export class Position {

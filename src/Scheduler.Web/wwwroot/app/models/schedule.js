@@ -5,6 +5,12 @@ var Schedule = (function () {
     return Schedule;
 }());
 exports.Schedule = Schedule;
+var ScheduleDetails = (function () {
+    function ScheduleDetails() {
+    }
+    return ScheduleDetails;
+}());
+exports.ScheduleDetails = ScheduleDetails;
 var Shift = (function () {
     function Shift() {
     }
