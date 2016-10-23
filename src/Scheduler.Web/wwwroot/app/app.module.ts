@@ -6,8 +6,10 @@ import { RouterModule }  from '@angular/router';
 import { AppComponent }         from './app.component';
 import { DashboardComponent }   from './components/dashboard.component';
 import { OrganizationsComponent }      from './components/organizations.component';
-import { HeroService }          from './services/hero.service';
+import { OrganizationDetailComponent }      from './components/organization-detail.component';
 import { OrganizationService }          from './services/organization.service';
+import { ScheduleService }          from './services/schedule.service';
+import { PositionService }          from './services/position.service';
 
 @NgModule({
     imports: [
@@ -27,6 +29,10 @@ import { OrganizationService }          from './services/organization.service';
         {
             path: 'organizations',
             component: OrganizationsComponent
+        },
+        {
+            path: 'organization/detail/:id',
+            component: OrganizationDetailComponent
         }
     ])
 ],
@@ -34,10 +40,12 @@ import { OrganizationService }          from './services/organization.service';
         AppComponent,
         DashboardComponent,
         OrganizationsComponent,
+        OrganizationDetailComponent
     ],
     providers: [
-        HeroService,
-        OrganizationService
+        OrganizationService,
+        ScheduleService,
+        PositionService
     ],
     bootstrap: [AppComponent]
 })

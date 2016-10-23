@@ -58,7 +58,6 @@ namespace Scheduler.Web
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
-            services.a
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

@@ -19,14 +19,16 @@
                     <th>Contact Name</th>
                     <th>Contact Phone</th>
                     <th>Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let organization of organizations" (click)="onSelect(organization)" [class.selected]="organization === selectedOrganization">
+                <tr *ngFor="let organization of organizations" (click)="goToDetail(organization.organizationId)" [class.selected]="organization === selectedOrganization">
                     <th scope="row">{{organization.organizationId}}</th>
                     <td>{{organization.name}}</td>
                     <td>{{organization.contactName}}</td>
                     <td>{{organization.contactPhone}}</td>
+                    <td><button class="btn btn-default" (click)="onSelect(organization); $event.stopPropagation()">Edit</button></td>
                     <td><button class="btn btn-danger" (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">Delete</button></td>
                 </tr>
             </tbody>
@@ -54,7 +56,7 @@
                 <input type="text" class="form-control" id="message" placeholder="Message to staff" name="message" [(ngModel)]="selectedOrganization.message">
             </div>
             <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Submit</button>
-            <button class="btn btn-default" (click)="selectOrganization = null;">Cancel</button>
+            <button class="btn btn-default" (click)="selectedOrganization = null;">Cancel</button>
         </form>
     </div>
 </div>

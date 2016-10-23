@@ -16,8 +16,10 @@ var router_1 = require('@angular/router');
 var app_component_1 = require('./app.component');
 var dashboard_component_1 = require('./components/dashboard.component');
 var organizations_component_1 = require('./components/organizations.component');
-var hero_service_1 = require('./services/hero.service');
+var organization_detail_component_1 = require('./components/organization-detail.component');
 var organization_service_1 = require('./services/organization.service');
+var schedule_service_1 = require('./services/schedule.service');
+var position_service_1 = require('./services/position.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -40,6 +42,10 @@ var AppModule = (function () {
                     {
                         path: 'organizations',
                         component: organizations_component_1.OrganizationsComponent
+                    },
+                    {
+                        path: 'organization/detail/:id',
+                        component: organization_detail_component_1.OrganizationDetailComponent
                     }
                 ])
             ],
@@ -47,10 +53,12 @@ var AppModule = (function () {
                 app_component_1.AppComponent,
                 dashboard_component_1.DashboardComponent,
                 organizations_component_1.OrganizationsComponent,
+                organization_detail_component_1.OrganizationDetailComponent
             ],
             providers: [
-                hero_service_1.HeroService,
-                organization_service_1.OrganizationService
+                organization_service_1.OrganizationService,
+                schedule_service_1.ScheduleService,
+                position_service_1.PositionService
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

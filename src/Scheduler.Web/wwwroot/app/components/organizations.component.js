@@ -54,6 +54,9 @@ var OrganizationsComponent = (function () {
     OrganizationsComponent.prototype.onSelect = function (organization) {
         this.selectedOrganization = organization;
     };
+    OrganizationsComponent.prototype.goToDetail = function (id) {
+        this.router.navigate(['/organization/detail', id]);
+    };
     OrganizationsComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
