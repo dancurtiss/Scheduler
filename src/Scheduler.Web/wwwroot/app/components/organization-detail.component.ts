@@ -50,7 +50,7 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onAddSchedule(): void {
-        this.addSchedule = { scheduleId: 0, name: null, shifts: [] };
+        this.addSchedule = { scheduleId: 0, name: null };
     }
 
     onAddPosition(): void {
@@ -89,7 +89,7 @@ export class OrganizationDetailComponent implements OnInit {
         this.selectedPosition = position;
     }
 
-    onScheduleSelect(scheduleId: number): void {
-        this.router.navigate(['/schedule', scheduleId]);
+    onScheduleSelect(schedule: Schedule): void {
+        this.router.navigate(['/schedule/detail', schedule.scheduleId]);
     }
 }

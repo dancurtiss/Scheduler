@@ -41,7 +41,7 @@ var OrganizationDetailComponent = (function () {
         this.getPositions();
     };
     OrganizationDetailComponent.prototype.onAddSchedule = function () {
-        this.addSchedule = { scheduleId: 0, name: null, shifts: [] };
+        this.addSchedule = { scheduleId: 0, name: null };
     };
     OrganizationDetailComponent.prototype.onAddPosition = function () {
         this.selectedPosition = { positionId: 0, name: null, category: null };
@@ -78,8 +78,8 @@ var OrganizationDetailComponent = (function () {
     OrganizationDetailComponent.prototype.onPositionSelect = function (position) {
         this.selectedPosition = position;
     };
-    OrganizationDetailComponent.prototype.onScheduleSelect = function (scheduleId) {
-        this.router.navigate(['/schedule', scheduleId]);
+    OrganizationDetailComponent.prototype.onScheduleSelect = function (schedule) {
+        this.router.navigate(['/schedule/detail', schedule.scheduleId]);
     };
     OrganizationDetailComponent = __decorate([
         core_1.Component({
