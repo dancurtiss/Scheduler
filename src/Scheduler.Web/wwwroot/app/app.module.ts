@@ -12,6 +12,7 @@ import { OrganizationsComponent }       from './components/organizations.compone
 import { OrganizationDetailComponent }  from './components/organization-detail.component';
 import { ScheduleDetailComponent }  from './components/schedule-detail.component';
 import { EmployeesComponent }       from './components/employees.component';
+import { EmployeeScheduleComponent }       from './components/employee-schedule.component';
 
 
 import { OrganizationService }      from './services/organization.service';
@@ -19,6 +20,7 @@ import { ScheduleService }          from './services/schedule.service';
 import { PositionService }          from './services/position.service';
 import { ShiftService }             from './services/shift.service';
 import { EmployeeService }             from './services/employee.service';
+import { EmployeeScheduleService }             from './services/employee-schedule.service';
 
 @NgModule({
     imports: [
@@ -50,6 +52,10 @@ import { EmployeeService }             from './services/employee.service';
         {
             path: 'schedule/detail/:id',
             component: ScheduleDetailComponent
+        },
+        {
+            path: 'employeeschedule/detail/:id/:date',
+            component: EmployeeScheduleComponent
         }
     ])
 ],
@@ -59,14 +65,16 @@ import { EmployeeService }             from './services/employee.service';
         OrganizationsComponent,
         OrganizationDetailComponent,
         ScheduleDetailComponent,
-        EmployeesComponent
+        EmployeesComponent,
+        EmployeeScheduleComponent
     ],
     providers: [
         OrganizationService,
         ScheduleService,
         PositionService,
         ShiftService,
-        EmployeeService
+        EmployeeService,
+        EmployeeScheduleService
     ],
     bootstrap: [AppComponent]
 })

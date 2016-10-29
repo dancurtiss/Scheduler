@@ -17,7 +17,7 @@ export class ShiftService {
         return this.http.get(url)
             .toPromise()
             .then((response) => {
-                return response.json() as Shift[];
+                return response.json() as ScheduleDetails;
             })
             .catch(this.handleError);
     }

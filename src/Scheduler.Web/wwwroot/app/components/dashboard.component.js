@@ -10,11 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
+var moment = require('moment');
 var DashboardComponent = (function () {
     function DashboardComponent(router) {
         this.router = router;
     }
     DashboardComponent.prototype.ngOnInit = function () {
+        this.nextTenDays = [];
+        for (var i = 0; i < 10; i++) {
+            var day = new Date();
+            day.setDate(day.getDate() + i);
+            this.nextTenDays.push(day);
+        }
+    };
+    DashboardComponent.prototype.goToEmployeeScheduling = function (id, date) {
+        var dateString = moment(date).format('MMDDYYYY');
+        this.router.navigate(['employeeschedule/detail/', id, dateString]);
     };
     DashboardComponent = __decorate([
         core_1.Component({

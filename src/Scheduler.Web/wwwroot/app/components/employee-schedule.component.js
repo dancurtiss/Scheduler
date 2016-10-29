@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var moment = require('moment');
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
  */
@@ -23,11 +24,11 @@ var EmployeeScheduleComponent = (function () {
     }
     EmployeeScheduleComponent.prototype.getSchedule = function () {
         var _this = this;
-        var dateString = this.scheduleDate.toDateString();
+        var dateString = moment(this.scheduleDate).format('MMDDYYYY');
         this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then(function (model) {
-            _this.availableEmployees = model.availableEmployees;
-            _this.availableShifts = model.availableShifts;
-            _this.employeShifts = model.employeeShifts;
+            _this.availableEmployees = model.employees;
+            _this.availableShifts = model.shifts;
+            _this.employeeShifts = model.employeeShifts;
         });
     };
     EmployeeScheduleComponent.prototype.ngOnInit = function () {

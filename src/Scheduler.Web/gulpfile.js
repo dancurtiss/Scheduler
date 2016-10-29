@@ -12,7 +12,8 @@ gulp.task('restore', function () {
         './node_modules/core-js/client/*.js',
         './node_modules/reflect-metadata/reflect.js',
         './node_modules/jquery/dist/*.js',
-        './node_modules/bootstrap/dist/**/*.*'
+        './node_modules/bootstrap/dist/**/*.*',
+        './node_modules/moment/moment.js'
     ]).pipe(gulp.dest('./wwwroot/libs'));
 
 

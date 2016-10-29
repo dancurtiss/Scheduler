@@ -8,7 +8,7 @@ import { ShiftDisplay, EmployeeDisplay, EmployeeSchedule, AddEmployeeShift, Canc
 export class EmployeeScheduleService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private employeesUrl = 'api/employeeshift';  // URL to web api
+    private employeesUrl = 'api/employeeschedule';  // URL to web api
 
     constructor(private http: Http) { }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
+using System.Globalization;
 
 namespace Scheduler.Web.Api
 {
@@ -24,11 +25,12 @@ namespace Scheduler.Web.Api
         [HttpGet("{id}")]
         public EmployeeScheduleModel Get(int id, string date)
         {
-            var scheduleDate = DateTime.Parse(date);
+            var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture);
+
             var endScheduleDate = scheduleDate.AddDays(1);
 
             var employeeShifts = _context.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
-            var employees = _context.Employees.Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
+            var employees = _context.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
             var shifts = _context.Shifts.Include(s => s.Schedule)
                 .Where(s => s.Schedule.StartDate < scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)

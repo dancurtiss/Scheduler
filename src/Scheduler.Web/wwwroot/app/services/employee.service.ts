@@ -17,7 +17,7 @@ export class EmployeeService {
         return this.http.get(url)
             .toPromise()
             .then((response) => {
-                return response.json() as Employee[];
+                return response.json() as EmployeeList;
             })
             .catch(this.handleError);
     }

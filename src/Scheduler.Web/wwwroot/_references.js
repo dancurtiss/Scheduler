@@ -426,6 +426,7 @@
 /// <reference path="libs/js/npm.js" />
 /// <reference path="libs/library.js" />
 /// <reference path="libs/long-stack-trace-zone.js" />
+/// <reference path="libs/moment.js" />
 /// <reference path="libs/proxy.js" />
 /// <reference path="libs/reflect.js" />
 /// <reference path="libs/rxjs/add/observable/bindCallback.js" />

@@ -15,7 +15,7 @@ var EmployeeScheduleService = (function () {
     function EmployeeScheduleService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.employeesUrl = 'api/employeeshift'; // URL to web api
+        this.employeesUrl = 'api/employeeschedule'; // URL to web api
     }
     EmployeeScheduleService.prototype.getEmployeeShifts = function (organizationId, date) {
         var url = this.employeesUrl + "/" + organizationId + "?date=" + date;

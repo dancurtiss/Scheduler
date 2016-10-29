@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, ShiftDisplay }             from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
 import { EmployeeScheduleService }      from '../services/employee-schedule.service';
+import * as moment from 'moment'
 
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
@@ -23,7 +24,7 @@ export class EmployeeScheduleComponent implements OnInit {
 
     availableShifts: ShiftDisplay[];
 
-    employeShifts: EmployeeShift[];
+    employeeShifts: EmployeeShift[];
 
     scheduleDate: Date = new Date();
     
@@ -34,11 +35,11 @@ export class EmployeeScheduleComponent implements OnInit {
     ) { }
 
     getSchedule(): void {
-        var dateString: string = this.scheduleDate.toDateString();
+        var dateString = moment(this.scheduleDate).format('MMDDYYYY');
         this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then((model) => {
-            this.availableEmployees = model.availableEmployees;
-            this.availableShifts = model.availableShifts;
-            this.employeShifts = model.employeeShifts;
+            this.availableEmployees = model.employees;
+            this.availableShifts = model.shifts;
+            this.employeeShifts = model.employeeShifts;
         });
     }
 

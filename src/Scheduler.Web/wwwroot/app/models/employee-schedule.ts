@@ -1,8 +1,8 @@
 ﻿export class EmployeeSchedule {
     startDate: Date;
     endDate: Date;
-    availableShifts: ShiftDisplay[];
-    availableEmployees: EmployeeDisplay[];
+    shifts: ShiftDisplay[];
+    employees: EmployeeDisplay[];
     employeeShifts: EmployeeShift[];
 }
 

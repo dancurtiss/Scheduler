@@ -29,7 +29,8 @@
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
     "jquery": "^2.2.4",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "moment": "^2.15.2"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
