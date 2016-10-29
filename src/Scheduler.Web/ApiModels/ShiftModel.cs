@@ -18,6 +18,8 @@ namespace Scheduler.Web.ApiModels
         {
             ShiftId = shift.ShiftId;
 
+            Day = shift.Day;
+
             TimeSpan startTime = TimeSpan.Parse(shift.StartTime);
 
             StartHour = startTime.Hours < 12 ? startTime.Hours : startTime.Hours - 12;
@@ -35,6 +37,8 @@ namespace Scheduler.Web.ApiModels
 
         public int ShiftId { get; set; }
 
+        [Required]
+        public string Day { get; set; }
         [Required]
         public int StartHour { get; set; }
         [Required]
@@ -77,6 +81,8 @@ namespace Scheduler.Web.ApiModels
             shift.EndTime = endTime.ToString();
 
             shift.Position = positions.Single(p => p.PositionId == PositionId);
+
+            shift.Day = Day;
 
             return shift;
         }

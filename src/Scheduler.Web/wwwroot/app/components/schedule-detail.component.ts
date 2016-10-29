@@ -17,6 +17,11 @@ export class ScheduleDetailComponent implements OnInit {
     shifts: Shift[];
     positions: Position[];
     selectedShift: Shift;
+
+    days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    hours: number[] = [1,2,3,4,5,6,7,8,9,10,11,12];
+    minutes: number[] = [0,15,30,45];
+    ampm: string[] = ['AM','PM'];
     
     constructor(
         private shiftService: ShiftService,
@@ -41,8 +46,12 @@ export class ScheduleDetailComponent implements OnInit {
         this.getScheduleDetails();
     }
 
+    positionName(positionId: number, positions: Position[]): string {
+        return positions.filter((p) => { return p.positionId == positionId; })[0].name;
+    }
+
     onAddShift(): void {
-        this.selectedShift = { shiftId: 0, startTime: null, endTime: null, positionId: 0 };
+        this.selectedShift = { shiftId: 0, day: null, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
     }
 
     onSaveShift(): void {

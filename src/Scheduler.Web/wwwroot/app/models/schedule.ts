@@ -12,8 +12,13 @@ export class ScheduleDetails {
 
 export class Shift {
     shiftId: number;
-    startTime: string;
-    endTime: string;
+    day: string;
+    startHour: number;
+    startMinute: number;
+    isStartAM: boolean;
+    endHour: number;
+    endMinute: number;
+    isEndAM: boolean;
     positionId: number;
 }
 

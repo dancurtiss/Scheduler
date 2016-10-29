@@ -12,6 +12,10 @@ namespace Scheduler.Data
 
         [Required]
         [MaxLength(10)]
+        public string Day { get; set; }
+
+        [Required]
+        [MaxLength(10)]
         public string StartTime { get; set; }
         [Required]
         [MaxLength(10)]

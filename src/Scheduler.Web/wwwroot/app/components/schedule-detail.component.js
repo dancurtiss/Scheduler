@@ -16,6 +16,10 @@ var ScheduleDetailComponent = (function () {
         this.shiftService = shiftService;
         this.router = router;
         this.route = route;
+        this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        this.minutes = [0, 15, 30, 45];
+        this.ampm = ['AM', 'PM'];
     }
     ScheduleDetailComponent.prototype.getScheduleDetails = function () {
         var _this = this;
@@ -33,8 +37,11 @@ var ScheduleDetailComponent = (function () {
         });
         this.getScheduleDetails();
     };
+    ScheduleDetailComponent.prototype.positionName = function (positionId, positions) {
+        return positions.filter(function (p) { return p.positionId == positionId; })[0].name;
+    };
     ScheduleDetailComponent.prototype.onAddShift = function () {
-        this.selectedShift = { shiftId: 0, startTime: null, endTime: null, positionId: 0 };
+        this.selectedShift = { shiftId: 0, day: null, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
     };
     ScheduleDetailComponent.prototype.onSaveShift = function () {
         var _this = this;

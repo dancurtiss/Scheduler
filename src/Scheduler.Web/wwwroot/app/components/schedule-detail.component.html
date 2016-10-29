@@ -16,16 +16,18 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Category</th>
+                    <th>Position</th>
+                    <th>Day</th>
+                    <th>Time</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let shift of shifts" (click)="onShiftSelect(shift)">
                     <th scope="row">{{shift.shiftId}}</th>
-                    <td>{{shift.name}}</td>
-                    <td>{{shift.category}}</td>
+                    <td>{{positionName(shift.positionId, positions)}}</td>
+                    <td>{{shift.day}}</td>
+                    <td>{{shift.startHour}}:{{shift.startMinute}} {{shift.isStartAM?"AM":"PM"}}-{{shift.endHour}}:{{shift.endMinute}} {{shift.isEndAM?"AM":"PM"}}</td>
                     <td><button class="btn btn-danger" (click)="onDeleteShift(shift.shiftId); $event.stopPropagation()">Delete</button></td>
                 </tr>
             </tbody>
@@ -34,34 +36,66 @@
 </div>
 
 <div class="row" *ngIf="selectedShift">
+    <pre>{{selectedShift | json}}</pre>
     <div class="col-md-6">
-        <form name="addShiftForm">
-            <div class="form-group">
-                <label for="position">Position</label>
-                <select class="form-control" id="position" [ngModel]="selectedShift.positionId" name="positionId">
-                    <option>Please Select</option>
-                    <option [value]="i" *ngFor="let i of positions">{{i}}</option>
-                </select>
+        <form class="form-inline" name="addShiftForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="position" style="width: 100px;">Position</label>
+                        <select class="form-control" id="position" [(ngModel)]="selectedShift.positionId" name="positionId">
+                            <option>Please Select</option>
+                            <option [value]="i.positionId" *ngFor="let i of positions">{{i.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="position" style="width: 50px;">Day</label>
+                        <select class="form-control" id="day" [(ngModel)]="selectedShift.day" name="day">
+                            <option>Please Select</option>
+                            <option [value]="i" *ngFor="let i of days">{{i}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="position" style="width: 100px;">Start Time</label>
+                        <select class="form-control" id="startHour" [(ngModel)]="selectedShift.startHour" name="startHour">
+                            <option [value]="i" *ngFor="let i of hours">{{("00"+i).slice(-2)}}</option>
+                        </select>
+                        <select class="form-control" id="startMinute" [(ngModel)]="selectedShift.startMinute" name="startMinute">
+                            <option [value]="i" *ngFor="let i of minutes">{{("00"+i).slice(-2)}}</option>
+                        </select>
+                        <select class="form-control" id="isStartAM" [(ngModel)]="selectedShift.isStartAM" name="isStartAM">
+                            <option [value]="i" *ngFor="let i of [true,false]">{{i ? "AM" : "PM"}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="position" style="width: 100px;">End Time</label>
+                        <select class="form-control" id="endHour" [(ngModel)]="selectedShift.endHour" name="endHour">
+                            <option [value]="i" *ngFor="let i of hours">{{("00"+i).slice(-2)}}</option>
+                        </select>
+                        <select class="form-control" id="endMinute" [(ngModel)]="selectedShift.endMinute" name="endMinute">
+                            <option [value]="i" *ngFor="let i of minutes">{{("00"+i).slice(-2)}}</option>
+                        </select>
+                        <select class="form-control" id="isEndAM" [(ngModel)]="selectedShift.isEndAM" name="isEndAM">
+                            <option [value]="i" *ngFor="let i of [true,false]">{{i ? "AM" : "PM"}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="position">Start Time</label>
-                <select class="form-control" id="position" [ngModel]="selectedShift.positionId" name="positionId">
-                    <option>Please Select</option>
-                    <option [value]="i" *ngFor="let i of positions">{{i}}</option>
-                </select>
-                <select class="form-control" id="position" [ngModel]="selectedShift.positionId" name="positionId">
-                    <option>Please Select</option>
-                    <option [value]="i" *ngFor="let i of positions">{{i}}</option>
-                </select>
-                <select class="form-control" id="position" [ngModel]="selectedShift.positionId" name="positionId">
-                    <option>Please Select</option>
-                    <option [value]="i" *ngFor="let i of positions">{{i}}</option>
-                </select>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary" (click)="onSaveShift();">Submit</button>
+                    <button type="reset" class="btn btn-default" (click)="selectedShift = null;$event.stopPropagation()">Cancel</button>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-primary" (click)="onSaveShift();">Submit</button>
-            <button type="reset" class="btn btn-default" (click)="selectedShift = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
 </div>
