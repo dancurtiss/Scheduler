@@ -14,6 +14,7 @@
 /// <reference path="app/models/organization.js" />
 /// <reference path="app/models/schedule.js" />
 /// <reference path="app/services/employee.service.js" />
+/// <reference path="app/services/employee-schedule.service.js" />
 /// <reference path="app/services/organization.service.js" />
 /// <reference path="app/services/position.service.js" />
 /// <reference path="app/services/schedule.service.js" />

@@ -22,6 +22,7 @@ namespace Scheduler.Data
 
         public bool Canceled { get; set; }
         public string CancelReason { get; set; }
+        public DateTime? CancelDate { get; set; }
 
         [Required]
         public Employee Employee { get; set; }

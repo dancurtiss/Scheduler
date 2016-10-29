@@ -10,22 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var employee_service_1 = require('../services/employee.service');
+var employee_schedule_service_1 = require('../services/employee-schedule.service');
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
  */
 var EmployeeScheduleComponent = (function () {
-    function EmployeeScheduleComponent(employeeService, router, route) {
-        this.employeeService = employeeService;
+    function EmployeeScheduleComponent(employeeScheduleService, router, route) {
+        this.employeeScheduleService = employeeScheduleService;
         this.router = router;
         this.route = route;
-        this.showAdd = false;
+        this.scheduleDate = new Date();
     }
-    EmployeeScheduleComponent.prototype.getEmployees = function () {
-        //this.employeeService.getEmployees(this.organizationId).then((model) => {
-        //    this.employees = model.employees;
-        //    this.availablePositions = model.availablePositions;
-        //});
+    EmployeeScheduleComponent.prototype.getSchedule = function () {
+        var _this = this;
+        var dateString = this.scheduleDate.toDateString();
+        this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then(function (model) {
+            _this.availableEmployees = model.availableEmployees;
+            _this.availableShifts = model.availableShifts;
+            _this.employeShifts = model.employeeShifts;
+        });
     };
     EmployeeScheduleComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -33,7 +36,8 @@ var EmployeeScheduleComponent = (function () {
             var id = +params['id'];
             _this.organizationId = id;
         });
-        this.getEmployees();
+        this.scheduleDate = new Date();
+        this.getSchedule();
     };
     //onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
     //    if (this.selectedEmployee.employeeId) {
@@ -48,21 +52,20 @@ var EmployeeScheduleComponent = (function () {
     //        });
     //    }
     //}
-    EmployeeScheduleComponent.prototype.onDeleteEmployee = function (employeeId) {
+    EmployeeScheduleComponent.prototype.onDeleteEmployeeShift = function (employeeShiftId) {
         var _this = this;
-        this.employeeService.delete(employeeId).then(function () {
-            _this.selectedEmployee = null;
-            _this.getEmployees();
+        this.employeeScheduleService.delete(employeeShiftId).then(function () {
+            _this.getSchedule();
         });
     };
     EmployeeScheduleComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'my-employees',
-            templateUrl: 'employees.component.html',
-            styleUrls: ['employees.component.css']
+            selector: 'my-employee-schedules',
+            templateUrl: 'employee-schedule.component.html',
+            styleUrls: ['employee-schedule.component.css']
         }), 
-        __metadata('design:paramtypes', [employee_service_1.EmployeeService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [employee_schedule_service_1.EmployeeScheduleService, router_1.Router, router_1.ActivatedRoute])
     ], EmployeeScheduleComponent);
     return EmployeeScheduleComponent;
 }());

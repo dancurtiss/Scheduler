@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, ShiftDisplay }             from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
-import { EmployeeService }      from '../services/employee.service';
+import { EmployeeScheduleService }      from '../services/employee-schedule.service';
 
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
@@ -10,29 +10,36 @@ import { EmployeeService }      from '../services/employee.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'my-employees',
-    templateUrl: 'employees.component.html',
-    styleUrls: ['employees.component.css']
+    selector: 'my-employee-schedules',
+    templateUrl: 'employee-schedule.component.html',
+    styleUrls: ['employee-schedule.component.css']
 })
 export class EmployeeScheduleComponent implements OnInit {
 
     organizationId: number;
-    employees: EmployeeDisplay[];
+    availableEmployees: EmployeeDisplay[];
     selectedEmployee: EmployeeDisplay;
-    showAdd: boolean = false;
-    availablePositions: Position[];
+
+
+    availableShifts: ShiftDisplay[];
+
+    employeShifts: EmployeeShift[];
+
+    scheduleDate: Date = new Date();
     
     constructor(
-        private employeeService: EmployeeService,
+        private employeeScheduleService: EmployeeScheduleService,
         private router: Router,
         private route: ActivatedRoute
     ) { }
 
-    getEmployees(): void {
-        //this.employeeService.getEmployees(this.organizationId).then((model) => {
-        //    this.employees = model.employees;
-        //    this.availablePositions = model.availablePositions;
-        //});
+    getSchedule(): void {
+        var dateString: string = this.scheduleDate.toDateString();
+        this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then((model) => {
+            this.availableEmployees = model.availableEmployees;
+            this.availableShifts = model.availableShifts;
+            this.employeShifts = model.employeeShifts;
+        });
     }
 
     ngOnInit(): void {
@@ -41,7 +48,8 @@ export class EmployeeScheduleComponent implements OnInit {
             this.organizationId = id;
         });
 
-        this.getEmployees();
+        this.scheduleDate = new Date();
+        this.getSchedule();
     }
 
 
@@ -59,10 +67,9 @@ export class EmployeeScheduleComponent implements OnInit {
     //    }
     //}
 
-    onDeleteEmployee(employeeId: number) {
-        this.employeeService.delete(employeeId).then(() => {
-            this.selectedEmployee = null;
-            this.getEmployees();
+    onDeleteEmployeeShift(employeeShiftId: number) {
+        this.employeeScheduleService.delete(employeeShiftId).then(() => {
+            this.getSchedule();
         });
     }
 }

@@ -23,4 +23,16 @@ var EmployeeDisplay = (function () {
     return EmployeeDisplay;
 }());
 exports.EmployeeDisplay = EmployeeDisplay;
+var AddEmployeeShift = (function () {
+    function AddEmployeeShift() {
+    }
+    return AddEmployeeShift;
+}());
+exports.AddEmployeeShift = AddEmployeeShift;
+var CancelEmployeeShift = (function () {
+    function CancelEmployeeShift() {
+    }
+    return CancelEmployeeShift;
+}());
+exports.CancelEmployeeShift = CancelEmployeeShift;
 //# sourceMappingURL=employee-schedule.js.map

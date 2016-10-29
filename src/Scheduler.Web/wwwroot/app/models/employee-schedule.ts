@@ -27,3 +27,15 @@ export class EmployeeDisplay {
     phoneNumber: string;
     positionIds: number[];
 }
+
+export class AddEmployeeShift {
+    employeeId: number;
+    shiftId: number;
+    shiftDate: Date;
+}
+
+export class CancelEmployeeShift {
+    employeeShiftId: number;
+    reason: string;
+}
+
