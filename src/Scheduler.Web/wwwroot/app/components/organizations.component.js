@@ -57,6 +57,9 @@ var OrganizationsComponent = (function () {
     OrganizationsComponent.prototype.goToDetail = function (id) {
         this.router.navigate(['/organization/detail', id]);
     };
+    OrganizationsComponent.prototype.goToEmployees = function (id) {
+        this.router.navigate(['/organization/employees', id]);
+    };
     OrganizationsComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

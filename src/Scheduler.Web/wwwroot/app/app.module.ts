@@ -11,13 +11,14 @@ import { DashboardComponent }   from './components/dashboard.component';
 import { OrganizationsComponent }       from './components/organizations.component';
 import { OrganizationDetailComponent }  from './components/organization-detail.component';
 import { ScheduleDetailComponent }  from './components/schedule-detail.component';
-
+import { EmployeesComponent }       from './components/employees.component';
 
 
 import { OrganizationService }      from './services/organization.service';
 import { ScheduleService }          from './services/schedule.service';
 import { PositionService }          from './services/position.service';
 import { ShiftService }             from './services/shift.service';
+import { EmployeeService }             from './services/employee.service';
 
 @NgModule({
     imports: [
@@ -39,6 +40,10 @@ import { ShiftService }             from './services/shift.service';
             component: OrganizationsComponent
         },
         {
+            path: 'organization/employees/:id',
+            component: EmployeesComponent
+        },
+        {
             path: 'organization/detail/:id',
             component: OrganizationDetailComponent
         },
@@ -53,13 +58,15 @@ import { ShiftService }             from './services/shift.service';
         DashboardComponent,
         OrganizationsComponent,
         OrganizationDetailComponent,
-        ScheduleDetailComponent
+        ScheduleDetailComponent,
+        EmployeesComponent
     ],
     providers: [
         OrganizationService,
         ScheduleService,
         PositionService,
-        ShiftService
+        ShiftService,
+        EmployeeService
     ],
     bootstrap: [AppComponent]
 })

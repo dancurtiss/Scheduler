@@ -31,5 +31,7 @@ namespace Scheduler.Data
         [Required]
         public Organization Organization { get; set; }
 
+        public IList<EmployeePosition> Positions { get; set; }
+
     }
 }

@@ -18,10 +18,12 @@ var dashboard_component_1 = require('./components/dashboard.component');
 var organizations_component_1 = require('./components/organizations.component');
 var organization_detail_component_1 = require('./components/organization-detail.component');
 var schedule_detail_component_1 = require('./components/schedule-detail.component');
+var employees_component_1 = require('./components/employees.component');
 var organization_service_1 = require('./services/organization.service');
 var schedule_service_1 = require('./services/schedule.service');
 var position_service_1 = require('./services/position.service');
 var shift_service_1 = require('./services/shift.service');
+var employee_service_1 = require('./services/employee.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -46,6 +48,10 @@ var AppModule = (function () {
                         component: organizations_component_1.OrganizationsComponent
                     },
                     {
+                        path: 'organization/employees/:id',
+                        component: employees_component_1.EmployeesComponent
+                    },
+                    {
                         path: 'organization/detail/:id',
                         component: organization_detail_component_1.OrganizationDetailComponent
                     },
@@ -60,13 +66,15 @@ var AppModule = (function () {
                 dashboard_component_1.DashboardComponent,
                 organizations_component_1.OrganizationsComponent,
                 organization_detail_component_1.OrganizationDetailComponent,
-                schedule_detail_component_1.ScheduleDetailComponent
+                schedule_detail_component_1.ScheduleDetailComponent,
+                employees_component_1.EmployeesComponent
             ],
             providers: [
                 organization_service_1.OrganizationService,
                 schedule_service_1.ScheduleService,
                 position_service_1.PositionService,
-                shift_service_1.ShiftService
+                shift_service_1.ShiftService,
+                employee_service_1.EmployeeService
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

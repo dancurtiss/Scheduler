@@ -61,4 +61,9 @@ export class OrganizationsComponent implements OnInit {
     goToDetail(id: number): void {
         this.router.navigate(['/organization/detail', id]);
     }
+
+    goToEmployees(id: number): void {
+        this.router.navigate(['/organization/employees', id]);
+    }
+
 }
