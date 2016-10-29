@@ -1,11 +1,17 @@
 ﻿export class Schedule {
     scheduleId: number;
     name: string;
+    startDate: Date;
+    endDate: Date;
+    isActive: boolean;
 }
 
 export class ScheduleDetails {
     scheduleId: number;
     name: string;
+    startDate: Date;
+    endDate: Date;
+    isActive: boolean;
     shifts: Shift[];
     positions: Position[];
 }

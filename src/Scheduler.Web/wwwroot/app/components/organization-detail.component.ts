@@ -50,7 +50,7 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onAddSchedule(): void {
-        this.addSchedule = { scheduleId: 0, name: null };
+        this.addSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
     }
 
     onAddPosition(): void {

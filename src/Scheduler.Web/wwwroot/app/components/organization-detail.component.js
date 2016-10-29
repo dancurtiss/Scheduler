@@ -41,7 +41,7 @@ var OrganizationDetailComponent = (function () {
         this.getPositions();
     };
     OrganizationDetailComponent.prototype.onAddSchedule = function () {
-        this.addSchedule = { scheduleId: 0, name: null };
+        this.addSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
     };
     OrganizationDetailComponent.prototype.onAddPosition = function () {
         this.selectedPosition = { positionId: 0, name: null, category: null };

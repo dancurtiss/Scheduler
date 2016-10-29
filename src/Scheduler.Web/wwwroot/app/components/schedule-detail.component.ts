@@ -13,6 +13,8 @@ export class ScheduleDetailComponent implements OnInit {
 
     scheduleId: number;
     scheduleName: string;
+    scheduleStart: Date;
+    scheduleEnd: Date;
 
     shifts: Shift[];
     positions: Position[];
@@ -32,6 +34,8 @@ export class ScheduleDetailComponent implements OnInit {
     getScheduleDetails(): void {
         this.shiftService.getShifts(this.scheduleId).then((scheduleDetails) => {
             this.scheduleName = scheduleDetails.name;
+            this.scheduleStart = scheduleDetails.startDate;
+            this.scheduleEnd = scheduleDetails.endDate;
             this.positions = scheduleDetails.positions;
             this.shifts = scheduleDetails.shifts;
         });

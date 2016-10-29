@@ -1,8 +1,8 @@
 ﻿<div class="row">
-    <div class="col-md-6">
-        <h2>Schedule Details: {{scheduleName}}</h2>
+    <div class="col-md-9">
+        <h2>Schedule Details: {{scheduleName}} ({{scheduleStart | date: 'MM/dd/yyyy'}}-{{scheduleEnd | date: 'MM/dd/yyyy'}})</h2>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <button class="btn btn-success pull-right" (click)="onAddShift();">
             Add Shift
         </button>
@@ -27,7 +27,7 @@
                     <th scope="row">{{shift.shiftId}}</th>
                     <td>{{positionName(shift.positionId, positions)}}</td>
                     <td>{{shift.day}}</td>
-                    <td>{{shift.startHour}}:{{shift.startMinute}} {{shift.isStartAM?"AM":"PM"}}-{{shift.endHour}}:{{shift.endMinute}} {{shift.isEndAM?"AM":"PM"}}</td>
+                    <td>{{("00"+shift.startHour).slice(-2)}}:{{("00"+shift.startMinute).slice(-2)}} {{shift.isStartAM?"AM":"PM"}}-{{("00"+shift.endHour).slice(-2)}}:{{("00"+shift.endMinute).slice(-2)}} {{shift.isEndAM?"AM":"PM"}}</td>
                     <td><button class="btn btn-danger" (click)="onDeleteShift(shift.shiftId); $event.stopPropagation()">Delete</button></td>
                 </tr>
             </tbody>

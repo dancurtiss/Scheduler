@@ -1,0 +1,73 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h2>Employee Schedule</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone Number</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of employees" (click)="goToDetail(employee.employeeId)" [class.selected]="employee === selectedEmployee">
+                    <th scope="row">{{employee.employeeId}}</th>
+                    <td>{{employee.firstName}}</td>
+                    <td>{{employee.lastName}}</td>
+                    <td>{{employee.phoneNumber}}</td>
+                    <td><button class="btn btn-default" (click)="onSelect(employee); $event.stopPropagation()">Edit</button></td>
+                    <td><button class="btn btn-danger" (click)="onDeleteEmployee(employee.employeeId); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf="selectedEmployee">
+    <div class="col-md-6">
+        <form name="employeeForm">
+            <div class="form-group">
+                <label for="employeeFirstName">First Name</label>
+                <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName">
+            </div>
+            <div class="form-group">
+                <label for="employeeLastName">Last Name</label>
+                <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName">
+            </div>
+            <div class="form-group">
+                <label for="employeeNumber">Employee Number</label>
+                <input type="text" class="form-control" id="employeeNumber" placeholder="" name="employeeNumber" [(ngModel)]="selectedEmployee.employeeNumber">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="message">Active</label>
+                <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive">
+                    <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Positions</label>
+                <select multiple name="employeePositions" [(ngModel)]="selectedEmployee.employeePositionIds">
+                    <option *ngFor="let position of availablePositions" [value]="position.positionId">
+                        {{position.name}}
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" (click)="onSaveEmployee();">Submit</button>
+            <button type="reset" class="btn btn-default" (click)="selectedEmployee = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+</div>
+

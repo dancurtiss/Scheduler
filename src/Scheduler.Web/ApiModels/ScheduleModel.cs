@@ -18,11 +18,24 @@ namespace Scheduler.Web.ApiModels
         {
             ScheduleId = schedule.ScheduleId;
             Name = schedule.Name;
+            StartDate = schedule.StartDate;
+            EndDate = schedule.EndDate;
+            IsActive = schedule.IsActive;
         }
 
         public int ScheduleId { get; set; }
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        public DateTime EndDate { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
+
 
         public Schedule Export()
         {
@@ -32,6 +45,9 @@ namespace Scheduler.Web.ApiModels
         public Schedule Export(Schedule schedule)
         {
             schedule.Name = this.Name;
+            schedule.StartDate = this.StartDate;
+            schedule.EndDate = this.EndDate;
+            schedule.IsActive = this.IsActive;
 
             return schedule;
         }
