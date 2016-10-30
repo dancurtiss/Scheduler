@@ -51,14 +51,28 @@ var EmployeeScheduleComponent = (function () {
         this.scheduleDate = new Date();
         this.getSchedule();
     };
+    EmployeeScheduleComponent.prototype.added = function (employeeId, shiftId) {
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then(function (es) {
+            //es.employeeShiftId;
+            console.log('shift added');
+        });
+    };
     EmployeeScheduleComponent.prototype.remove = function (employeeId, shiftId) {
-        var removes = this.shiftBags[shiftId].filter(function (es) {
+        var _this = this;
+        var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
+        var index = this.shiftBags[shiftId].indexOf(employeeShiftObject);
+        if (index > -1) {
+            this.employeeScheduleService.delete(employeeShiftObject.employeeShiftId).then(function () {
+                _this.shiftBags[shiftId].splice(index, 1);
+            });
+        }
+    };
+    EmployeeScheduleComponent.prototype.getEmployeeShiftObject = function (employeeId, shiftId) {
+        var employeeShifts = this.shiftBags[shiftId].filter(function (es) {
             return es.employeeId == employeeId;
         });
-        var index = this.shiftBags[shiftId].indexOf(removes[0]);
-        if (index > -1) {
-            this.shiftBags[shiftId].splice(index, 1);
-        }
+        var employeeShiftObject = employeeShifts[0];
+        return employeeShiftObject;
     };
     EmployeeScheduleComponent.prototype.dragulaSetup = function () {
         var _this = this;
@@ -77,48 +91,14 @@ var EmployeeScheduleComponent = (function () {
             }
         });
         this.dragulaService.dropModel.subscribe(function (value) {
-            console.log('ouch', value);
             _this.onDropModel(value.slice(1));
-        });
-        this.dragulaService.removeModel.subscribe(function (value) {
-            _this.onRemoveModel(value.slice(1));
-        });
-        this.dragulaService.drag.subscribe(function (value) {
-            _this.onDrag(value.slice(1));
-        });
-        //this.dragulaService.drop.subscribe((value) => {
-        //    this.onDrop(value.slice(1));
-        //});
-        this.dragulaService.over.subscribe(function (value) {
-            _this.onOver(value.slice(1));
-        });
-        this.dragulaService.out.subscribe(function (value) {
-            _this.onOut(value.slice(1));
         });
     };
     EmployeeScheduleComponent.prototype.onDropModel = function (args) {
         var el = args[0], target = args[1], source = args[2];
-        console.log("dropmodel: " + args);
-    };
-    EmployeeScheduleComponent.prototype.onRemoveModel = function (args) {
-        var el = args[0], source = args[1];
-        console.log("removemodel: " + args);
-    };
-    EmployeeScheduleComponent.prototype.onDrag = function (args) {
-        var e = args[0], el = args[1];
-        //console.log(`drag: ${args}`);
-    };
-    EmployeeScheduleComponent.prototype.onDrop = function (args) {
-        var e = args[0], el = args[1];
-        //console.log(`drop: ${args}`);
-    };
-    EmployeeScheduleComponent.prototype.onOver = function (args) {
-        var e = args[0], el = args[1], container = args[2];
-        //console.log(`over: ${args}`);
-    };
-    EmployeeScheduleComponent.prototype.onOut = function (args) {
-        var e = args[0], el = args[1], container = args[2];
-        //console.log(`out: ${args}`);
+        var employeeId = el.getAttribute('data-employee-id');
+        var shiftId = target.getAttribute('data-shift-id');
+        this.added(employeeId, shiftId);
     };
     //onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
     //    if (this.selectedEmployee.employeeId) {

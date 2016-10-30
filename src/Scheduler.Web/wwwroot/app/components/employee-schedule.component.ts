@@ -68,16 +68,32 @@ export class EmployeeScheduleComponent implements OnInit {
 
     }
 
+    added(employeeId: number, shiftId: number) {
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then((es) => {
+
+            //es.employeeShiftId;
+            console.log('shift added');
+        });
+    }
+
     remove(employeeId: number, shiftId: number) {
-        var removes = this.shiftBags[shiftId].filter((es) => {
+        var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
+        var index = this.shiftBags[shiftId].indexOf(employeeShiftObject);
+
+        if (index > -1) {
+            this.employeeScheduleService.delete(employeeShiftObject.employeeShiftId).then(() => {
+                this.shiftBags[shiftId].splice(index, 1);
+            });
+        }
+    }
+
+    getEmployeeShiftObject(employeeId: number, shiftId: number) {
+        var employeeShifts = this.shiftBags[shiftId].filter((es) => {
             return es.employeeId == employeeId;
         });
 
-        var index = this.shiftBags[shiftId].indexOf(removes[0]);
-
-        if (index > -1) {
-            this.shiftBags[shiftId].splice(index, 1);
-        }
+        var employeeShiftObject = employeeShifts[0];
+        return employeeShiftObject;
     }
 
     dragulaSetup() {
@@ -97,54 +113,17 @@ export class EmployeeScheduleComponent implements OnInit {
         });
 
         this.dragulaService.dropModel.subscribe((value) => {
-            console.log('ouch', value);
             this.onDropModel(value.slice(1));
-        });
-        this.dragulaService.removeModel.subscribe((value) => {
-            this.onRemoveModel(value.slice(1));
-        });
-        this.dragulaService.drag.subscribe((value) => {
-            this.onDrag(value.slice(1));
-        });
-        //this.dragulaService.drop.subscribe((value) => {
-        //    this.onDrop(value.slice(1));
-        //});
-        this.dragulaService.over.subscribe((value) => {
-            this.onOver(value.slice(1));
-        });
-        this.dragulaService.out.subscribe((value) => {
-            this.onOut(value.slice(1));
         });
     }
 
     private onDropModel(args) {
         let [el, target, source] = args;
-        console.log(`dropmodel: ${args}`);
-    }
 
-    private onRemoveModel(args) {
-        let [el, source] = args;
-        console.log(`removemodel: ${args}`);
-    }
+        var employeeId = el.getAttribute('data-employee-id');
+        var shiftId = target.getAttribute('data-shift-id');
 
-    private onDrag(args) {
-        let [e, el] = args;
-        //console.log(`drag: ${args}`);
-    }
-
-    private onDrop(args) {
-        let [e, el] = args;
-        //console.log(`drop: ${args}`);
-    }
-
-    private onOver(args) {
-        let [e, el, container] = args;
-        //console.log(`over: ${args}`);
-    }
-
-    private onOut(args) {
-        let [e, el, container] = args;
-        //console.log(`out: ${args}`);
+        this.added(employeeId, shiftId);
     }
 
     //onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {

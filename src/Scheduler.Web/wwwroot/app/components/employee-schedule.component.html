@@ -6,11 +6,11 @@
 
 <div class='wrapper'>
     <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
-        <div class="employee-item" *ngFor='let employee of availableEmployees'>{{employee.firstName}}</div>
+        <div class="employee-item" *ngFor='let employee of availableEmployees' attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}}</div>
     </div>
     <div *ngFor='let shift of availableShifts' >
         <h3>{{shift.positionCategory}} {{ shift.positionName}} {{shift.shiftTime}}</h3>
-        <div class='container' style="width: 200px; min-height: 50px;" [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]'>
+        <div class='container' style="width: 200px; min-height: 50px;" [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
             <div>drop here</div>
             <div *ngFor='let employee of shiftBags[shift.shiftId]'>
                 {{employee.firstName}}
