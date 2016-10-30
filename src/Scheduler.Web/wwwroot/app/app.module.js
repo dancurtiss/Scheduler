@@ -13,6 +13,7 @@ var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
+var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
 var app_component_1 = require('./app.component');
 var dashboard_component_1 = require('./components/dashboard.component');
 var organizations_component_1 = require('./components/organizations.component');
@@ -32,6 +33,7 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             imports: [
+                ng2_dragula_1.DragulaModule,
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
                 http_1.HttpModule,
@@ -77,6 +79,7 @@ var AppModule = (function () {
                 employee_schedule_component_1.EmployeeScheduleComponent
             ],
             providers: [
+                ng2_dragula_1.DragulaService,
                 organization_service_1.OrganizationService,
                 schedule_service_1.ScheduleService,
                 position_service_1.PositionService,

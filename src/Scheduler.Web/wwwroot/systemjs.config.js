@@ -20,6 +20,13 @@
             // other libraries
             'rxjs': 'npm:rxjs',
             'moment': 'npm:moment.js',
+            'crossvent': 'npm:crossvent',
+            'atoa': 'npm:atoa',
+            'custom-event': 'npm:custom-event',
+            'contra': 'npm:contra',
+            'ticky': 'npm:ticky',
+            'dragula': 'npm:dragula',
+            'ng2-dragula': 'npm:ng2-dragula',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
         },
         // packages tells the System loader how to load when no filename and/or no extension
@@ -29,6 +36,32 @@
                 defaultExtension: 'js'
             },
             rxjs: {
+                defaultExtension: 'js'
+            },
+            atoa: {
+                main: './atoa.js',
+                defaultExtension: 'js'
+            },
+            'custom-event': {
+                main: './index.js',
+                defaultExtension: 'js'
+            },
+            ticky: {
+                main: './ticky.js',
+                defaultExtension: 'js'
+            },
+            contra: {
+                defaultExtension: 'js'
+            },
+            crossvent: {
+                main: './src/crossvent.js',
+                defaultExtension: 'js'
+            },
+            dragula: {
+                main: './dragula.js',
+                defaultExtension: 'js'
+            },
+            'ng2-dragula': {
                 defaultExtension: 'js'
             },
             'angular-in-memory-web-api': {

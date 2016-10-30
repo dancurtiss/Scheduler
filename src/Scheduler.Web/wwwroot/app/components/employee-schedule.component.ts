@@ -1,9 +1,12 @@
 ﻿import { Component, OnInit }        from '@angular/core';
 import { Router, ActivatedRoute, Params }      from '@angular/router';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula'
+
 import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, ShiftDisplay }             from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
 import { EmployeeScheduleService }      from '../services/employee-schedule.service';
 import * as moment from 'moment'
+
 
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..

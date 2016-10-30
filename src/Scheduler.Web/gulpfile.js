@@ -18,6 +18,35 @@ gulp.task('restore', function () {
 
 
     gulp.src([
+    './node_modules/atoa/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/atoa'));
+
+    gulp.src([
+    './node_modules/custom-event/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/custom-event'));
+
+    gulp.src([
+    './node_modules/ticky/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/ticky'));
+
+    gulp.src([
+    './node_modules/contra/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/contra'));
+
+    gulp.src([
+    './node_modules/crossvent/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/crossvent'));
+
+    gulp.src([
+    './node_modules/ng2-dragula/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/ng2-dragula'));
+
+    gulp.src([
+    './node_modules/dragula/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/dragula'));
+
+
+    gulp.src([
     './node_modules/rxjs/**/*.js',
     ]).pipe(gulp.dest('./wwwroot/libs/rxjs'));
 

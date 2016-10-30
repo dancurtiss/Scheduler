@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 import { RouterModule }  from '@angular/router';
+import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AppComponent }         from './app.component';
 
@@ -24,6 +25,7 @@ import { EmployeeScheduleService }             from './services/employee-schedul
 
 @NgModule({
     imports: [
+        DragulaModule,
         BrowserModule,
         FormsModule,
         HttpModule,
@@ -69,6 +71,7 @@ import { EmployeeScheduleService }             from './services/employee-schedul
         EmployeeScheduleComponent
     ],
     providers: [
+        DragulaService,
         OrganizationService,
         ScheduleService,
         PositionService,
