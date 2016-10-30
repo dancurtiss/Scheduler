@@ -63,14 +63,14 @@ namespace Scheduler.Web.ApiModels
 
         public Shift Export(Shift shift, List<Position> positions)
         {
-            if (IsStartAM)
+            if (!IsStartAM)
             {
                 StartHour += 12;
             }
 
             TimeSpan startTime = new TimeSpan(StartHour, StartMinute, 0);
 
-            if (IsEndAM)
+            if (!IsEndAM)
             {
                 EndHour += 12;
             }

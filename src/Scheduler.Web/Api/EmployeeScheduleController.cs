@@ -31,7 +31,7 @@ namespace Scheduler.Web.Api
 
             var employeeShifts = _context.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
             var employees = _context.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
-            var shifts = _context.Shifts.Include(s => s.Schedule)
+            var shifts = _context.Shifts.Include(s => s.Schedule).Include(s => s.Position)
                 .Where(s => s.Schedule.StartDate < scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)
                 .ToList();
@@ -56,8 +56,8 @@ namespace Scheduler.Web.Api
             Employee employeeEntity = _context.Employees.Single(e => e.EmployeeId == employeeShift.EmployeeId);
             Shift shiftEntity = _context.Shifts.Single(s => s.ShiftId == employeeShift.ShiftId);
 
-            DateTime startTime = employeeShift.ShiftDate + TimeSpan.Parse(shiftEntity.StartTime);
-            DateTime endTime = employeeShift.ShiftDate + TimeSpan.Parse(shiftEntity.EndTime);
+            DateTime startTime = employeeShift.ShiftDate.Date + TimeSpan.Parse(shiftEntity.StartTime);
+            DateTime endTime = employeeShift.ShiftDate.Date + TimeSpan.Parse(shiftEntity.EndTime);
 
             EmployeeShift employeeShiftEntity = new EmployeeShift
             {
@@ -68,10 +68,12 @@ namespace Scheduler.Web.Api
                 ConfirmationNumber = 1
             };
 
+            // TODO: NEED TO VALIDATE BASED ON UI RULES
+
             _context.EmployeeShifts.Add(employeeShiftEntity);
             _context.SaveChanges();
 
-            return new ObjectResult(employeeShiftEntity);
+            return new ObjectResult(employeeShiftEntity.EmployeeShiftId);
         }
 
         // PUT api/values/5

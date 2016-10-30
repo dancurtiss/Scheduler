@@ -4,9 +4,11 @@
     shifts: ShiftDisplay[];
     employees: EmployeeDisplay[];
     employeeShifts: EmployeeShift[];
+    positionCategories: string[];
 }
 
 export class EmployeeShift {
+    employeeShiftId: number;
     employeeId: number;
     shiftId: number;
 }
@@ -18,6 +20,8 @@ export class ShiftDisplay {
     positionCategory: string;
     shiftDay: string;
     shiftTime: string;
+    shiftStartMinute: number;
+    shiftEndMinute: number;
 }
 
 export class EmployeeDisplay {

@@ -26,8 +26,10 @@ export class EmployeeScheduleComponent implements OnInit {
 
     shiftBags: any;
 
+    availableGroupedShifts: any;
     availableShifts: ShiftDisplay[];
     employeeShifts: EmployeeShift[];
+    positionCategories: string[];
 
     scheduleDate: Date = new Date();
     
@@ -44,6 +46,13 @@ export class EmployeeScheduleComponent implements OnInit {
             this.availableEmployees = model.employees;
             this.availableShifts = model.shifts;
             this.employeeShifts = model.employeeShifts;
+            this.positionCategories = model.positionCategories;
+
+            this.availableGroupedShifts = {};
+
+            this.positionCategories.forEach((pc) => {
+                this.availableGroupedShifts[pc] = this.availableShifts.filter((s) => { return s.positionCategory == pc; });
+            });
 
             this.setupShiftBags();
         });
@@ -53,6 +62,12 @@ export class EmployeeScheduleComponent implements OnInit {
         this.shiftBags = {};
         this.availableShifts.forEach((s) => {
             this.shiftBags[s.shiftId] = [];
+        });
+
+        this.employeeShifts.forEach((es) => {
+            var employee = this.availableEmployees.filter((e) => { return e.employeeId == es.employeeId; })[0];
+            employee['employeeShiftId'] = es.employeeShiftId;
+            this.shiftBags[es.shiftId].push(employee);
         });
     }
 
@@ -69,10 +84,10 @@ export class EmployeeScheduleComponent implements OnInit {
     }
 
     added(employeeId: number, shiftId: number) {
-        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then((es) => {
-
-            //es.employeeShiftId;
-            console.log('shift added');
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then((employeeShiftId) => {
+            var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
+            employeeShiftObject.employeeShiftId = employeeShiftId;
+            console.log('shift added', employeeShiftId);
         });
     }
 
@@ -92,30 +107,106 @@ export class EmployeeScheduleComponent implements OnInit {
             return es.employeeId == employeeId;
         });
 
+        if (employeeShifts.length == 0) {
+            return null;
+        }
+
         var employeeShiftObject = employeeShifts[0];
+
         return employeeShiftObject;
+    }
+
+    getAllEmployeeShifts(employeeId: number):ShiftDisplay[] {
+        var allShifts = [];
+        for (var shiftId in this.shiftBags) {
+            if (this.shiftBags.hasOwnProperty(shiftId)) {
+                var shiftIdValue: number = +shiftId;
+                var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftIdValue);
+                if (employeeShiftObject) {
+                    var shiftObject = this.availableShifts.filter((s) => { return s.shiftId == shiftIdValue });
+                    allShifts.push(shiftObject[0]);
+                }
+            }
+        }
+        return allShifts;
     }
 
     dragulaSetup() {
         this.dragulaService.setOptions('schedule-bag', {
             removeOnSpill: true,
             copy: true,
-            moves: function (el, source, handle, sibling) {
-                // only move favorite items, not the icon element
-                return el.className.toLowerCase() === 'employee-item';
-            },
-            accepts: function (el, target, source, sibling) {
-                return !el.contains(target); // elements can not be dropped within themselves
-            },
-            invalid: function (el, handle) {
-                return false; // don't prevent any drags from initiating by default
-            }
+            moves: this.dragMoves,
+            accepts: this.dragAccepts,
+            invalid: this.dragInvalid
         });
 
         this.dragulaService.dropModel.subscribe((value) => {
             this.onDropModel(value.slice(1));
         });
     }
+
+    private dragMoves = (el, source, handle, sibling): boolean => {
+        // only move favorite items, not the icon element
+        return el.className.toLowerCase() === 'employee-item';
+    }
+
+    private dragAccepts = (el, target, source, sibling): boolean => {
+        var ownContainer = el.contains(target);
+        if (ownContainer) {
+            return false;
+        }
+
+        var employeeId = el.getAttribute('data-employee-id');
+        var shiftId = target.getAttribute('data-shift-id');
+
+        var employee = this.availableEmployees.filter((e) => { return e.employeeId == employeeId; })[0];
+        var shift = this.availableShifts.filter((s) => { return s.shiftId == shiftId; })[0];
+
+        if (!employee || !shift) {
+            return false;
+        }
+
+        // does not have position
+        if (employee.positionIds.indexOf(shift.positionId) < 0) {
+            return false;
+        }
+
+        // employee already exists
+        if (this.getEmployeeShiftObject(employeeId, shiftId) != null) {
+            return false;
+        }
+
+        // employee time overlap
+        var allEmployeeShifts = this.getAllEmployeeShifts(employeeId);
+
+        var hasConflict = false;
+        allEmployeeShifts.forEach((existingShift) => {
+            var shiftStartWithinOtherShift = shift.shiftStartMinute >= existingShift.shiftStartMinute && shift.shiftStartMinute < existingShift.shiftEndMinute;
+            var shiftEndWithinOtherShift = shift.shiftEndMinute > existingShift.shiftStartMinute && shift.shiftEndMinute <= existingShift.shiftEndMinute;
+
+            if (shiftStartWithinOtherShift || shiftEndWithinOtherShift) {
+                hasConflict = true;
+                return;
+            }
+
+            var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute <= shift.shiftEndMinute;
+
+            if (existingShiftWithin) {
+                hasConflict = true;
+                return;
+            }
+        });
+
+        if (hasConflict) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private dragInvalid = (el, handle): boolean => {
+        return false; // don't prevent any drags from initiating by default
+    };
 
     private onDropModel(args) {
         let [el, target, source] = args;
@@ -125,20 +216,6 @@ export class EmployeeScheduleComponent implements OnInit {
 
         this.added(employeeId, shiftId);
     }
-
-    //onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
-    //    if (this.selectedEmployee.employeeId) {
-    //        this.employeeService.update(this.selectedEmployee).then((employee) => {
-    //            this.selectedEmployee = null;
-    //            this.getEmployees();
-    //        });
-    //    } else {
-    //        this.employeeService.create(this.organizationId, this.selectedEmployee).then((employee) => {
-    //            this.selectedEmployee = null;
-    //            this.getEmployees();
-    //        });
-    //    }
-    //}
 
     onDeleteEmployeeShift(employeeShiftId: number) {
         this.employeeScheduleService.delete(employeeShiftId).then(() => {

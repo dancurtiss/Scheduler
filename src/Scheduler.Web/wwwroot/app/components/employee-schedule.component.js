@@ -18,11 +18,60 @@ var moment = require('moment');
  */
 var EmployeeScheduleComponent = (function () {
     function EmployeeScheduleComponent(employeeScheduleService, router, route, dragulaService) {
+        var _this = this;
         this.employeeScheduleService = employeeScheduleService;
         this.router = router;
         this.route = route;
         this.dragulaService = dragulaService;
         this.scheduleDate = new Date();
+        this.dragMoves = function (el, source, handle, sibling) {
+            // only move favorite items, not the icon element
+            return el.className.toLowerCase() === 'employee-item';
+        };
+        this.dragAccepts = function (el, target, source, sibling) {
+            var ownContainer = el.contains(target);
+            if (ownContainer) {
+                return false;
+            }
+            var employeeId = el.getAttribute('data-employee-id');
+            var shiftId = target.getAttribute('data-shift-id');
+            var employee = _this.availableEmployees.filter(function (e) { return e.employeeId == employeeId; })[0];
+            var shift = _this.availableShifts.filter(function (s) { return s.shiftId == shiftId; })[0];
+            if (!employee || !shift) {
+                return false;
+            }
+            // does not have position
+            if (employee.positionIds.indexOf(shift.positionId) < 0) {
+                return false;
+            }
+            // employee already exists
+            if (_this.getEmployeeShiftObject(employeeId, shiftId) != null) {
+                return false;
+            }
+            // employee time overlap
+            var allEmployeeShifts = _this.getAllEmployeeShifts(employeeId);
+            var hasConflict = false;
+            allEmployeeShifts.forEach(function (existingShift) {
+                var shiftStartWithinOtherShift = shift.shiftStartMinute >= existingShift.shiftStartMinute && shift.shiftStartMinute < existingShift.shiftEndMinute;
+                var shiftEndWithinOtherShift = shift.shiftEndMinute > existingShift.shiftStartMinute && shift.shiftEndMinute <= existingShift.shiftEndMinute;
+                if (shiftStartWithinOtherShift || shiftEndWithinOtherShift) {
+                    hasConflict = true;
+                    return;
+                }
+                var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute <= shift.shiftEndMinute;
+                if (existingShiftWithin) {
+                    hasConflict = true;
+                    return;
+                }
+            });
+            if (hasConflict) {
+                return false;
+            }
+            return true;
+        };
+        this.dragInvalid = function (el, handle) {
+            return false; // don't prevent any drags from initiating by default
+        };
     }
     EmployeeScheduleComponent.prototype.getSchedule = function () {
         var _this = this;
@@ -31,6 +80,11 @@ var EmployeeScheduleComponent = (function () {
             _this.availableEmployees = model.employees;
             _this.availableShifts = model.shifts;
             _this.employeeShifts = model.employeeShifts;
+            _this.positionCategories = model.positionCategories;
+            _this.availableGroupedShifts = {};
+            _this.positionCategories.forEach(function (pc) {
+                _this.availableGroupedShifts[pc] = _this.availableShifts.filter(function (s) { return s.positionCategory == pc; });
+            });
             _this.setupShiftBags();
         });
     };
@@ -39,6 +93,11 @@ var EmployeeScheduleComponent = (function () {
         this.shiftBags = {};
         this.availableShifts.forEach(function (s) {
             _this.shiftBags[s.shiftId] = [];
+        });
+        this.employeeShifts.forEach(function (es) {
+            var employee = _this.availableEmployees.filter(function (e) { return e.employeeId == es.employeeId; })[0];
+            employee['employeeShiftId'] = es.employeeShiftId;
+            _this.shiftBags[es.shiftId].push(employee);
         });
     };
     EmployeeScheduleComponent.prototype.ngOnInit = function () {
@@ -52,9 +111,11 @@ var EmployeeScheduleComponent = (function () {
         this.getSchedule();
     };
     EmployeeScheduleComponent.prototype.added = function (employeeId, shiftId) {
-        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then(function (es) {
-            //es.employeeShiftId;
-            console.log('shift added');
+        var _this = this;
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then(function (employeeShiftId) {
+            var employeeShiftObject = _this.getEmployeeShiftObject(employeeId, shiftId);
+            employeeShiftObject.employeeShiftId = employeeShiftId;
+            console.log('shift added', employeeShiftId);
         });
     };
     EmployeeScheduleComponent.prototype.remove = function (employeeId, shiftId) {
@@ -71,24 +132,34 @@ var EmployeeScheduleComponent = (function () {
         var employeeShifts = this.shiftBags[shiftId].filter(function (es) {
             return es.employeeId == employeeId;
         });
+        if (employeeShifts.length == 0) {
+            return null;
+        }
         var employeeShiftObject = employeeShifts[0];
         return employeeShiftObject;
+    };
+    EmployeeScheduleComponent.prototype.getAllEmployeeShifts = function (employeeId) {
+        var allShifts = [];
+        for (var shiftId in this.shiftBags) {
+            if (this.shiftBags.hasOwnProperty(shiftId)) {
+                var shiftIdValue = +shiftId;
+                var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftIdValue);
+                if (employeeShiftObject) {
+                    var shiftObject = this.availableShifts.filter(function (s) { return s.shiftId == shiftIdValue; });
+                    allShifts.push(shiftObject[0]);
+                }
+            }
+        }
+        return allShifts;
     };
     EmployeeScheduleComponent.prototype.dragulaSetup = function () {
         var _this = this;
         this.dragulaService.setOptions('schedule-bag', {
             removeOnSpill: true,
             copy: true,
-            moves: function (el, source, handle, sibling) {
-                // only move favorite items, not the icon element
-                return el.className.toLowerCase() === 'employee-item';
-            },
-            accepts: function (el, target, source, sibling) {
-                return !el.contains(target); // elements can not be dropped within themselves
-            },
-            invalid: function (el, handle) {
-                return false; // don't prevent any drags from initiating by default
-            }
+            moves: this.dragMoves,
+            accepts: this.dragAccepts,
+            invalid: this.dragInvalid
         });
         this.dragulaService.dropModel.subscribe(function (value) {
             _this.onDropModel(value.slice(1));
@@ -100,19 +171,6 @@ var EmployeeScheduleComponent = (function () {
         var shiftId = target.getAttribute('data-shift-id');
         this.added(employeeId, shiftId);
     };
-    //onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
-    //    if (this.selectedEmployee.employeeId) {
-    //        this.employeeService.update(this.selectedEmployee).then((employee) => {
-    //            this.selectedEmployee = null;
-    //            this.getEmployees();
-    //        });
-    //    } else {
-    //        this.employeeService.create(this.organizationId, this.selectedEmployee).then((employee) => {
-    //            this.selectedEmployee = null;
-    //            this.getEmployees();
-    //        });
-    //    }
-    //}
     EmployeeScheduleComponent.prototype.onDeleteEmployeeShift = function (employeeShiftId) {
         var _this = this;
         this.employeeScheduleService.delete(employeeShiftId).then(function () {

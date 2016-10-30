@@ -1,25 +1,50 @@
 ﻿<div class="row">
-    <div class="col-md-6">
-        <h2>Employee Schedule {{scheduleDate.toDateString()}}</h2>
-    </div>
-</div>
-
-<div class='wrapper'>
-    <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
-        <div class="employee-item" *ngFor='let employee of availableEmployees' attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}}</div>
-    </div>
-    <div *ngFor='let shift of availableShifts' >
-        <h3>{{shift.positionCategory}} {{ shift.positionName}} {{shift.shiftTime}}</h3>
-        <div class='container' style="width: 200px; min-height: 50px;" [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
-            <div>drop here</div>
-            <div *ngFor='let employee of shiftBags[shift.shiftId]'>
-                {{employee.firstName}}
-                <button class="btn btn-danger" (click)="remove(employee.employeeId, shift.shiftId)">Remove</button>
-            </div>
-        </div>
+    <div class="col-sm-12">
+        <h1>Employee Schedule {{scheduleDate.toDateString()}}</h1>
     </div>
 </div>
 
 <div class="row">
-    <pre>{{shiftBags | json}}</pre>
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Employees</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
+                    <div class="employee-item" *ngFor='let employee of availableEmployees' attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}} {{employee.lastName}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-10" style="border-left: 2px solid darkgrey;">
+        <div class="row">
+            <div *ngFor="let positionCategory of positionCategories" class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>{{positionCategory}}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div *ngFor='let shift of availableGroupedShifts[positionCategory]'>
+                            <h4>{{ shift.positionName}} </h4>
+                            <span class="small">{{shift.shiftTime}}</span>
+
+                            <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
+                                <div>drop here</div>
+                                <div *ngFor='let employee of shiftBags[shift.shiftId]'>
+                                    {{employee.firstName}} {{employee.lastName}}
+                                    <button class="btn btn-danger btn-xs pull-right" (click)="remove(employee.employeeId, shift.shiftId)">X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

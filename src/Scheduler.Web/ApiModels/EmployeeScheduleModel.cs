@@ -17,11 +17,15 @@ namespace Scheduler.Web.ApiModels
             Shifts = shifts.Select(s => new ShiftDisplayModel(s)).ToList();
             Employees = employees.Select(e => new EmployeeDisplayModel(e)).ToList();
             EmployeeShifts = employeeShifts.Select(es => new EmployeeShiftModel(es)).ToList();
+
+            Shifts = Shifts.OrderBy(s => s.PositionCategory).ThenBy(s => s.PositionName).ThenBy(s => s.ShiftStartMinute).ToList();
+            PositionCategories = Shifts.Select(s => s.PositionCategory).Distinct().ToList();
         }
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public List<string> PositionCategories { get; set; }
         public List<ShiftDisplayModel> Shifts { get; set; }
         public List<EmployeeDisplayModel> Employees { get; set; }
         public List<EmployeeShiftModel> EmployeeShifts { get; set; }
@@ -31,10 +35,12 @@ namespace Scheduler.Web.ApiModels
     {
         public EmployeeShiftModel(EmployeeShift employeeShift)
         {
+            EmployeeShiftId = employeeShift.EmployeeShiftId;
             EmployeeId = employeeShift.Employee.EmployeeId;
             ShiftId = employeeShift.Shift.ShiftId;
         }
 
+        public int EmployeeShiftId { get; set; }
         public int EmployeeId { get; set; }
         public int ShiftId { get; set; }
     }
@@ -49,7 +55,17 @@ namespace Scheduler.Web.ApiModels
             PositionCategory = shift.Position.Category;
 
             ShiftDay = shift.Day;
-            ShiftTime = shift.StartTime + "-" + shift.EndTime;
+
+            TimeSpan startSpan = TimeSpan.Parse(shift.StartTime);
+            TimeSpan endSpan = TimeSpan.Parse(shift.EndTime);
+
+            DateTime timeStart = DateTime.Today.Add(startSpan);
+            DateTime timeEnd = DateTime.Today.Add(endSpan);
+
+            ShiftTime = timeStart.ToString("hh:mm tt") + "-" + timeEnd.ToString("hh:mm tt");
+
+            ShiftStartMinute = startSpan.TotalMinutes;
+            ShiftEndMinute = endSpan.TotalMinutes;
         }
 
         public int ShiftId { get; set; }
@@ -58,6 +74,8 @@ namespace Scheduler.Web.ApiModels
         public string PositionCategory { get; set; }
         public string ShiftDay { get; set; }
         public string ShiftTime { get; set; }
+        public double ShiftStartMinute { get; set; }
+        public double ShiftEndMinute { get; set; }
     }
 
     public class EmployeeDisplayModel

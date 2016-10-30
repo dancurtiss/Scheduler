@@ -30,7 +30,7 @@ export class EmployeeScheduleService {
             .catch(this.handleError);
     }
 
-    create(organizationId: number, addShift: AddEmployeeShift): Promise<AddEmployeeShift> {
+    create(organizationId: number, addShift: AddEmployeeShift): Promise<number> {
         const url = `${this.employeesUrl}/${organizationId}`;
         return this.http
             .post(url, JSON.stringify(addShift), { headers: this.headers })
