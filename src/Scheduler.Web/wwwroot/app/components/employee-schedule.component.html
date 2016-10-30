@@ -4,25 +4,22 @@
     </div>
 </div>
 
-<div>
-    <div class='wrapper'>
-        <div class='container' [dragula]='"first-bag"'>
-            <div>You can move these elements between these two containers</div>
-            <div>Moving them anywhere else isn't quite possible</div>
-            <div>There's also the possibility of moving elements around in the same container, changing their position</div>
-        </div>
-        <div class='container' [dragula]='"first-bag"'>
-            <div>This is the default use case. You only need to specify the containers you want to use</div>
-            <div>More interactive use cases lie ahead</div>
-            <div>Make sure to check out the <a href='https://github.com/bevacqua/dragula#readme'>documentation on GitHub!</a></div>
+<div class='wrapper'>
+    <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
+        <div class="employee-item" *ngFor='let employee of availableEmployees'>{{employee.firstName}}</div>
+    </div>
+    <div *ngFor='let shift of availableShifts' >
+        <h3>{{shift.positionCategory}} {{ shift.positionName}} {{shift.shiftTime}}</h3>
+        <div class='container' style="width: 200px; min-height: 50px;" [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]'>
+            <div>drop here</div>
+            <div *ngFor='let employee of shiftBags[shift.shiftId]'>
+                {{employee.firstName}}
+                <button class="btn btn-danger" (click)="remove(employee.employeeId, shift.shiftId)">Remove</button>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <pre>{{availableEmployees | json}}</pre>
-</div><div class="row">
-    <pre>{{availableShifts | json}}</pre>
-</div><div class="row">
-    <pre>{{employeeShifts | json}}</pre>
+    <pre>{{shiftBags | json}}</pre>
 </div>
