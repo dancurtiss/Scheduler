@@ -21,12 +21,14 @@ var organization_detail_component_1 = require('./components/organization-detail.
 var schedule_detail_component_1 = require('./components/schedule-detail.component');
 var employees_component_1 = require('./components/employees.component');
 var employee_schedule_component_1 = require('./components/employee-schedule.component');
+var employee_detail_component_1 = require('./components/employee-detail.component');
 var organization_service_1 = require('./services/organization.service');
 var schedule_service_1 = require('./services/schedule.service');
 var position_service_1 = require('./services/position.service');
 var shift_service_1 = require('./services/shift.service');
 var employee_service_1 = require('./services/employee.service');
 var employee_schedule_service_1 = require('./services/employee-schedule.service');
+var employee_conflict_service_1 = require('./services/employee-conflict.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -66,6 +68,10 @@ var AppModule = (function () {
                     {
                         path: 'employeeschedule/detail/:id/:date',
                         component: employee_schedule_component_1.EmployeeScheduleComponent
+                    },
+                    {
+                        path: 'employee/detail/:id',
+                        component: employee_detail_component_1.EmployeeDetailComponent
                     }
                 ])
             ],
@@ -76,7 +82,8 @@ var AppModule = (function () {
                 organization_detail_component_1.OrganizationDetailComponent,
                 schedule_detail_component_1.ScheduleDetailComponent,
                 employees_component_1.EmployeesComponent,
-                employee_schedule_component_1.EmployeeScheduleComponent
+                employee_schedule_component_1.EmployeeScheduleComponent,
+                employee_detail_component_1.EmployeeDetailComponent
             ],
             providers: [
                 ng2_dragula_1.DragulaService,
@@ -85,7 +92,8 @@ var AppModule = (function () {
                 position_service_1.PositionService,
                 shift_service_1.ShiftService,
                 employee_service_1.EmployeeService,
-                employee_schedule_service_1.EmployeeScheduleService
+                employee_schedule_service_1.EmployeeScheduleService,
+                employee_conflict_service_1.EmployeeConflictService
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

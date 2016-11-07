@@ -43,3 +43,26 @@ export class CancelEmployeeShift {
     reason: string;
 }
 
+export class EmployeeDetails {
+    conflicts: EmployeeConflict[];
+    shifts: EmployeeShiftDisplay[];
+}
+
+export class EmployeeConflict {
+    employeeConflictId: number;
+    conflictDate: string;
+    startHour: number;
+    endHour: number;
+    reason: string;
+}
+
+export class EmployeeShiftDisplay {
+    employeeShiftId: number;
+    shiftId: number;
+    positionName: string;
+    positionCategory: string;
+    shiftStartTime: string;
+    shiftEndTime: string;
+    cancelled: boolean;
+    cancelReason: string;
+}

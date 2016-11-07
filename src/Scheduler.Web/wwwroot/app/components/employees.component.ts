@@ -68,4 +68,8 @@ export class EmployeesComponent implements OnInit {
     onSelect(employee: Employee): void {
         this.selectedEmployee = employee;
     }
+
+    goToDetail(id: number): void {
+        this.router.navigate(['employee/detail/', id]);
+    }
 }

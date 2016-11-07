@@ -61,6 +61,9 @@ var EmployeesComponent = (function () {
     EmployeesComponent.prototype.onSelect = function (employee) {
         this.selectedEmployee = employee;
     };
+    EmployeesComponent.prototype.goToDetail = function (id) {
+        this.router.navigate(['employee/detail/', id]);
+    };
     EmployeesComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

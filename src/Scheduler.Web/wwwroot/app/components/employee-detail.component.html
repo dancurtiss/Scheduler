@@ -1,0 +1,110 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h2>{{employeeName}}</h2>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-success pull-right" (click)="onAddEmployeeConflict();">
+            Add Conflict
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employeeConflict of conflicts" (click)="onEmployeeConflictSelect(employeeConflict)">
+                    <th scope="row">{{employeeConflict.employeeConflictId}}</th>
+                    <td>{{employeeConflict.conflictDate | date:'MM/dd/yyyy'}}</td>
+                    <td>{{employeeConflict.startHour%12==0?12:employeeConflict.startHour%12}}{{employeeConflict.startHour<12?'AM':'PM'}} - {{employeeConflict.endHour%12==0?12:employeeConflict.endHour%12}}{{employeeConflict.endHour<12?'AM':'PM'}}</td>
+                    <td><button class="btn btn-danger" (click)="onDeleteEmployeeConflict(employeeConflict.employeeConflictId); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf="selectedEmployeeConflict">
+    <div class="col-md-6">
+        <form name="selectedEmployeeConflictForm">
+            <div class="form-group">
+                <label for="employeeConflictReason">Reason</label>
+                <input type="text" class="form-control" id="employeeConflictReason" placeholder="" name="reason" [(ngModel)]="selectedEmployeeConflict.reason" required>
+            </div>
+            <div class="form-group">
+                <label for="conflictDate">Conflict Date</label>
+                <input type="text" class="form-control" id="conflictDate" placeholder="" name="conflictDate" [(ngModel)]="selectedEmployeeConflict.conflictDate" required>
+            </div>
+            <div class="form-group">
+                <label for="conflictEnd">Conflict Time</label>
+                <select class="form-control" id="startHour" [(ngModel)]="selectedEmployeeConflict.startHour" name="startHour">
+                    <option [value]="i" *ngFor="let i of hours">{{i%12==0?12:i%12}}{{i<12?'AM':'PM'}}</option>
+                </select>
+                <select class="form-control" id="endHour" [(ngModel)]="selectedEmployeeConflict.endHour" name="endHour">
+                    <option [value]="i" *ngFor="let i of hours">{{i%12==0?12:i%12}}{{i<12?'AM':'PM'}}</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSaveEmployeeConflict();">Submit</button>
+            <button type="reset" class="btn btn-default" (click)="selectedEmployeeConflict = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Scheduled Shifts</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Position Name</th>
+                    <th>Postion Category</th>
+                    <th>Shift Start</th>
+                    <th>Shift End</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shift of shifts">
+                    <th scope="row">{{shift.employeeShiftId}}</th>
+                    <td>{{shift.positionName}}</td>
+                    <td>{{shift.positionCategory}}</td>
+                    <td>{{shift.shiftStartTime | date:'short'}}</td>
+                    <td>{{shift.shiftEndTime | date:'short'}}</td>
+                    <td>
+                        <button class="btn btn-danger" *ngIf="!shift.cancelled" (click)="onShiftSelect(shift); $event.stopPropagation()">Cancel</button>
+                        <span *ngIf="shift.cancelled">Cancelled: {{shift.cancelReason}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf="selectedShift">
+    <div class="col-md-6">
+        <form name="selectedShiftForm">
+            <h2>{{selectedShift.positionName}} {{selectedShift.shiftStartTime | date: 'short'}} {{selectedShift.shiftEndTime | date: 'short'}}</h2>
+            <div class="form-group">
+                <label for="shiftCancelReason">Reason</label>
+                <input type="text" class="form-control" id="shiftCancelReason" placeholder="" name="cancelReason" [(ngModel)]="selectedShift.cancelReason">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onCancelShift(selectedShift.employeeShiftId, selectedShift.cancelReason);">Cancel Shift</button>
+            <button type="reset" class="btn btn-default" (click)="selectedShift = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+</div>
+

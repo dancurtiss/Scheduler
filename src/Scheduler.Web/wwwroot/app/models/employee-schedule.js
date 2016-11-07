@@ -35,4 +35,22 @@ var CancelEmployeeShift = (function () {
     return CancelEmployeeShift;
 }());
 exports.CancelEmployeeShift = CancelEmployeeShift;
+var EmployeeDetails = (function () {
+    function EmployeeDetails() {
+    }
+    return EmployeeDetails;
+}());
+exports.EmployeeDetails = EmployeeDetails;
+var EmployeeConflict = (function () {
+    function EmployeeConflict() {
+    }
+    return EmployeeConflict;
+}());
+exports.EmployeeConflict = EmployeeConflict;
+var EmployeeShiftDisplay = (function () {
+    function EmployeeShiftDisplay() {
+    }
+    return EmployeeShiftDisplay;
+}());
+exports.EmployeeShiftDisplay = EmployeeShiftDisplay;
 //# sourceMappingURL=employee-schedule.js.map

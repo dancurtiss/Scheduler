@@ -14,6 +14,7 @@ import { OrganizationDetailComponent }  from './components/organization-detail.c
 import { ScheduleDetailComponent }  from './components/schedule-detail.component';
 import { EmployeesComponent }       from './components/employees.component';
 import { EmployeeScheduleComponent }       from './components/employee-schedule.component';
+import { EmployeeDetailComponent }       from './components/employee-detail.component';
 
 
 import { OrganizationService }      from './services/organization.service';
@@ -22,6 +23,7 @@ import { PositionService }          from './services/position.service';
 import { ShiftService }             from './services/shift.service';
 import { EmployeeService }             from './services/employee.service';
 import { EmployeeScheduleService }             from './services/employee-schedule.service';
+import { EmployeeConflictService }             from './services/employee-conflict.service';
 
 @NgModule({
     imports: [
@@ -58,6 +60,10 @@ import { EmployeeScheduleService }             from './services/employee-schedul
         {
             path: 'employeeschedule/detail/:id/:date',
             component: EmployeeScheduleComponent
+        },
+        {
+            path: 'employee/detail/:id',
+            component: EmployeeDetailComponent
         }
     ])
 ],
@@ -68,7 +74,8 @@ import { EmployeeScheduleService }             from './services/employee-schedul
         OrganizationDetailComponent,
         ScheduleDetailComponent,
         EmployeesComponent,
-        EmployeeScheduleComponent
+        EmployeeScheduleComponent,
+        EmployeeDetailComponent
     ],
     providers: [
         DragulaService,
@@ -77,7 +84,8 @@ import { EmployeeScheduleService }             from './services/employee-schedul
         PositionService,
         ShiftService,
         EmployeeService,
-        EmployeeScheduleService
+        EmployeeScheduleService,
+        EmployeeConflictService
     ],
     bootstrap: [AppComponent]
 })
