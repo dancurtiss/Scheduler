@@ -15,7 +15,7 @@ var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
 var app_component_1 = require('./app.component');
-var dashboard_component_1 = require('./components/dashboard.component');
+var organization_schedule_component_1 = require('./components/organization-schedule.component');
 var organizations_component_1 = require('./components/organizations.component');
 var organization_detail_component_1 = require('./components/organization-detail.component');
 var schedule_detail_component_1 = require('./components/schedule-detail.component');
@@ -42,12 +42,8 @@ var AppModule = (function () {
                 router_1.RouterModule.forRoot([
                     {
                         path: '',
-                        redirectTo: '/dashboard',
+                        redirectTo: '/organizations',
                         pathMatch: 'full'
-                    },
-                    {
-                        path: 'dashboard',
-                        component: dashboard_component_1.DashboardComponent
                     },
                     {
                         path: 'organizations',
@@ -56,6 +52,10 @@ var AppModule = (function () {
                     {
                         path: 'organization/employees/:id',
                         component: employees_component_1.EmployeesComponent
+                    },
+                    {
+                        path: 'organization/schedule/:id',
+                        component: organization_schedule_component_1.OrganizationScheduleComponent
                     },
                     {
                         path: 'organization/detail/:id',
@@ -77,7 +77,7 @@ var AppModule = (function () {
             ],
             declarations: [
                 app_component_1.AppComponent,
-                dashboard_component_1.DashboardComponent,
+                organization_schedule_component_1.OrganizationScheduleComponent,
                 organizations_component_1.OrganizationsComponent,
                 organization_detail_component_1.OrganizationDetailComponent,
                 schedule_detail_component_1.ScheduleDetailComponent,

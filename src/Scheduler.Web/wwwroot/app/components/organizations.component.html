@@ -5,7 +5,6 @@
     <div class="col-md-6">
         <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a routerLink="/dashboard">Dashboard</a></li>
                 <li><a routerLink="/organizations">Organizations</a></li>
             </ul>
         </div>
@@ -33,7 +32,6 @@
                     <th>Contact Phone</th>
                     <th>Action</th>
                     <th>Action</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,7 +40,6 @@
                     <td>{{organization.name}}</td>
                     <td>{{organization.contactName}}</td>
                     <td>{{organization.contactPhone}}</td>
-                    <td><button class="btn btn-default" (click)="goToEmployees(organization.organizationId); $event.stopPropagation()">Edit Employees</button></td>
                     <td><button class="btn btn-default" (click)="onSelect(organization); $event.stopPropagation()">Edit</button></td>
                     <td><button class="btn btn-danger" (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">Delete</button></td>
                 </tr>

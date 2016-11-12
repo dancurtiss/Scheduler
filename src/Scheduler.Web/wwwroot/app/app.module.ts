@@ -7,8 +7,7 @@ import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AppComponent }         from './app.component';
 
-import { DashboardComponent }   from './components/dashboard.component';
-
+import { OrganizationScheduleComponent }   from './components/organization-schedule.component';
 import { OrganizationsComponent }       from './components/organizations.component';
 import { OrganizationDetailComponent }  from './components/organization-detail.component';
 import { ScheduleDetailComponent }  from './components/schedule-detail.component';
@@ -34,12 +33,8 @@ import { EmployeeConflictService }             from './services/employee-conflic
         RouterModule.forRoot([
         {
             path: '',
-            redirectTo: '/dashboard',
+            redirectTo: '/organizations',
             pathMatch: 'full'
-        },
-        {
-            path: 'dashboard',
-            component: DashboardComponent
         },
         {
             path: 'organizations',
@@ -48,6 +43,10 @@ import { EmployeeConflictService }             from './services/employee-conflic
         {
             path: 'organization/employees/:id',
             component: EmployeesComponent
+        },
+        {
+            path: 'organization/schedule/:id',
+            component: OrganizationScheduleComponent
         },
         {
             path: 'organization/detail/:id',
@@ -69,7 +68,7 @@ import { EmployeeConflictService }             from './services/employee-conflic
 ],
     declarations: [
         AppComponent,
-        DashboardComponent,
+        OrganizationScheduleComponent,
         OrganizationsComponent,
         OrganizationDetailComponent,
         ScheduleDetailComponent,
