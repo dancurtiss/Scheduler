@@ -7,6 +7,7 @@
 }
 
 export class ScheduleDetails {
+    organizationId: number;
     scheduleId: number;
     name: string;
     startDate: Date;

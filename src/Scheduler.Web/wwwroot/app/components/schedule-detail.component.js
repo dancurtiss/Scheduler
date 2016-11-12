@@ -24,6 +24,7 @@ var ScheduleDetailComponent = (function () {
     ScheduleDetailComponent.prototype.getScheduleDetails = function () {
         var _this = this;
         this.shiftService.getShifts(this.scheduleId).then(function (scheduleDetails) {
+            _this.organizationId = scheduleDetails.organizationId;
             _this.scheduleName = scheduleDetails.name;
             _this.scheduleStart = scheduleDetails.startDate;
             _this.scheduleEnd = scheduleDetails.endDate;

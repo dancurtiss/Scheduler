@@ -11,6 +11,7 @@ import { ShiftService }                                     from '../services/sh
 })
 export class ScheduleDetailComponent implements OnInit {
 
+    organizationId: number;
     scheduleId: number;
     scheduleName: string;
     scheduleStart: Date;
@@ -33,6 +34,7 @@ export class ScheduleDetailComponent implements OnInit {
 
     getScheduleDetails(): void {
         this.shiftService.getShifts(this.scheduleId).then((scheduleDetails) => {
+            this.organizationId = scheduleDetails.organizationId;
             this.scheduleName = scheduleDetails.name;
             this.scheduleStart = scheduleDetails.startDate;
             this.scheduleEnd = scheduleDetails.endDate;

@@ -11,6 +11,7 @@ namespace Scheduler.Web.ApiModels
     {
         public ScheduleDetailModel(Schedule schedule, List<Shift> shifts, List<Position> positions)
         {
+            OrganizationId = schedule.Organization.OrganizationId;
             ScheduleId = schedule.ScheduleId;
             Name = schedule.Name;
             StartDate = schedule.StartDate;
@@ -21,6 +22,7 @@ namespace Scheduler.Web.ApiModels
             Positions = positions.Select(p => new PositionModel(p)).ToList();
         }
 
+        public int OrganizationId { get; set; }
         public int ScheduleId { get; set; }
 
         public string Name { get; set; }

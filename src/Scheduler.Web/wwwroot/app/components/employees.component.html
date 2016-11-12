@@ -3,6 +3,20 @@
         <h2>Employees</h2>
     </div>
     <div class="col-md-6">
+        <div class="navbar-collapse collapse pull-right">
+            <ul class="nav navbar-nav">
+                <li><a [routerLink]="['/organization','schedule', organizationId]">Schedule</a></li>
+                <li><a [routerLink]="['/organization','employees', organizationId]">Employees</a></li>
+                <li><a [routerLink]="['/organization','detail', organizationId]">Setup</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
         <button class="btn btn-success pull-right" (click)="onAddEmployee();">
             Add Employee
         </button>
