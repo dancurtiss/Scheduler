@@ -12,5 +12,9 @@ namespace Scheduler.Web.Models
     {
         [MaxLength(10)]
         public string Phone { get; set; }
+
+        public int? OrganizationId { get; set; }
+
+        public int? EmployeeId { get; set; }
     }
 }
