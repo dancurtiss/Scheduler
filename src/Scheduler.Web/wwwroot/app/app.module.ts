@@ -7,8 +7,11 @@ import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AppComponent }         from './app.component';
 
+import { AuthGuard }    from './services/auth-guard.service';
+
 import { OrganizationScheduleComponent }   from './components/organization-schedule.component';
 import { OrganizationsComponent }       from './components/organizations.component';
+import { LandingComponent }       from './components/landing.component';
 import { OrganizationDetailComponent }  from './components/organization-detail.component';
 import { ScheduleDetailComponent }  from './components/schedule-detail.component';
 import { EmployeesComponent }       from './components/employees.component';
@@ -16,6 +19,7 @@ import { EmployeeScheduleComponent }       from './components/employee-schedule.
 import { EmployeeDetailComponent }       from './components/employee-detail.component';
 
 
+import { AuthorizationService }      from './services/authorization.service';
 import { OrganizationService }      from './services/organization.service';
 import { ScheduleService }          from './services/schedule.service';
 import { PositionService }          from './services/position.service';
@@ -33,41 +37,55 @@ import { EmployeeConflictService }             from './services/employee-conflic
         RouterModule.forRoot([
         {
             path: '',
-            redirectTo: '/organizations',
+            redirectTo: '/landing',
             pathMatch: 'full'
         },
         {
+            path: 'landing',
+            component: LandingComponent,
+            canActivate: [AuthGuard]
+        },
+        {
             path: 'organizations',
-            component: OrganizationsComponent
+            component: OrganizationsComponent,
+            canActivate: [AuthGuard],
+            data: { 'permission': 'organizations.manage' }
         },
         {
             path: 'organization/employees/:id',
-            component: EmployeesComponent
+            component: EmployeesComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'organization/schedule/:id',
-            component: OrganizationScheduleComponent
+            component: OrganizationScheduleComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'organization/detail/:id',
-            component: OrganizationDetailComponent
+            component: OrganizationDetailComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'schedule/detail/:id',
-            component: ScheduleDetailComponent
+            component: ScheduleDetailComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'employeeschedule/detail/:id/:date',
-            component: EmployeeScheduleComponent
+            component: EmployeeScheduleComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'employee/detail/:id',
-            component: EmployeeDetailComponent
+            component: EmployeeDetailComponent,
+            canActivate: [AuthGuard]
         }
     ])
 ],
     declarations: [
         AppComponent,
+        LandingComponent,
         OrganizationScheduleComponent,
         OrganizationsComponent,
         OrganizationDetailComponent,
@@ -77,6 +95,8 @@ import { EmployeeConflictService }             from './services/employee-conflic
         EmployeeDetailComponent
     ],
     providers: [
+        AuthGuard,
+        AuthorizationService,
         DragulaService,
         OrganizationService,
         ScheduleService,

@@ -10,8 +10,26 @@ namespace Scheduler.Web.Controllers
     {
         public IActionResult Index()
         {
+            // lookup user by username
+            // pull org or employee id as necessary
+
+
+            if (UserHasPermission(PermissionClaimType.Organizations_Manage))
+            {
+                ViewBag.RouteUrl = "/organizations";
+            }
+            else
+            {
+                ViewBag.RouteUrl = "/organization/detail/2003";
+            }
+
             // This is the landing page -- will keep this .net mvc
             return View();
+        }
+
+        private bool UserHasPermission(PermissionClaimType permission)
+        {
+            return User.HasClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], SchedulerClaims.PermissionClaimTypes[permission].PolicyName);
         }
 
         //public IActionResult About()

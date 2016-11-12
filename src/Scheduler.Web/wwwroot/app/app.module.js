@@ -15,13 +15,16 @@ var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
 var app_component_1 = require('./app.component');
+var auth_guard_service_1 = require('./services/auth-guard.service');
 var organization_schedule_component_1 = require('./components/organization-schedule.component');
 var organizations_component_1 = require('./components/organizations.component');
+var landing_component_1 = require('./components/landing.component');
 var organization_detail_component_1 = require('./components/organization-detail.component');
 var schedule_detail_component_1 = require('./components/schedule-detail.component');
 var employees_component_1 = require('./components/employees.component');
 var employee_schedule_component_1 = require('./components/employee-schedule.component');
 var employee_detail_component_1 = require('./components/employee-detail.component');
+var authorization_service_1 = require('./services/authorization.service');
 var organization_service_1 = require('./services/organization.service');
 var schedule_service_1 = require('./services/schedule.service');
 var position_service_1 = require('./services/position.service');
@@ -42,41 +45,55 @@ var AppModule = (function () {
                 router_1.RouterModule.forRoot([
                     {
                         path: '',
-                        redirectTo: '/organizations',
+                        redirectTo: '/landing',
                         pathMatch: 'full'
                     },
                     {
+                        path: 'landing',
+                        component: landing_component_1.LandingComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
+                    },
+                    {
                         path: 'organizations',
-                        component: organizations_component_1.OrganizationsComponent
+                        component: organizations_component_1.OrganizationsComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard],
+                        data: { 'permission': 'organizations.manage' }
                     },
                     {
                         path: 'organization/employees/:id',
-                        component: employees_component_1.EmployeesComponent
+                        component: employees_component_1.EmployeesComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     },
                     {
                         path: 'organization/schedule/:id',
-                        component: organization_schedule_component_1.OrganizationScheduleComponent
+                        component: organization_schedule_component_1.OrganizationScheduleComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     },
                     {
                         path: 'organization/detail/:id',
-                        component: organization_detail_component_1.OrganizationDetailComponent
+                        component: organization_detail_component_1.OrganizationDetailComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     },
                     {
                         path: 'schedule/detail/:id',
-                        component: schedule_detail_component_1.ScheduleDetailComponent
+                        component: schedule_detail_component_1.ScheduleDetailComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     },
                     {
                         path: 'employeeschedule/detail/:id/:date',
-                        component: employee_schedule_component_1.EmployeeScheduleComponent
+                        component: employee_schedule_component_1.EmployeeScheduleComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     },
                     {
                         path: 'employee/detail/:id',
-                        component: employee_detail_component_1.EmployeeDetailComponent
+                        component: employee_detail_component_1.EmployeeDetailComponent,
+                        canActivate: [auth_guard_service_1.AuthGuard]
                     }
                 ])
             ],
             declarations: [
                 app_component_1.AppComponent,
+                landing_component_1.LandingComponent,
                 organization_schedule_component_1.OrganizationScheduleComponent,
                 organizations_component_1.OrganizationsComponent,
                 organization_detail_component_1.OrganizationDetailComponent,
@@ -86,6 +103,8 @@ var AppModule = (function () {
                 employee_detail_component_1.EmployeeDetailComponent
             ],
             providers: [
+                auth_guard_service_1.AuthGuard,
+                authorization_service_1.AuthorizationService,
                 ng2_dragula_1.DragulaService,
                 organization_service_1.OrganizationService,
                 schedule_service_1.ScheduleService,

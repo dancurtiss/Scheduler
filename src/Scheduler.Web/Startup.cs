@@ -87,11 +87,11 @@ namespace Scheduler.Web
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Manage Organizations",
-                    policy => policy.RequireClaim("permissions", "organizations.manage"));
-
-                options.AddPolicy("Destroy Organizations",
-                    policy => policy.RequireClaim("permissions", "organizations.destroy"));
+                foreach(SchedulerPermission permission in SchedulerClaims.PermissionClaimTypes.Values)
+                {
+                    options.AddPolicy(permission.PolicyName,
+                        policy => policy.RequireClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], permission.ClaimName));
+                }
             });
         }
 
