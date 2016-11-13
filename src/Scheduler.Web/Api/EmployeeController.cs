@@ -7,28 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class EmployeeController : Controller
+    [Authorize("Manage Employees")]
+    public class EmployeeController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public EmployeeController(SchedulerContext context)
+        public EmployeeController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
         [HttpGet("{id}")]
         public EmployeeListModel Get(int id)
         {
-            List<PositionModel> availablePositions = _context.Positions.Include(p => p.Organization)
+            UserCanAccessOrganization(id);
+
+            List<PositionModel> availablePositions = _schedulerContext.Positions.Include(p => p.Organization)
                 .Where(p => p.Organization.OrganizationId == id).ToList()
                 .Select(p => new PositionModel(p)).ToList();
 
-            List<EmployeeModel> employees = _context.Employees
+            List<EmployeeModel> employees = _schedulerContext.Employees
                 .Include(e => e.Positions).ThenInclude(p => p.Position)
                 .Where(p => p.Organization.OrganizationId == id).ToList()
                 .Select(o => new EmployeeModel(o)).ToList();
@@ -47,6 +48,8 @@ namespace Scheduler.Web.Api
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]EmployeeModel employee)
         {
+            UserCanAccessOrganization(id);
+
             if (employee == null)
             {
                 return BadRequest();
@@ -57,11 +60,11 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var availablePositions = _context.Positions.Include(p => p.Organization)
+            var availablePositions = _schedulerContext.Positions.Include(p => p.Organization)
                                         .Where(p => p.Organization.OrganizationId == id).ToList();
 
 
-            var organization = _context.Organizations.Single(o => o.OrganizationId == id);
+            var organization = _schedulerContext.Organizations.Single(o => o.OrganizationId == id);
             var employeeEntity = employee.Export();
             employeeEntity.Organization = organization;
 
@@ -69,12 +72,12 @@ namespace Scheduler.Web.Api
             {
                 if (employee.EmployeePositionIds.Contains(position.PositionId))
                 {
-                    _context.EmployeePositions.Add(new EmployeePosition { Employee = employeeEntity, Position = position });
+                    _schedulerContext.EmployeePositions.Add(new EmployeePosition { Employee = employeeEntity, Position = position });
                 }
             }
 
-            _context.Employees.Add(employeeEntity);
-            _context.SaveChanges();
+            _schedulerContext.Employees.Add(employeeEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employee);
         }
@@ -83,6 +86,8 @@ namespace Scheduler.Web.Api
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EmployeeModel employee)
         {
+            UserCanAccessEmployee(id);
+
             if (employee == null)
             {
                 return BadRequest();
@@ -93,12 +98,12 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var employeeEntity = _context.Employees
+            var employeeEntity = _schedulerContext.Employees
                 .Include(e => e.Organization)
                 .Include(e => e.Positions).ThenInclude(p => p.Position)
                 .Single(o => o.EmployeeId == id);
 
-            var availablePositions = _context.Positions.Include(p => p.Organization)
+            var availablePositions = _schedulerContext.Positions.Include(p => p.Organization)
                 .Where(p => p.Organization.OrganizationId == employeeEntity.Organization.OrganizationId).ToList();
 
             var currentPositions = employeeEntity.Positions.Select(p => p.Position.PositionId);
@@ -116,17 +121,17 @@ namespace Scheduler.Web.Api
                 }
                 else if (positionSelected && !positionAlreadyIncluded)
                 {
-                    _context.EmployeePositions.Add(new EmployeePosition { Employee = employeeEntity, Position = position });
+                    _schedulerContext.EmployeePositions.Add(new EmployeePosition { Employee = employeeEntity, Position = position });
                 }
                 else if (!positionSelected && positionAlreadyIncluded)
                 {
                     var removePosition = employeeEntity.Positions.Single(ep => ep.Position.PositionId == position.PositionId);
-                    _context.EmployeePositions.Remove(removePosition);
+                    _schedulerContext.EmployeePositions.Remove(removePosition);
                 }
 
             }
 
-            _context.SaveChanges();
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employee);
         }
@@ -135,9 +140,11 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var employeeEntity = _context.Employees.Single(o => o.EmployeeId == id);
-            _context.Employees.Remove(employeeEntity);
-            _context.SaveChanges();
+            UserCanAccessEmployee(id);
+
+            var employeeEntity = _schedulerContext.Employees.Single(o => o.EmployeeId == id);
+            _schedulerContext.Employees.Remove(employeeEntity);
+            _schedulerContext.SaveChanges();
         }
     }
 }

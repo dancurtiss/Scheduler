@@ -7,28 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class EmployeeConflictController : Controller
+    [Authorize("Manage Employee Details")]
+    public class EmployeeConflictController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public EmployeeConflictController(SchedulerContext context)
+        public EmployeeConflictController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
         [HttpGet("{id}")]
         public EmployeeDetailModel Get(int id)
         {
-            List<EmployeeConflictModel> employeeConflicts = _context.EmployeeConflicts
+            UserCanAccessEmployee(id);
+
+            List<EmployeeConflictModel> employeeConflicts = _schedulerContext.EmployeeConflicts
                 .Where(ec => ec.Employee.EmployeeId == id).ToList()
                 .Select(ec => new EmployeeConflictModel(ec)).ToList();
 
-            List<EmployeeShiftDisplayModel> employeeShifts = _context.EmployeeShifts
+            List<EmployeeShiftDisplayModel> employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Shift).ThenInclude(s => s.Position)
                 .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > DateTime.Today).ToList()
                 .Select(es => new EmployeeShiftDisplayModel(es)).ToList();
@@ -50,13 +51,15 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var employeeEntity = _context.Employees.Single(e => e.EmployeeId == id);
+            UserCanAccessEmployee(id);
+
+            var employeeEntity = _schedulerContext.Employees.Single(e => e.EmployeeId == id);
             var employeeConflictEntity = employeeConflict.Export();
 
             employeeConflictEntity.Employee = employeeEntity;
 
-            _context.EmployeeConflicts.Add(employeeConflictEntity);
-            _context.SaveChanges();
+            _schedulerContext.EmployeeConflicts.Add(employeeConflictEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employeeConflict);
         }
@@ -75,12 +78,14 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var employeeConflictEntity = _context.EmployeeConflicts
+            var employeeConflictEntity = _schedulerContext.EmployeeConflicts.Include(ec=>ec.Employee)
                 .Single(o => o.EmployeeConflictId == id);
 
+            UserCanAccessEmployee(employeeConflictEntity.Employee.EmployeeId);
+
             employeeConflict.Export(employeeConflictEntity);
-            
-            _context.SaveChanges();
+
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employeeConflict);
         }
@@ -89,9 +94,13 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var employeeConflictEntity = _context.EmployeeConflicts.Single(o => o.EmployeeConflictId == id);
-            _context.EmployeeConflicts.Remove(employeeConflictEntity);
-            _context.SaveChanges();
+            var employeeConflictEntity = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee)
+                .Single(o => o.EmployeeConflictId == id);
+
+            UserCanAccessEmployee(employeeConflictEntity.Employee.EmployeeId);
+
+            _schedulerContext.EmployeeConflicts.Remove(employeeConflictEntity);
+            _schedulerContext.SaveChanges();
         }
     }
 }

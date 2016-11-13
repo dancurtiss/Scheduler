@@ -7,17 +7,16 @@ using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
 using Microsoft.EntityFrameworkCore;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class ShiftController : Controller
+    [Authorize("Manage Organization Details")]
+    public class ShiftController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public ShiftController(SchedulerContext context)
+        public ShiftController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
@@ -25,7 +24,10 @@ namespace Scheduler.Web.Api
         public ScheduleDetailModel Get(int id)
         {
             Schedule schedule = GetSchedule(id);
-            List<Shift> shifts = _context.Shifts.Where(s => s.Schedule.ScheduleId == id).ToList();
+
+            UserCanAccessOrganization(schedule.Organization.OrganizationId);
+
+            List<Shift> shifts = _schedulerContext.Shifts.Where(s => s.Schedule.ScheduleId == id).ToList();
             List<Position> positions = GetAvailableSchedulePositions(schedule);
 
             ScheduleDetailModel model = new ScheduleDetailModel(schedule, shifts, positions);
@@ -33,15 +35,6 @@ namespace Scheduler.Web.Api
             return model;
         }
 
-        private Schedule GetSchedule(int id)
-        {
-            return _context.Schedules.Include(s => s.Organization).Single(s => s.ScheduleId == id);
-        }
-
-        private List<Position> GetAvailableSchedulePositions(Schedule schedule)
-        {
-            return _context.Positions.Where(p => p.Organization.OrganizationId == schedule.Organization.OrganizationId).ToList();
-        }
 
         //// GET api/values/5
         //[HttpGet("{id}")]
@@ -65,12 +58,15 @@ namespace Scheduler.Web.Api
             }
 
             Schedule schedule = GetSchedule(id);
+
+            UserCanAccessOrganization(schedule.Organization.OrganizationId);
+
             var positions = GetAvailableSchedulePositions(schedule);
             var shiftEntity = shift.Export(positions);
             shiftEntity.Schedule = schedule;
 
-            _context.Shifts.Add(shiftEntity);
-            _context.SaveChanges();
+            _schedulerContext.Shifts.Add(shiftEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(shift);
         }
@@ -89,13 +85,15 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var shiftEntity = _context.Shifts
+            var shiftEntity = _schedulerContext.Shifts
                 .Include(s => s.Schedule)
                 .Include(s => s.Schedule.Organization)
                 .Single(o => o.ShiftId == id);
 
+            UserCanAccessOrganization(shiftEntity.Schedule.Organization.OrganizationId);
+
             shift.Export(shiftEntity, GetAvailableSchedulePositions(shiftEntity.Schedule));
-            _context.SaveChanges();
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(shift);
         }
@@ -104,9 +102,26 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var shiftEntity = _context.Shifts.Single(o => o.ShiftId == id);
-            _context.Shifts.Remove(shiftEntity);
-            _context.SaveChanges();
+            var shiftEntity = _schedulerContext.Shifts
+                .Include(s => s.Schedule)
+                .Include(s => s.Schedule.Organization)
+                .Single(o => o.ShiftId == id);
+
+            UserCanAccessOrganization(shiftEntity.Schedule.Organization.OrganizationId);
+
+            _schedulerContext.Shifts.Remove(shiftEntity);
+            _schedulerContext.SaveChanges();
         }
+
+        private Schedule GetSchedule(int id)
+        {
+            return _schedulerContext.Schedules.Include(s => s.Organization).Single(s => s.ScheduleId == id);
+        }
+
+        private List<Position> GetAvailableSchedulePositions(Schedule schedule)
+        {
+            return _schedulerContext.Positions.Where(p => p.Organization.OrganizationId == schedule.Organization.OrganizationId).ToList();
+        }
+
     }
 }

@@ -6,24 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class OrganizationController : Controller
+    [Authorize("Manage Organizations")]
+    public class OrganizationController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public OrganizationController(SchedulerContext context)
+        public OrganizationController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
         [HttpGet]
         public IEnumerable<OrganizationModel> Get()
         {
-            return _context.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
+            return _schedulerContext.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
         }
 
         //// GET api/values/5
@@ -49,16 +48,19 @@ namespace Scheduler.Web.Api
 
             var organizationEntity = organization.Export();
 
-            _context.Organizations.Add(organizationEntity);
-            _context.SaveChanges();
+            _schedulerContext.Organizations.Add(organizationEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(organization);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
+        [Authorize("Manage Organization Details")]
         public IActionResult Put(int id, [FromBody]OrganizationModel organization)
         {
+            UserCanAccessOrganization(id);
+
             if (organization == null)
             {
                 return BadRequest();
@@ -69,9 +71,9 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var organizationEntity = _context.Organizations.Single(o => o.OrganizationId == id);
+            var organizationEntity = _schedulerContext.Organizations.Single(o => o.OrganizationId == id);
             organization.Export(organizationEntity);
-            _context.SaveChanges();
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(organization);
         }
@@ -80,9 +82,9 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var organizationEntity = _context.Organizations.Single(o => o.OrganizationId == id);
-            _context.Organizations.Remove(organizationEntity);
-            _context.SaveChanges();
+            var organizationEntity = _schedulerContext.Organizations.Single(o => o.OrganizationId == id);
+            _schedulerContext.Organizations.Remove(organizationEntity);
+            _schedulerContext.SaveChanges();
         }
     }
 }

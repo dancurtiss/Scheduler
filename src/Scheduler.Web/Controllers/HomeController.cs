@@ -3,33 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Scheduler.Web.Data;
+using Scheduler.Web.Api;
+using Scheduler.Data;
 
 namespace Scheduler.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public HomeController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
+        {
+        }
+
         public IActionResult Index()
         {
-            // lookup user by username
-            // pull org or employee id as necessary
-
-
-            if (UserHasPermission(PermissionClaimType.Organizations_Manage))
+            if (UserHasPermission(PermissionClaimType.Organization_Manage))
             {
                 ViewBag.RouteUrl = "/organizations";
             }
+            else if (UserHasPermission(PermissionClaimType.Organization_Details))
+            {
+                ViewBag.RouteUrl = string.Format("/organization/detail/{0}", LoggedInUser.OrganizationId);
+            }
+            else if (UserHasPermission(PermissionClaimType.Employee_Details))
+            {
+                ViewBag.RouteUrl = string.Format("/employee/detail/{0}", LoggedInUser.EmployeeId);
+            }
             else
             {
-                ViewBag.RouteUrl = "/organization/detail/2003";
+                throw new UnauthorizedAccessException("Cannot access site.");
             }
 
-            // This is the landing page -- will keep this .net mvc
             return View();
-        }
-
-        private bool UserHasPermission(PermissionClaimType permission)
-        {
-            return User.HasClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], SchedulerClaims.PermissionClaimTypes[permission].PolicyName);
         }
 
         //public IActionResult About()

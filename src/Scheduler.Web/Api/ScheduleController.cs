@@ -2,28 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class ScheduleController : Controller
+    [Authorize("Manage Organization Details")]
+    public class ScheduleController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public ScheduleController(SchedulerContext context)
+        public ScheduleController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
         [HttpGet("{id}")]
         public IEnumerable<ScheduleModel> Get(int id)
         {
-            return _context.Schedules.Where(p => p.Organization.OrganizationId == id).ToList().Select(o => new ScheduleModel(o)).ToList();
+            UserCanAccessOrganization(id);
+
+            return _schedulerContext.Schedules.Where(p => p.Organization.OrganizationId == id).ToList().Select(o => new ScheduleModel(o)).ToList();
         }
 
         //// GET api/values/5
@@ -37,6 +39,8 @@ namespace Scheduler.Web.Api
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]ScheduleModel schedule)
         {
+            UserCanAccessOrganization(id);
+
             if (schedule == null)
             {
                 return BadRequest();
@@ -47,12 +51,12 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var organization = _context.Organizations.Single(o => o.OrganizationId == id);
+            var organization = _schedulerContext.Organizations.Single(o => o.OrganizationId == id);
             var scheduleEntity = schedule.Export();
             scheduleEntity.Organization = organization;
 
-            _context.Schedules.Add(scheduleEntity);
-            _context.SaveChanges();
+            _schedulerContext.Schedules.Add(scheduleEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(schedule);
         }
@@ -71,9 +75,12 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var scheduleEntity = _context.Schedules.Single(o => o.ScheduleId == id);
+            var scheduleEntity = _schedulerContext.Schedules.Include(s => s.Organization).Single(o => o.ScheduleId == id);
+
+            UserCanAccessOrganization(scheduleEntity.Organization.OrganizationId);
+
             schedule.Export(scheduleEntity);
-            _context.SaveChanges();
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(schedule);
         }
@@ -82,9 +89,12 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var scheduleEntity = _context.Schedules.Single(o => o.ScheduleId == id);
-            _context.Schedules.Remove(scheduleEntity);
-            _context.SaveChanges();
+            var scheduleEntity = _schedulerContext.Schedules.Include(s => s.Organization).Single(o => o.ScheduleId == id);
+
+            UserCanAccessOrganization(scheduleEntity.Organization.OrganizationId);
+
+            _schedulerContext.Schedules.Remove(scheduleEntity);
+            _schedulerContext.SaveChanges();
         }
     }
 }

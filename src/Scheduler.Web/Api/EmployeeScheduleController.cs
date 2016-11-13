@@ -8,30 +8,31 @@ using Microsoft.AspNetCore.Authorization;
 using Scheduler.Data;
 using Scheduler.Web.ApiModels;
 using System.Globalization;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    public class EmployeeScheduleController : Controller
+    [Authorize("Manage Organization Details")]
+    public class EmployeeScheduleController : BaseController
     {
-        SchedulerContext _context = null;
-
-        public EmployeeScheduleController(SchedulerContext context)
+        public EmployeeScheduleController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
         {
-            _context = context;
         }
 
         // GET: api/values
         [HttpGet("{id}")]
         public EmployeeScheduleModel Get(int id, string date)
         {
+            UserCanAccessOrganization(id);
+
             var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture);
 
             var endScheduleDate = scheduleDate.AddDays(1);
 
-            var employeeShifts = _context.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
-            var employees = _context.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
-            var shifts = _context.Shifts.Include(s => s.Schedule).Include(s => s.Position)
+            var employeeShifts = _schedulerContext.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
+            var employees = _schedulerContext.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
+            var shifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position)
                 .Where(s => s.Schedule.StartDate < scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)
                 .ToList();
@@ -53,8 +54,10 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            Employee employeeEntity = _context.Employees.Single(e => e.EmployeeId == employeeShift.EmployeeId);
-            Shift shiftEntity = _context.Shifts.Single(s => s.ShiftId == employeeShift.ShiftId);
+            UserCanAccessEmployee(employeeShift.EmployeeId);
+
+            Employee employeeEntity = _schedulerContext.Employees.Single(e => e.EmployeeId == employeeShift.EmployeeId);
+            Shift shiftEntity = _schedulerContext.Shifts.Single(s => s.ShiftId == employeeShift.ShiftId);
 
             DateTime startTime = employeeShift.ShiftDate.Date + TimeSpan.Parse(shiftEntity.StartTime);
             DateTime endTime = employeeShift.ShiftDate.Date + TimeSpan.Parse(shiftEntity.EndTime);
@@ -70,14 +73,15 @@ namespace Scheduler.Web.Api
 
             // TODO: NEED TO VALIDATE BASED ON UI RULES
 
-            _context.EmployeeShifts.Add(employeeShiftEntity);
-            _context.SaveChanges();
+            _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employeeShiftEntity.EmployeeShiftId);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
+        [Authorize("Manage Employee Details")]
         public IActionResult Put(int id, [FromBody]CancelEmployeeShiftModel cancelShift)
         {
             if (cancelShift == null)
@@ -90,13 +94,15 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var employeeShiftEntity = _context.EmployeeShifts.Single(es => es.EmployeeShiftId == id);
+            var employeeShiftEntity = _schedulerContext.EmployeeShifts.Include(es => es.Employee).Single(es => es.EmployeeShiftId == id);
+
+            UserCanAccessEmployee(employeeShiftEntity.Employee.EmployeeId);
 
             employeeShiftEntity.Canceled = true;
             employeeShiftEntity.CancelReason = cancelShift.Reason;
             employeeShiftEntity.CancelDate = DateTime.Now;
 
-            _context.SaveChanges();
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(employeeShiftEntity);
         }
@@ -105,9 +111,12 @@ namespace Scheduler.Web.Api
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var employeeShiftEntity = _context.EmployeeShifts.Single(es => es.EmployeeShiftId == id);
-            _context.EmployeeShifts.Remove(employeeShiftEntity);
-            _context.SaveChanges();
+            var employeeShiftEntity = _schedulerContext.EmployeeShifts.Include(es => es.Employee).Single(es => es.EmployeeShiftId == id);
+
+            UserCanAccessEmployee(employeeShiftEntity.Employee.EmployeeId);
+
+            _schedulerContext.EmployeeShifts.Remove(employeeShiftEntity);
+            _schedulerContext.SaveChanges();
         }
     }
 }

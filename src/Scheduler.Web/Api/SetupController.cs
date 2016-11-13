@@ -10,12 +10,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Scheduler.Data;
+using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
     [Produces("application/json")]
     [Route("api/setup")]
-    public class SetupController : Controller
+    [Authorize("Manage System Setup")]
+    public class SetupController : BaseController
     {
 
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -23,12 +26,13 @@ namespace Scheduler.Web.Api
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
-
         public SetupController(
+            ApplicationDbContext appDbContext, 
+            SchedulerContext schedulerContext,
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory) : base(appDbContext, schedulerContext)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -36,15 +40,6 @@ namespace Scheduler.Web.Api
             _logger = loggerFactory.CreateLogger<SetupController>();
         }
 
-        [HttpGet("list")]
-        [Authorize]
-        public IActionResult Index()
-        {
-            var claims = User.Claims.Select(claim => new { claim.Type, claim.Value }).ToArray();
-            return Json(claims);
-        }
-
-        [Authorize("Manage Organizations")]
         [HttpGet("secure")]
         public IActionResult Secure()
         {
