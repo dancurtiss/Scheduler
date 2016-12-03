@@ -17,7 +17,7 @@ namespace Scheduler.Web.Api
 {
     [Produces("application/json")]
     [Route("api/setup")]
-    [Authorize("Manage System Setup")]
+    //[Authorize("Manage System Setup")]
     public class SetupController : BaseController
     {
 
@@ -55,6 +55,7 @@ namespace Scheduler.Web.Api
                 adminRole = new IdentityRole("SuperAdministrator");
                 await _roleManager.CreateAsync(adminRole);
 
+                await _roleManager.AddClaimAsync(adminRole, new Claim("permissions", "system.manage"));
                 await _roleManager.AddClaimAsync(adminRole, new Claim("permissions", "organizations.manage"));
                 await _roleManager.AddClaimAsync(adminRole, new Claim("permissions", "organization.details"));
                 await _roleManager.AddClaimAsync(adminRole, new Claim("permissions", "employees.manage"));

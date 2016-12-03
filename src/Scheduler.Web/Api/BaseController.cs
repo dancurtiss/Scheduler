@@ -23,7 +23,7 @@ namespace Scheduler.Web.Api
 
         protected bool UserHasPermission(PermissionClaimType permission)
         {
-            return User.HasClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], SchedulerClaims.PermissionClaimTypes[permission].PolicyName);
+            return User.HasClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], SchedulerClaims.PermissionClaimTypes[permission].ClaimName);
         }
 
         protected bool UserCanAccessEmployee(int employeeId)

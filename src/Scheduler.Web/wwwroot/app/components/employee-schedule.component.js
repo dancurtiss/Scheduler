@@ -23,7 +23,6 @@ var EmployeeScheduleComponent = (function () {
         this.router = router;
         this.route = route;
         this.dragulaService = dragulaService;
-        this.scheduleDate = new Date();
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
             return el.className.toLowerCase() === 'employee-item';
@@ -42,10 +41,12 @@ var EmployeeScheduleComponent = (function () {
             }
             // does not have position
             if (employee.positionIds.indexOf(shift.positionId) < 0) {
+                _this.message = "Employee cannot work shift '" + shift.positionName + "'";
                 return false;
             }
             // employee already exists
             if (_this.getEmployeeShiftObject(employeeId, shiftId) != null) {
+                _this.message = "Employee is already working this shift.";
                 return false;
             }
             // employee time overlap
@@ -65,6 +66,7 @@ var EmployeeScheduleComponent = (function () {
                 }
             });
             if (hasConflict) {
+                _this.message = "Employee is already working another shift at this time.";
                 return false;
             }
             return true;
@@ -75,7 +77,7 @@ var EmployeeScheduleComponent = (function () {
     }
     EmployeeScheduleComponent.prototype.getSchedule = function () {
         var _this = this;
-        var dateString = moment(this.scheduleDate).format('MMDDYYYY');
+        var dateString = this.scheduleDate.format('MMDDYYYY');
         this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then(function (model) {
             _this.availableEmployees = model.employees;
             _this.availableShifts = model.shifts;
@@ -105,14 +107,15 @@ var EmployeeScheduleComponent = (function () {
         this.route.params.forEach(function (params) {
             var id = +params['id'];
             _this.organizationId = id;
+            var date = params['date'];
+            _this.scheduleDate = moment(date, 'MMDDYYYY');
         });
         this.dragulaSetup();
-        this.scheduleDate = new Date();
         this.getSchedule();
     };
     EmployeeScheduleComponent.prototype.added = function (employeeId, shiftId) {
         var _this = this;
-        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then(function (employeeShiftId) {
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then(function (employeeShiftId) {
             var employeeShiftObject = _this.getEmployeeShiftObject(employeeId, shiftId);
             employeeShiftObject.employeeShiftId = employeeShiftId;
             console.log('shift added', employeeShiftId);
@@ -154,6 +157,9 @@ var EmployeeScheduleComponent = (function () {
     };
     EmployeeScheduleComponent.prototype.dragulaSetup = function () {
         var _this = this;
+        if (this.dragulaService.find('schedule-bag')) {
+            return;
+        }
         this.dragulaService.setOptions('schedule-bag', {
             removeOnSpill: true,
             copy: true,
@@ -170,6 +176,7 @@ var EmployeeScheduleComponent = (function () {
         var employeeId = el.getAttribute('data-employee-id');
         var shiftId = target.getAttribute('data-shift-id');
         this.added(employeeId, shiftId);
+        this.message = null;
     };
     EmployeeScheduleComponent.prototype.onDeleteEmployeeShift = function (employeeShiftId) {
         var _this = this;

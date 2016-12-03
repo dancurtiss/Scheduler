@@ -31,7 +31,8 @@ export class EmployeeScheduleComponent implements OnInit {
     employeeShifts: EmployeeShift[];
     positionCategories: string[];
 
-    scheduleDate: Date = new Date();
+    message: string;
+    scheduleDate: moment.Moment;
     
     constructor(
         private employeeScheduleService: EmployeeScheduleService,
@@ -41,7 +42,8 @@ export class EmployeeScheduleComponent implements OnInit {
     ) { }
 
     getSchedule(): void {
-        var dateString = moment(this.scheduleDate).format('MMDDYYYY');
+        var dateString = this.scheduleDate.format('MMDDYYYY');
+
         this.employeeScheduleService.getEmployeeShifts(this.organizationId, dateString).then((model) => {
             this.availableEmployees = model.employees;
             this.availableShifts = model.shifts;
@@ -75,16 +77,16 @@ export class EmployeeScheduleComponent implements OnInit {
         this.route.params.forEach((params: Params) => {
             let id = +params['id'];
             this.organizationId = id;
+            let date = params['date'];
+            this.scheduleDate = moment(date, 'MMDDYYYY');
         });
 
         this.dragulaSetup();
-        this.scheduleDate = new Date();
         this.getSchedule();
-
     }
 
     added(employeeId: number, shiftId: number) {
-        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: this.scheduleDate }).then((employeeShiftId) => {
+        this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then((employeeShiftId) => {
             var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
             employeeShiftObject.employeeShiftId = employeeShiftId;
             console.log('shift added', employeeShiftId);
@@ -132,6 +134,10 @@ export class EmployeeScheduleComponent implements OnInit {
     }
 
     dragulaSetup() {
+        if (this.dragulaService.find('schedule-bag')) {
+            return;
+        }
+
         this.dragulaService.setOptions('schedule-bag', {
             removeOnSpill: true,
             copy: true,
@@ -168,11 +174,13 @@ export class EmployeeScheduleComponent implements OnInit {
 
         // does not have position
         if (employee.positionIds.indexOf(shift.positionId) < 0) {
+            this.message = "Employee cannot work shift '" + shift.positionName + "'";
             return false;
         }
 
         // employee already exists
         if (this.getEmployeeShiftObject(employeeId, shiftId) != null) {
+            this.message = "Employee is already working this shift.";
             return false;
         }
 
@@ -198,6 +206,7 @@ export class EmployeeScheduleComponent implements OnInit {
         });
 
         if (hasConflict) {
+            this.message = "Employee is already working another shift at this time.";
             return false;
         }
 
@@ -215,6 +224,7 @@ export class EmployeeScheduleComponent implements OnInit {
         var shiftId = target.getAttribute('data-shift-id');
 
         this.added(employeeId, shiftId);
+        this.message = null;
     }
 
     onDeleteEmployeeShift(employeeShiftId: number) {

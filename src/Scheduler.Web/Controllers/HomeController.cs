@@ -17,6 +17,11 @@ namespace Scheduler.Web.Controllers
 
         public IActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+
             if (UserHasPermission(PermissionClaimType.Organization_Manage))
             {
                 ViewBag.RouteUrl = "/organizations";

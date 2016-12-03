@@ -1,15 +1,21 @@
 ﻿<div class="row">
     <div class="col-md-8">
-        <h2>Employee Schedule {{scheduleDate.toDateString()}}</h2>
+        <h2>Employee Schedule {{scheduleDate.format('MM/DD/YYYY')}}</h2>
     </div>
     <div class="col-md-4">
         <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a routerLink="/dashboard">Schedule</a></li>
-                <li><a routerLink="/organizations">Employees</a></li>
-                <li><a routerLink="/orgdetail">Setup</a></li>
+                <li><a [routerLink]="['/organization','schedule', organizationId]">Schedule</a></li>
+                <li><a [routerLink]="['/organization','employees', organizationId]">Employees</a></li>
+                <li><a [routerLink]="['/organization','detail', organizationId]">Setup</a></li>
             </ul>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <label style="color:red;">{{message}}</label>
     </div>
 </div>
 
