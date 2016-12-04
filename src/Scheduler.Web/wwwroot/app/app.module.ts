@@ -20,11 +20,13 @@ import { EmployeeDetailComponent }       from './components/employee-detail.comp
 
 
 import { AuthorizationService }      from './services/authorization.service';
-import { OrganizationService }      from './services/organization.service';
+import { OrganizationService } from './services/organization.service';
+import { OrganizationManagerService } from './services/organization-manager.service';
 import { ScheduleService }          from './services/schedule.service';
 import { PositionService }          from './services/position.service';
 import { ShiftService }             from './services/shift.service';
-import { EmployeeService }             from './services/employee.service';
+import { EmployeeService } from './services/employee.service';
+import { EmployeeAccessService } from './services/employee-access.service';
 import { EmployeeScheduleService }             from './services/employee-schedule.service';
 import { EmployeeConflictService }             from './services/employee-conflict.service';
 
@@ -99,10 +101,12 @@ import { EmployeeConflictService }             from './services/employee-conflic
         AuthorizationService,
         DragulaService,
         OrganizationService,
+        OrganizationManagerService,
         ScheduleService,
         PositionService,
         ShiftService,
         EmployeeService,
+        EmployeeAccessService,
         EmployeeScheduleService,
         EmployeeConflictService
     ],

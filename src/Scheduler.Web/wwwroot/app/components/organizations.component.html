@@ -71,5 +71,34 @@
             <button type="reset" class="btn btn-default" (click)="selectedOrganization = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
+
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-success pull-right" (click)="onAddOrganizationManager();">
+                    Add Organization Manager
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let organizationManager of organizationManagers">
+                    <td>{{organizationManager.username}}</td>
+                    <td>{{organizationManager.phoneNumber}}</td>
+                    <td><button class="btn btn-danger" (click)="onDeleteOrganizationManager(organizationManager.username); $event.stopPropagation()">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 

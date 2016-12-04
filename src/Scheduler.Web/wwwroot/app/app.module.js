@@ -26,10 +26,12 @@ var employee_schedule_component_1 = require('./components/employee-schedule.comp
 var employee_detail_component_1 = require('./components/employee-detail.component');
 var authorization_service_1 = require('./services/authorization.service');
 var organization_service_1 = require('./services/organization.service');
+var organization_manager_service_1 = require('./services/organization-manager.service');
 var schedule_service_1 = require('./services/schedule.service');
 var position_service_1 = require('./services/position.service');
 var shift_service_1 = require('./services/shift.service');
 var employee_service_1 = require('./services/employee.service');
+var employee_access_service_1 = require('./services/employee-access.service');
 var employee_schedule_service_1 = require('./services/employee-schedule.service');
 var employee_conflict_service_1 = require('./services/employee-conflict.service');
 var AppModule = (function () {
@@ -107,10 +109,12 @@ var AppModule = (function () {
                 authorization_service_1.AuthorizationService,
                 ng2_dragula_1.DragulaService,
                 organization_service_1.OrganizationService,
+                organization_manager_service_1.OrganizationManagerService,
                 schedule_service_1.ScheduleService,
                 position_service_1.PositionService,
                 shift_service_1.ShiftService,
                 employee_service_1.EmployeeService,
+                employee_access_service_1.EmployeeAccessService,
                 employee_schedule_service_1.EmployeeScheduleService,
                 employee_conflict_service_1.EmployeeConflictService
             ],

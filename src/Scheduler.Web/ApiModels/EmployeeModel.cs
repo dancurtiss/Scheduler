@@ -13,6 +13,17 @@ namespace Scheduler.Web.ApiModels
         public List<PositionModel> AvailablePositions { get; set; }
     }
 
+    public class CreateEmployeeAccessModel
+    {
+        public int EmployeeId { get; set; }
+        [Required]
+        [MaxLength(10)]
+        public string PhoneNumber { get; set; }
+        [Required]
+        [MaxLength(20)]
+        public string Password { get; set; }
+    }
+
     public class EmployeeModel
     {
         public EmployeeModel()

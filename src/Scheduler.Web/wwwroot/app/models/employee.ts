@@ -15,3 +15,10 @@ export class Employee {
 
     employeePositionIds: number[];
 }
+
+
+export class CreateEmployeeAccess {
+    phoneNumber: string;
+    employeeId: number;
+    password: string;
+}
