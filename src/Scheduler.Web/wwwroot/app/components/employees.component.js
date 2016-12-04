@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var employee_service_1 = require('../services/employee.service');
+var employee_access_service_1 = require('../services/employee-access.service');
 var EmployeesComponent = (function () {
-    function EmployeesComponent(employeeService, router, route) {
+    function EmployeesComponent(employeeService, employeeAccessService, router, route) {
         this.employeeService = employeeService;
+        this.employeeAccessService = employeeAccessService;
         this.router = router;
         this.route = route;
         this.showAdd = false;
@@ -58,8 +60,31 @@ var EmployeesComponent = (function () {
             _this.getEmployees();
         });
     };
+    EmployeesComponent.prototype.getEmployeeAccess = function () {
+        var _this = this;
+        this.employeeAccessService.getEmployeeAccess(this.selectedEmployee.employeeId).then(function (access) { _this.selectedEmployeeAccess = access; });
+    };
+    EmployeesComponent.prototype.onAddEmployeeAccess = function (password) {
+        var _this = this;
+        if (this.selectedEmployee.employeeId && this.selectedEmployee.phoneNumber) {
+            this.employeeAccessService.create(this.organizationId, {
+                employeeId: this.selectedEmployee.employeeId,
+                password: password,
+                phoneNumber: this.selectedEmployee.phoneNumber
+            }).then(function (manager) {
+                _this.selectedEmployeeAccess = _this.getEmployeeAccess();
+            });
+        }
+    };
+    EmployeesComponent.prototype.onRemoveEmployeeAccess = function () {
+        var _this = this;
+        this.employeeAccessService.delete(this.selectedEmployee.phoneNumber).then(function () {
+            _this.selectedEmployeeAccess = null;
+        });
+    };
     EmployeesComponent.prototype.onSelect = function (employee) {
         this.selectedEmployee = employee;
+        this.getEmployeeAccess();
     };
     EmployeesComponent.prototype.goToDetail = function (id) {
         this.router.navigate(['employee/detail/', id]);
@@ -71,7 +96,7 @@ var EmployeesComponent = (function () {
             templateUrl: 'employees.component.html',
             styleUrls: ['employees.component.css']
         }), 
-        __metadata('design:paramtypes', [employee_service_1.EmployeeService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [employee_service_1.EmployeeService, employee_access_service_1.EmployeeAccessService, router_1.Router, router_1.ActivatedRoute])
     ], EmployeesComponent);
     return EmployeesComponent;
 }());

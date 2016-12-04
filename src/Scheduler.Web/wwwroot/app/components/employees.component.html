@@ -88,5 +88,18 @@
             <button type="reset" class="btn btn-default" (click)="selectedEmployee = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
+    <div class="col-md-6">
+        <form name="accessForm" *ngIf="!selectedEmployeeAccess">
+            <div class="form-group">
+                <label for="employeePassword">Password</label>
+                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" (click)="onAddEmployeeAccess(selectedEmployee.password);">Add Access</button>
+        </form>
+        <form name="removeForm" *ngIf="selectedEmployeeAccess">
+            <button type="submit" class="btn btn-danger" (click)="onRemoveEmployeeAccess();">Remove Access</button>
+        </form>
+    </div>
 </div>
 

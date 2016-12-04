@@ -21,5 +21,9 @@ namespace Scheduler.Web.ApiModels
         [Required]
         [MaxLength(20)]
         public string Password { get; set; }
+
+        [Required]
+        [MaxLength(150)]
+        public string EmailAddress { get; set; }
     }
 }

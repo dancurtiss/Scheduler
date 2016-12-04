@@ -39,7 +39,7 @@ namespace Scheduler.Web.Api
 
         // POST api/values
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post([FromQuery]int id, [FromBody]CreateOrganizationManagerModel manager)
+        public async Task<IActionResult> Post(int id, [FromBody]CreateOrganizationManagerModel manager)
         {
             if (manager == null)
             {
@@ -60,13 +60,28 @@ namespace Scheduler.Web.Api
                 throw new InvalidOperationException("User already exists.");
             }
 
-            user = new ApplicationUser { UserName = manager.UserName, OrganizationId = id, Phone = manager.PhoneNumber, PhoneNumber = manager.PhoneNumber };
-            IdentityResult identity = await _userManager.CreateAsync(user, manager.Password);
+            user = new ApplicationUser { UserName = manager.UserName, OrganizationId = id, Phone = manager.PhoneNumber, PhoneNumber = manager.PhoneNumber, Email = manager.EmailAddress };
+            var result = await _userManager.CreateAsync(user, manager.Password);
 
-            user = await _userManager.FindByNameAsync(manager.UserName);
-            await _userManager.AddToRoleAsync(user, role.Name);
+            if (result.Succeeded)
+            {
+                user = await _userManager.FindByNameAsync(manager.UserName);
+                await _userManager.AddToRoleAsync(user, role.Name);
+            }
+            else
+            {
+                AddErrors(result);
+                return new ObjectResult(ModelState);
+            }
 
             return new ObjectResult(manager);
+        }
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
 
         // DELETE api/values/5

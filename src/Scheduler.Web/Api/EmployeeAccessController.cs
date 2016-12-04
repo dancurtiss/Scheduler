@@ -28,13 +28,16 @@ namespace Scheduler.Web.Api
         }
 
         [HttpGet("{id}")]
-        public ApplicationUser Get(int id)
+        public IActionResult Get(int id)
         {
             ApplicationUser employeeUser = _appDbContext.Users.SingleOrDefault(u => u.EmployeeId == id);
 
-            UserCanAccessOrganization(employeeUser.OrganizationId.Value);
+            if (employeeUser != null)
+            {
+                UserCanAccessOrganization(employeeUser.OrganizationId.Value);
+            }
 
-            return employeeUser;
+            return new ObjectResult(employeeUser);
         }
 
         // POST api/values
@@ -62,7 +65,8 @@ namespace Scheduler.Web.Api
                 throw new InvalidOperationException("User already exists.");
             }
 
-            user = new ApplicationUser { UserName = employee.PhoneNumber, EmployeeId = employee.EmployeeId, OrganizationId = organizationId, Phone = employee.PhoneNumber, PhoneNumber = employee.PhoneNumber };
+            user = new ApplicationUser { UserName = employee.PhoneNumber + "@test.com", EmployeeId = employee.EmployeeId, OrganizationId = organizationId,
+                Phone = employee.PhoneNumber, PhoneNumber = employee.PhoneNumber, Email = employee.PhoneNumber + "@test.com" };
             IdentityResult identity = await _userManager.CreateAsync(user, employee.Password);
 
             user = await _userManager.FindByNameAsync(employee.PhoneNumber);

@@ -12,8 +12,10 @@ export class OrganizationManagerService {
 
     constructor(private http: Http) { }
 
-    getOrganizationManagers(): Promise<ApplicationUser[]> {
-        return this.http.get(this.organizationsUrl)
+    getOrganizationManagers(organizationId: number): Promise<ApplicationUser[]> {
+        const url = `${this.organizationsUrl}/${organizationId}`;
+
+        return this.http.get(url)
             .toPromise()
             .then((response) => {
                 return response.json() as ApplicationUser[];
@@ -29,9 +31,11 @@ export class OrganizationManagerService {
             .catch(this.handleError);
     }
 
-    create(organizationManager: CreateOrganizationManager): Promise<ApplicationUser> {
+    create(organizationId: number, organizationManager: CreateOrganizationManager): Promise<ApplicationUser> {
+        const url = `${this.organizationsUrl}/${organizationId}`;
+
         return this.http
-            .post(this.organizationsUrl, JSON.stringify(organizationManager), { headers: this.headers })
+            .post(url, JSON.stringify(organizationManager), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
             .catch(this.handleError);

@@ -23,8 +23,8 @@ export class EmployeeAccessService {
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
-        const url = `${this.employeesAccessUrl}/${id}`;
+    delete(phone: string): Promise<void> {
+        const url = `${this.employeesAccessUrl}/${phone}`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)

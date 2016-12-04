@@ -1,7 +1,8 @@
 ﻿import { Component, OnInit }        from '@angular/core';
-import { Router }                   from '@angular/router';
-import { Organization }             from '../models/organization';
-import { OrganizationService }      from '../services/organization.service';
+import { Router } from '@angular/router';
+import { Organization, CreateOrganizationManager, ApplicationUser } from '../models/organization';
+import { OrganizationService } from '../services/organization.service';
+import { OrganizationManagerService } from '../services/organization-manager.service';
 
 @Component({
     moduleId: module.id,
@@ -13,15 +14,26 @@ export class OrganizationsComponent implements OnInit {
 
     organizations: Organization[];
     selectedOrganization: Organization;
+
+    organizationManagers: ApplicationUser[];
+    createOrganizationManager: CreateOrganizationManager;
     showAdd: boolean = false;
     
     constructor(
         private organizationService: OrganizationService,
+        private organizationManagerService: OrganizationManagerService,
         private router: Router) { }
 
     getOrganizations(): void {
         this.organizationService.getOrganizations().then((organizations) => {
             this.organizations = organizations;
+        });
+    }
+
+    getOrganizationManagers(organizationId: number): void {
+        this.organizationManagerService.getOrganizationManagers(organizationId)
+            .then((managers) => {
+                this.organizationManagers = managers;
         });
     }
 
@@ -54,8 +66,30 @@ export class OrganizationsComponent implements OnInit {
         });
     }
 
+    onAddOrganizationManager(): void {
+        this.createOrganizationManager = { userName: null, password: null, phoneNumber: null, emailAddress: null };
+    }
+
+
+    onSaveOrganizationManager(): void {
+        if (this.selectedOrganization.organizationId) {
+            this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then((manager) => {
+                this.createOrganizationManager = null;
+                this.getOrganizationManagers(this.selectedOrganization.organizationId);
+            });
+        } 
+    }
+
+    onDeleteOrganizationManager(username: string) {
+        this.organizationManagerService.delete(username).then(() => {
+            this.getOrganizationManagers(this.selectedOrganization.organizationId);
+        });
+    }
+
     onSelect(organization: Organization): void {
         this.selectedOrganization = organization;
+
+        this.getOrganizationManagers(organization.organizationId);
     }
 
     goToDetail(id: number): void {

@@ -1,8 +1,10 @@
 ﻿import { Component, OnInit }        from '@angular/core';
 import { Router, ActivatedRoute, Params }      from '@angular/router';
-import { Employee, EmployeeList }             from '../models/employee';
+import { ApplicationUser } from '../models/organization';
+import { Employee, EmployeeList, CreateEmployeeAccess } from '../models/employee';
 import { Position }             from '../models/schedule';
-import { EmployeeService }      from '../services/employee.service';
+import { EmployeeService } from '../services/employee.service';
+import { EmployeeAccessService } from '../services/employee-access.service';
 
 @Component({
     moduleId: module.id,
@@ -15,11 +17,13 @@ export class EmployeesComponent implements OnInit {
     organizationId: number;
     employees: Employee[];
     selectedEmployee: Employee;
+    selectedEmployeeAccess
     showAdd: boolean = false;
     availablePositions: Position[];
     
     constructor(
         private employeeService: EmployeeService,
+        private employeeAccessService: EmployeeAccessService,
         private router: Router,
         private route: ActivatedRoute
     ) { }
@@ -65,8 +69,33 @@ export class EmployeesComponent implements OnInit {
         });
     }
 
+    getEmployeeAccess() {
+        this.employeeAccessService.getEmployeeAccess(this.selectedEmployee.employeeId).then((access) => { this.selectedEmployeeAccess = access;});
+    }
+
+    onAddEmployeeAccess(password: string): void {
+        if (this.selectedEmployee.employeeId && this.selectedEmployee.phoneNumber) {
+            this.employeeAccessService.create(this.organizationId,
+            {
+                employeeId: this.selectedEmployee.employeeId,
+                password: password,
+                phoneNumber: this.selectedEmployee.phoneNumber
+            }).then((manager) => {
+                this.selectedEmployeeAccess = this.getEmployeeAccess();
+            });
+        }
+    }
+
+    onRemoveEmployeeAccess() {
+        this.employeeAccessService.delete(this.selectedEmployee.phoneNumber).then(() => {
+            this.selectedEmployeeAccess = null;
+        });
+    }
+
+
     onSelect(employee: Employee): void {
         this.selectedEmployee = employee;
+        this.getEmployeeAccess();
     }
 
     goToDetail(id: number): void {

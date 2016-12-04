@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var organization_service_1 = require('../services/organization.service');
+var organization_manager_service_1 = require('../services/organization-manager.service');
 var OrganizationsComponent = (function () {
-    function OrganizationsComponent(organizationService, router) {
+    function OrganizationsComponent(organizationService, organizationManagerService, router) {
         this.organizationService = organizationService;
+        this.organizationManagerService = organizationManagerService;
         this.router = router;
         this.showAdd = false;
     }
@@ -21,6 +23,13 @@ var OrganizationsComponent = (function () {
         var _this = this;
         this.organizationService.getOrganizations().then(function (organizations) {
             _this.organizations = organizations;
+        });
+    };
+    OrganizationsComponent.prototype.getOrganizationManagers = function (organizationId) {
+        var _this = this;
+        this.organizationManagerService.getOrganizationManagers(organizationId)
+            .then(function (managers) {
+            _this.organizationManagers = managers;
         });
     };
     OrganizationsComponent.prototype.ngOnInit = function () {
@@ -51,8 +60,27 @@ var OrganizationsComponent = (function () {
             _this.getOrganizations();
         });
     };
+    OrganizationsComponent.prototype.onAddOrganizationManager = function () {
+        this.createOrganizationManager = { userName: null, password: null, phoneNumber: null, emailAddress: null };
+    };
+    OrganizationsComponent.prototype.onSaveOrganizationManager = function () {
+        var _this = this;
+        if (this.selectedOrganization.organizationId) {
+            this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then(function (manager) {
+                _this.createOrganizationManager = null;
+                _this.getOrganizationManagers(_this.selectedOrganization.organizationId);
+            });
+        }
+    };
+    OrganizationsComponent.prototype.onDeleteOrganizationManager = function (username) {
+        var _this = this;
+        this.organizationManagerService.delete(username).then(function () {
+            _this.getOrganizationManagers(_this.selectedOrganization.organizationId);
+        });
+    };
     OrganizationsComponent.prototype.onSelect = function (organization) {
         this.selectedOrganization = organization;
+        this.getOrganizationManagers(organization.organizationId);
     };
     OrganizationsComponent.prototype.goToDetail = function (id) {
         this.router.navigate(['/organization/detail', id]);
@@ -67,7 +95,7 @@ var OrganizationsComponent = (function () {
             templateUrl: 'organizations.component.html',
             styleUrls: ['organizations.component.css']
         }), 
-        __metadata('design:paramtypes', [organization_service_1.OrganizationService, router_1.Router])
+        __metadata('design:paramtypes', [organization_service_1.OrganizationService, organization_manager_service_1.OrganizationManagerService, router_1.Router])
     ], OrganizationsComponent);
     return OrganizationsComponent;
 }());

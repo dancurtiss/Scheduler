@@ -10,9 +10,12 @@ export class CreateOrganizationManager {
     userName: string;
     phoneNumber: string;
     password: string;
+    emailAddress: string;
 }
 
 export class ApplicationUser {
     userName: string;
     phoneNumber: string;
+    email: string;
+    id: string;
 }

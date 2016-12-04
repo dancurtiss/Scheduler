@@ -17,8 +17,9 @@ var OrganizationManagerService = (function () {
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.organizationsUrl = 'api/organizationmanager'; // URL to web api
     }
-    OrganizationManagerService.prototype.getOrganizationManagers = function () {
-        return this.http.get(this.organizationsUrl)
+    OrganizationManagerService.prototype.getOrganizationManagers = function (organizationId) {
+        var url = this.organizationsUrl + "/" + organizationId;
+        return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
@@ -32,9 +33,10 @@ var OrganizationManagerService = (function () {
             .then(function () { return null; })
             .catch(this.handleError);
     };
-    OrganizationManagerService.prototype.create = function (organizationManager) {
+    OrganizationManagerService.prototype.create = function (organizationId, organizationManager) {
+        var url = this.organizationsUrl + "/" + organizationId;
         return this.http
-            .post(this.organizationsUrl, JSON.stringify(organizationManager), { headers: this.headers })
+            .post(url, JSON.stringify(organizationManager), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
             .catch(this.handleError);

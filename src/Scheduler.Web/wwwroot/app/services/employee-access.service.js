@@ -26,8 +26,8 @@ var EmployeeAccessService = (function () {
         })
             .catch(this.handleError);
     };
-    EmployeeAccessService.prototype.delete = function (id) {
-        var url = this.employeesAccessUrl + "/" + id;
+    EmployeeAccessService.prototype.delete = function (phone) {
+        var url = this.employeesAccessUrl + "/" + phone;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })

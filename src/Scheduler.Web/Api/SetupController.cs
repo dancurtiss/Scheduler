@@ -50,6 +50,7 @@ namespace Scheduler.Web.Api
         public async Task<IActionResult> Roles()
         {
             var adminRole = await _roleManager.FindByNameAsync("SuperAdministrator");
+
             if (adminRole == null)
             {
                 adminRole = new IdentityRole("SuperAdministrator");
