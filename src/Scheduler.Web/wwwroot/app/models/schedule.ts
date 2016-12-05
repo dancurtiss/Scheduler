@@ -35,3 +35,8 @@ export class Position {
     category: string;
 }
 
+export class SelectedPosition extends Position {
+    checked: boolean;
+}
+
+

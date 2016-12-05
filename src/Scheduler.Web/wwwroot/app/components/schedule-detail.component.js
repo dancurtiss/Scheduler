@@ -40,6 +40,11 @@ var ScheduleDetailComponent = (function () {
         });
         this.getScheduleDetails();
     };
+    ScheduleDetailComponent.prototype.getDayShifts = function (day) {
+        if (!this.shifts)
+            return [];
+        return this.shifts.filter(function (s) { return s.day == day; });
+    };
     ScheduleDetailComponent.prototype.positionName = function (positionId, positions) {
         return positions.filter(function (p) { return p.positionId == positionId; })[0].name;
     };

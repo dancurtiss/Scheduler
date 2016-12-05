@@ -38,8 +38,12 @@ var EmployeesComponent = (function () {
     EmployeesComponent.prototype.onAddEmployee = function () {
         this.selectedEmployee = { employeeId: 0, firstName: null, lastName: null, employeeNumber: null, phoneNumber: null, isActive: true, employeePositionIds: [] };
     };
+    EmployeesComponent.prototype.selectPosition = function (position) {
+        position.checked = position.checked ? false : true;
+    };
     EmployeesComponent.prototype.onSaveEmployee = function (employeeId, name, contactName, contactPhone, message) {
         var _this = this;
+        this.selectedEmployee.employeePositionIds = this.selectedEmployeePositions.filter(function (sp) { return sp.checked; }).map(function (sp) { return sp.positionId; });
         if (this.selectedEmployee.employeeId) {
             this.employeeService.update(this.selectedEmployee).then(function (employee) {
                 _this.selectedEmployee = null;
@@ -72,7 +76,7 @@ var EmployeesComponent = (function () {
                 password: password,
                 phoneNumber: this.selectedEmployee.phoneNumber
             }).then(function (manager) {
-                _this.selectedEmployeeAccess = _this.getEmployeeAccess();
+                _this.getEmployeeAccess();
             });
         }
     };
@@ -83,7 +87,13 @@ var EmployeesComponent = (function () {
         });
     };
     EmployeesComponent.prototype.onSelect = function (employee) {
+        var _this = this;
         this.selectedEmployee = employee;
+        this.selectedEmployeePositions = [];
+        this.availablePositions.forEach(function (p) {
+            var selected = _this.selectedEmployee.employeePositionIds.indexOf(p.positionId) > -1;
+            _this.selectedEmployeePositions.push({ positionId: p.positionId, category: p.category, name: p.name, checked: selected });
+        });
         this.getEmployeeAccess();
     };
     EmployeesComponent.prototype.goToDetail = function (id) {

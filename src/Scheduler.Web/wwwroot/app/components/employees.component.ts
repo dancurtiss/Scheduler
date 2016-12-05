@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { ApplicationUser } from '../models/organization';
 import { Employee, EmployeeList, CreateEmployeeAccess } from '../models/employee';
-import { Position }             from '../models/schedule';
+import { Position, SelectedPosition }             from '../models/schedule';
 import { EmployeeService } from '../services/employee.service';
 import { EmployeeAccessService } from '../services/employee-access.service';
 
@@ -17,7 +17,8 @@ export class EmployeesComponent implements OnInit {
     organizationId: number;
     employees: Employee[];
     selectedEmployee: Employee;
-    selectedEmployeeAccess
+    selectedEmployeePositions: SelectedPosition[];
+    selectedEmployeeAccess: ApplicationUser;
     showAdd: boolean = false;
     availablePositions: Position[];
     
@@ -48,7 +49,13 @@ export class EmployeesComponent implements OnInit {
         this.selectedEmployee = { employeeId: 0, firstName: null, lastName: null, employeeNumber: null, phoneNumber: null, isActive: true, employeePositionIds: [] };
     }
 
+    selectPosition(position: SelectedPosition) {
+        position.checked = position.checked ? false : true;
+    }
+
     onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
+        this.selectedEmployee.employeePositionIds = this.selectedEmployeePositions.filter((sp) => { return sp.checked; }).map((sp) => { return sp.positionId });
+
         if (this.selectedEmployee.employeeId) {
             this.employeeService.update(this.selectedEmployee).then((employee) => {
                 this.selectedEmployee = null;
@@ -81,7 +88,7 @@ export class EmployeesComponent implements OnInit {
                 password: password,
                 phoneNumber: this.selectedEmployee.phoneNumber
             }).then((manager) => {
-                this.selectedEmployeeAccess = this.getEmployeeAccess();
+                this.getEmployeeAccess();
             });
         }
     }
@@ -95,6 +102,14 @@ export class EmployeesComponent implements OnInit {
 
     onSelect(employee: Employee): void {
         this.selectedEmployee = employee;
+
+        this.selectedEmployeePositions = [];
+
+        this.availablePositions.forEach((p) => {
+            var selected = this.selectedEmployee.employeePositionIds.indexOf(p.positionId) > -1;
+            this.selectedEmployeePositions.push({ positionId: p.positionId, category: p.category, name: p.name, checked: selected });
+        });
+
         this.getEmployeeAccess();
     }
 

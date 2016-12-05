@@ -52,6 +52,12 @@ export class ScheduleDetailComponent implements OnInit {
         this.getScheduleDetails();
     }
 
+    getDayShifts(day: string) {
+        if (!this.shifts) return [];
+
+        return this.shifts.filter((s) => { return s.day == day; });
+    }
+
     positionName(positionId: number, positions: Position[]): string {
         return positions.filter((p) => { return p.positionId == positionId; })[0].name;
     }

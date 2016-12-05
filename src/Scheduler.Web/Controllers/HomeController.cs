@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Scheduler.Web.Data;
 using Scheduler.Web.Api;
 using Scheduler.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Scheduler.Web.Controllers
 {
@@ -15,6 +16,7 @@ namespace Scheduler.Web.Controllers
         {
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -41,20 +43,6 @@ namespace Scheduler.Web.Controllers
 
             return View();
         }
-
-        //public IActionResult About()
-        //{
-        //    ViewData["Message"] = "Your application description page.";
-
-        //    return View();
-        //}
-
-        //public IActionResult Contact()
-        //{
-        //    ViewData["Message"] = "Your contact page.";
-
-        //    return View();
-        //}
 
         public IActionResult Error()
         {

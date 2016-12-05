@@ -75,6 +75,55 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employee);
         }
 
+
+        // PUT api/values/5
+        [Authorize("Manage Employee Details")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePassword(string id, [FromBody]UpdatePasswordModel passwordModel)
+        {
+            if (passwordModel == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new ObjectResult(ModelState);
+            }
+
+            var user = await _userManager.FindByNameAsync(id);
+
+            UserCanAccessEmployee(user.EmployeeId.Value);
+
+            await _userManager.ChangePasswordAsync(user, passwordModel.ExistingPassword, passwordModel.Password);
+
+            return new ObjectResult(user);
+        }
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> SetResetToken(string id, [FromBody]ResetPasswordModel passwordModel)
+        //{
+        //    //GeneratePasswordResetTokenAsync -- needs to be done first
+
+        //    if (passwordModel == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return new ObjectResult(ModelState);
+        //    }
+
+        //    var user = await _userManager.FindByNameAsync(id);
+
+        //    UserCanAccessEmployee(user.EmployeeId.Value);
+
+        //    await _userManager.ResetPasswordAsync(user, passwordModel.Token, passwordModel.Password);
+
+        //    return new ObjectResult(user);
+        //}
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public async void Delete(string id)
