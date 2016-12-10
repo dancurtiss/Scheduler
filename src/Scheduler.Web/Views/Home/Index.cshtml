@@ -5,7 +5,9 @@
 @if (User.Identity.IsAuthenticated)
 {
     <my-app default-route-url="@ViewBag.RouteUrl">
-        <i class="fa fa-circle-o-notch fa-spin"></i>Loading...
+        <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i> Loading...
+        </h1>
     </my-app>
 }
 else

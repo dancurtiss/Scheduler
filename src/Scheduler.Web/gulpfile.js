@@ -54,4 +54,12 @@ gulp.task('restore', function () {
     './node_modules/@angular/**/*.js',
     ]).pipe(gulp.dest('./wwwroot/libs/@angular'));
 
+    gulp.src([
+    './node_modules/font-awesome/**/*.css',
+    ]).pipe(gulp.dest('./wwwroot/libs/font-awesome'));
+
+    gulp.src([
+    './node_modules/font-awesome/fonts/*.*',
+    ]).pipe(gulp.dest('./wwwroot/libs/font-awesome/fonts'));
+
 });

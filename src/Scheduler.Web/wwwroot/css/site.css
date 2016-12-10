@@ -48,3 +48,26 @@ textarea {
     display: none
   }
 }
+
+
+.btn {
+  padding: 5px 7px;
+}
+.navbar-btn {
+    margin-top: 7.5px;
+    margin-bottom: 7.5px;
+}
+
+@media (min-width: 768px){
+    .navbar-nav > li > .navbar-btn {
+        padding-top: 9.5px;
+        padding-bottom: 9.5px;
+    }
+
+    .navbar-nav > li > div {
+        padding-top: 19.5px;
+        padding-bottom: 19.5px;
+        color: white;
+    }
+
+}

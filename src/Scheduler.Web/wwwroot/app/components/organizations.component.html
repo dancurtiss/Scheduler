@@ -15,7 +15,7 @@
     <div class="col-md-6">
     </div>
     <div class="col-md-6">
-        <button class="btn btn-success pull-right" (click)="onAddOrganization();">
+        <button class="btn btn-primary pull-right" (click)="onAddOrganization();">
             Add Organization
         </button>
     </div>
@@ -74,11 +74,13 @@
 
     <div class="col-md-6">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="row">
-                    <button class="btn btn-success pull-right" (click)="onAddOrganizationManager();">
-                        Add Organization Manager
-                    </button>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary pull-right" (click)="onAddOrganizationManager();">
+                            Add Organization Manager
+                        </button>
+                    </div>
                 </div>
                 <div class="row" *ngIf="createOrganizationManager">
                     <div class="col-md-12">

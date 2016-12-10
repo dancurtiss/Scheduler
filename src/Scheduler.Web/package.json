@@ -31,7 +31,8 @@
     "jquery": "^2.2.4",
     "bootstrap": "^3.3.7",
     "moment": "^2.15.2",
-    "ng2-dragula": "^1.2.1"
+    "ng2-dragula": "^1.2.1",
+    "font-awesome": "^4.7.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
