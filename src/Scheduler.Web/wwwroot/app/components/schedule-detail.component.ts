@@ -11,6 +11,8 @@ import { ShiftService }                                     from '../services/sh
 })
 export class ScheduleDetailComponent implements OnInit {
 
+    showDay: string = 'all';
+
     organizationId: number;
     scheduleId: number;
     scheduleName: string;
@@ -62,8 +64,8 @@ export class ScheduleDetailComponent implements OnInit {
         return positions.filter((p) => { return p.positionId == positionId; })[0].name;
     }
 
-    onAddShift(): void {
-        this.selectedShift = { shiftId: 0, day: null, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
+    onAddShift(day): void {
+        this.selectedShift = { shiftId: 0, day: day, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
     }
 
     onSaveShift(): void {
