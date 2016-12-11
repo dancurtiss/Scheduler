@@ -7,6 +7,7 @@
 /// <reference path="app/components/employees.component.js" />
 /// <reference path="app/components/employee-schedule.component.js" />
 /// <reference path="app/components/landing.component.js" />
+/// <reference path="app/components/my-datepicker.component.js" />
 /// <reference path="app/components/organization-detail.component.js" />
 /// <reference path="app/components/organizations.component.js" />
 /// <reference path="app/components/organization-schedule.component.js" />

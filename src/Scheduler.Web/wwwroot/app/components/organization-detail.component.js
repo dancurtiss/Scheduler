@@ -41,15 +41,36 @@ var OrganizationDetailComponent = (function () {
         this.getPositions();
     };
     OrganizationDetailComponent.prototype.onAddSchedule = function () {
-        this.addSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
+        this.selectedSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
     };
     OrganizationDetailComponent.prototype.onAddPosition = function () {
         this.selectedPosition = { positionId: 0, name: null, category: null };
     };
+    OrganizationDetailComponent.prototype.onEditSchedule = function (schedule) {
+        this.selectedSchedule = schedule;
+    };
     OrganizationDetailComponent.prototype.onSaveSchedule = function () {
         var _this = this;
-        this.scheduleService.create(this.organizationId, this.addSchedule).then(function (schedule) {
-            _this.addSchedule = null;
+        if (this.selectedSchedule.scheduleId) {
+            this.scheduleService.update(this.selectedSchedule).then(function (schedule) {
+                _this.selectedSchedule = null;
+                _this.getSchedules();
+            });
+        }
+        else {
+            this.scheduleService.create(this.organizationId, this.selectedSchedule).then(function (schedule) {
+                _this.selectedSchedule = null;
+                _this.getSchedules();
+            });
+        }
+    };
+    OrganizationDetailComponent.prototype.onDeleteSchedule = function (scheduleId) {
+        var _this = this;
+        var sure = confirm('Are you sure you want to delete this schedule?');
+        if (!sure)
+            return;
+        this.scheduleService.delete(scheduleId).then(function () {
+            _this.selectedSchedule = null;
             _this.getSchedules();
         });
     };
@@ -70,6 +91,9 @@ var OrganizationDetailComponent = (function () {
     };
     OrganizationDetailComponent.prototype.onDeletePosition = function (positionId) {
         var _this = this;
+        var sure = confirm('Are you sure you want to delete this position?');
+        if (!sure)
+            return;
         this.positionService.delete(positionId).then(function () {
             _this.selectedPosition = null;
             _this.getPositions();

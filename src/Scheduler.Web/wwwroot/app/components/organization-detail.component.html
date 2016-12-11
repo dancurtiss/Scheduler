@@ -32,12 +32,14 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let schedule of schedules" (click)="onScheduleSelect(schedule)">
                     <th scope="row">{{schedule.scheduleId}}</th>
                     <td>{{schedule.name}}</td>
+                    <td><button class="btn" (click)="onEditSchedule(schedule); $event.stopPropagation()">Edit</button></td>
                     <td><button class="btn btn-danger" (click)="onDeleteSchedule(schedule.scheduleId); $event.stopPropagation()">Delete</button></td>
                 </tr>
             </tbody>
@@ -45,30 +47,38 @@
     </div>
 </div>
 
-<div class="row" *ngIf="addSchedule">
-    <div class="col-md-6">
-        <form name="addScheduleForm">
-            <div class="form-group">
-                <label for="scheduleName">Name</label>
-                <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="addSchedule.name" required>
+<div *ngIf="selectedSchedule" class="modal fade show in danger" id="scheduleModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Schedule Details</h4>
             </div>
-            <div class="form-group">
-                <label for="startDate">Start Date</label>
-                <input type="text" class="form-control" id="startDate" placeholder="" name="startDate" [(ngModel)]="addSchedule.startDate" required>
+            <div class="modal-body">
+                <form name="addScheduleForm">
+                    <div class="form-group">
+                        <label for="scheduleName">Name</label>
+                        <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="selectedSchedule.name" required>
+                    </div>
+                    <div class="form-group">
+                        <my-datepicker [dateModel]="selectedSchedule.startDate" [label]="'Start Date'"></my-datepicker>
+                    </div>
+                    <div class="form-group">
+                        <my-datepicker [dateModel]="selectedSchedule.endDate" [label]="'End Date'"></my-datepicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Active</label>
+                        <select class="form-control" id="isActive" [(ngModel)]="selectedSchedule.isActive" name="isActive" required>
+                            <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="endDate">End Date</label>
-                <input type="text" class="form-control" id="endDate" placeholder="" name="endDate" [(ngModel)]="addSchedule.endDate" required>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="onSaveSchedule();">Submit</button>
+                <button type="reset" class="btn btn-default" (click)="selectedSchedule = null;$event.stopPropagation()">Cancel</button>
             </div>
-            <div class="form-group">
-                <label for="message">Active</label>
-                <select class="form-control" id="isActive" [(ngModel)]="addSchedule.isActive" name="isActive" required>
-                    <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" (click)="onSaveSchedule();">Submit</button>
-            <button type="reset" class="btn btn-default" (click)="addSchedule = null;$event.stopPropagation()">Cancel</button>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -106,20 +116,29 @@
     </div>
 </div>
 
-<div class="row" *ngIf="selectedPosition">
-    <div class="col-md-6">
-        <form name="addPositionForm">
-            <div class="form-group">
-                <label for="positionName">Name</label>
-                <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name">
+<div *ngIf="selectedPosition" class="modal fade show in danger" id="positionModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Position Details</h4>
             </div>
-            <div class="form-group">
-                <label for="positionCategory">Category</label>
-                <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category">
+            <div class="modal-body">
+                <form name="addPositionForm">
+                    <div class="form-group">
+                        <label for="positionName">Name</label>
+                        <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="positionCategory">Category</label>
+                        <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category">
+                    </div>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary" (click)="onSavePosition();">Submit</button>
-            <button type="reset" class="btn btn-default" (click)="selectedPosition = null;$event.stopPropagation()">Cancel</button>
-        </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="onSavePosition();">Submit</button>
+                <button type="reset" class="btn btn-default" (click)="selectedPosition = null;$event.stopPropagation()">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
-

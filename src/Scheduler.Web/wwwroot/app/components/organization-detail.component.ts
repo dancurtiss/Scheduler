@@ -18,7 +18,7 @@ export class OrganizationDetailComponent implements OnInit {
     selectedPosition: Position;
 
     schedules: Schedule[];
-    addSchedule: Schedule;
+    selectedSchedule: Schedule;
     
     constructor(
         private positionService: PositionService,
@@ -50,16 +50,37 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onAddSchedule(): void {
-        this.addSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
+        this.selectedSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
     }
 
     onAddPosition(): void {
         this.selectedPosition = { positionId: 0, name: null, category: null };
     }
 
+    onEditSchedule(schedule: Schedule): void {
+        this.selectedSchedule = schedule;
+    }
+
     onSaveSchedule(): void {
-        this.scheduleService.create(this.organizationId, this.addSchedule).then((schedule) => {
-            this.addSchedule = null;
+        if (this.selectedSchedule.scheduleId) {
+            this.scheduleService.update(this.selectedSchedule).then((schedule) => {
+                this.selectedSchedule = null;
+                this.getSchedules();
+            });
+        } else {
+            this.scheduleService.create(this.organizationId, this.selectedSchedule).then((schedule) => {
+                this.selectedSchedule = null;
+                this.getSchedules();
+            });
+        }
+    }
+
+    onDeleteSchedule(scheduleId: number) {
+        var sure = confirm('Are you sure you want to delete this schedule?');
+        if (!sure) return;
+
+        this.scheduleService.delete(scheduleId).then(() => {
+            this.selectedSchedule = null;
             this.getSchedules();
         });
     }
@@ -79,6 +100,9 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onDeletePosition(positionId: number) {
+        var sure = confirm('Are you sure you want to delete this position?');
+        if (!sure) return;
+
         this.positionService.delete(positionId).then(() => {
             this.selectedPosition = null;
             this.getPositions();
