@@ -55,6 +55,10 @@ gulp.task('restore', function () {
     ]).pipe(gulp.dest('./wwwroot/libs/@angular'));
 
     gulp.src([
+    './node_modules/ng2-bootstrap/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/ng2-bootstrap'));
+
+    gulp.src([
     './node_modules/font-awesome/**/*.css',
     ]).pipe(gulp.dest('./wwwroot/libs/font-awesome'));
 

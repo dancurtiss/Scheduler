@@ -47,6 +47,14 @@ export class EmployeesComponent implements OnInit {
 
     onAddEmployee(): void {
         this.selectedEmployee = { employeeId: 0, firstName: null, lastName: null, employeeNumber: null, phoneNumber: null, isActive: true, employeePositionIds: [] };
+
+        this.selectedEmployeePositions = [];
+
+        this.availablePositions.forEach((p) => {
+            this.selectedEmployeePositions.push({ positionId: p.positionId, category: p.category, name: p.name, checked: false });
+        });
+
+        this.selectedEmployeeAccess = null;
     }
 
     selectPosition(position: SelectedPosition) {

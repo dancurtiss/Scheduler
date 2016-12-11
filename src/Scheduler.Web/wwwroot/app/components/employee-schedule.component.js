@@ -113,6 +113,14 @@ var EmployeeScheduleComponent = (function () {
         this.dragulaSetup();
         this.getSchedule();
     };
+    EmployeeScheduleComponent.prototype.previousDay = function () {
+        this.scheduleDate = this.scheduleDate.add(-1, 'days');
+        this.getSchedule();
+    };
+    EmployeeScheduleComponent.prototype.nextDay = function () {
+        this.scheduleDate = this.scheduleDate.add(1, 'days');
+        this.getSchedule();
+    };
     EmployeeScheduleComponent.prototype.added = function (employeeId, shiftId) {
         var _this = this;
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then(function (employeeShiftId) {

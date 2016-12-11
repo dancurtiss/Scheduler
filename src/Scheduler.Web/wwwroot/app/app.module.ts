@@ -5,6 +5,8 @@ import { HttpModule }    from '@angular/http';
 import { RouterModule }  from '@angular/router';
 import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
+import { AlertModule, DatepickerModule } from 'ng2-bootstrap/ng2-bootstrap';
+
 import { AppComponent }         from './app.component';
 
 import { AuthGuard }    from './services/auth-guard.service';
@@ -30,12 +32,15 @@ import { EmployeeAccessService } from './services/employee-access.service';
 import { EmployeeScheduleService }             from './services/employee-schedule.service';
 import { EmployeeConflictService }             from './services/employee-conflict.service';
 
+
 @NgModule({
     imports: [
         DragulaModule,
         BrowserModule,
         FormsModule,
         HttpModule,
+        AlertModule,
+        DatepickerModule,
         RouterModule.forRoot([
         {
             path: '',

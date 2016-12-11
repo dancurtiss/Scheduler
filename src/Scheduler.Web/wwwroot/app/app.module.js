@@ -14,6 +14,7 @@ var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
+var ng2_bootstrap_1 = require('ng2-bootstrap/ng2-bootstrap');
 var app_component_1 = require('./app.component');
 var auth_guard_service_1 = require('./services/auth-guard.service');
 var organization_schedule_component_1 = require('./components/organization-schedule.component');
@@ -44,6 +45,8 @@ var AppModule = (function () {
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
                 http_1.HttpModule,
+                ng2_bootstrap_1.AlertModule,
+                ng2_bootstrap_1.DatepickerModule,
                 router_1.RouterModule.forRoot([
                     {
                         path: '',

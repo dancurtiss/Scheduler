@@ -45,7 +45,9 @@
 .gu-mirror {
   margin: 5px;
   padding: 5px;
-  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  background-color: #2c3e50;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   transition: opacity 0.4s ease-in-out;
 }
 .container div {
@@ -68,10 +70,14 @@
 .handle {
   padding: 0 5px;
   margin-right: 5px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #c87f0a;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   cursor: move;
 }
 nested-repeat-example .container span {
   display: block;
   padding: 8px;
+}
+.btn-danger {
+    padding: 1px;
 }

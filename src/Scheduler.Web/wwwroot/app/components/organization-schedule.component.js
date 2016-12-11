@@ -22,16 +22,10 @@ var OrganizationScheduleComponent = (function () {
             var id = +params['id'];
             _this.organizationId = id;
         });
-        this.nextTenDays = [];
-        for (var i = 0; i < 10; i++) {
-            var day = new Date();
-            day.setDate(day.getDate() + i);
-            this.nextTenDays.push(day);
-        }
     };
-    OrganizationScheduleComponent.prototype.goToEmployeeScheduling = function (id, date) {
-        var dateString = moment(date).format('MMDDYYYY');
-        this.router.navigate(['employeeschedule/detail/', id, dateString]);
+    OrganizationScheduleComponent.prototype.goToEmployeeScheduling = function ($event) {
+        var dateString = moment(this.calendarDate).format('MMDDYYYY');
+        this.router.navigate(['employeeschedule/detail/', this.organizationId, dateString]);
     };
     OrganizationScheduleComponent = __decorate([
         core_1.Component({

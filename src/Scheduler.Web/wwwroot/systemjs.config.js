@@ -27,6 +27,7 @@
             'ticky': 'npm:ticky',
             'dragula': 'npm:dragula',
             'ng2-dragula': 'npm:ng2-dragula',
+            'ng2-bootstrap': 'npm:ng2-bootstrap',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
         },
         // packages tells the System loader how to load when no filename and/or no extension
@@ -62,6 +63,9 @@
                 defaultExtension: 'js'
             },
             'ng2-dragula': {
+                defaultExtension: 'js'
+            },
+            'ng2-bootstrap': {
                 defaultExtension: 'js'
             },
             'angular-in-memory-web-api': {

@@ -36,7 +36,13 @@ var EmployeesComponent = (function () {
         this.getEmployees();
     };
     EmployeesComponent.prototype.onAddEmployee = function () {
+        var _this = this;
         this.selectedEmployee = { employeeId: 0, firstName: null, lastName: null, employeeNumber: null, phoneNumber: null, isActive: true, employeePositionIds: [] };
+        this.selectedEmployeePositions = [];
+        this.availablePositions.forEach(function (p) {
+            _this.selectedEmployeePositions.push({ positionId: p.positionId, category: p.category, name: p.name, checked: false });
+        });
+        this.selectedEmployeeAccess = null;
     };
     EmployeesComponent.prototype.selectPosition = function (position) {
         position.checked = position.checked ? false : true;

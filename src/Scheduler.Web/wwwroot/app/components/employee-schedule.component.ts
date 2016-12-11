@@ -85,6 +85,16 @@ export class EmployeeScheduleComponent implements OnInit {
         this.getSchedule();
     }
 
+    previousDay() {
+        this.scheduleDate = this.scheduleDate.add(-1, 'days');
+        this.getSchedule();
+    }
+
+    nextDay() {
+        this.scheduleDate = this.scheduleDate.add(1, 'days');
+        this.getSchedule();
+    }
+
     added(employeeId: number, shiftId: number) {
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then((employeeShiftId) => {
             var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);

@@ -53,40 +53,45 @@
 <div class="row" *ngIf="selectedEmployee">
     <div class="col-md-6">
         <form name="employeeForm">
-            <div class="form-group">
-                <label for="employeeFirstName">First Name</label>
-                <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName">
-            </div>
-            <div class="form-group">
-                <label for="employeeLastName">Last Name</label>
-                <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName">
-            </div>
-            <div class="form-group">
-                <label for="employeeNumber">Employee Number</label>
-                <input type="text" class="form-control" id="employeeNumber" placeholder="" name="employeeNumber" [(ngModel)]="selectedEmployee.employeeNumber">
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber">
-            </div>
-            <div class="form-group">
-                <label for="message">Active</label>
-                <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive">
-                    <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Positions</label>
-                <div *ngFor="let position of selectedEmployeePositions">
-                    <label>
-                        <input type="checkbox"
-                               name="employeePositions"
-                               value="{{position.positionId}}"
-                               [checked]="position.checked"
-                               (change)="selectPosition(position)"
-                               />
-                        {{position.name}}
-                    </label>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="employeeFirstName">First Name</label>
+                        <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeLastName">Last Name</label>
+                        <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeNumber">Employee Number</label>
+                        <input type="text" class="form-control" id="employeeNumber" placeholder="" name="employeeNumber" [(ngModel)]="selectedEmployee.employeeNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Active</label>
+                        <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive">
+                            <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Positions</label>
+                        <div *ngFor="let position of selectedEmployeePositions">
+                            <label>
+                                <input type="checkbox"
+                                       name="employeePositions"
+                                       value="{{position.positionId}}"
+                                       [checked]="position.checked"
+                                       (change)="selectPosition(position)" />
+                                {{position.name}}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

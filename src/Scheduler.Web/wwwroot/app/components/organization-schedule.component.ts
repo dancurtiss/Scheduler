@@ -16,26 +16,19 @@ export class OrganizationScheduleComponent implements OnInit {
     ) { }
 
     organizationId: number;
-    nextTenDays: Date[];
+
+    calendarDate: Date;
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
             let id = +params['id'];
             this.organizationId = id;
         });
-
-        this.nextTenDays = [];
-
-        for (var i = 0; i < 10; i++) {
-            var day = new Date();
-            day.setDate(day.getDate() + i);
-            this.nextTenDays.push(day);
-        }
     }
 
-    goToEmployeeScheduling(id: number, date: Date): void {
-        var dateString = moment(date).format('MMDDYYYY');
-        this.router.navigate(['employeeschedule/detail/', id, dateString]);
+    goToEmployeeScheduling($event: any): void {
+        var dateString = moment(this.calendarDate).format('MMDDYYYY');
+        this.router.navigate(['employeeschedule/detail/', this.organizationId, dateString]);
     }
 
 }

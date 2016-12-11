@@ -1,6 +1,14 @@
 ﻿<div class="row">
-    <div class="col-md-8">
-        <h2>Employee Schedule {{scheduleDate.format('MM/DD/YYYY')}}</h2>
+    <div class="col-md-4">
+        <h2>Schedule <span class="small">{{scheduleDate.format('MM/DD/YYYY')}}</span></h2>
+    </div>
+    <div class="col-md-4">
+        <div class="navbar-collapse collapse pull-left">
+            <ul class="nav navbar-nav">
+                <li><a (click)="previousDay()"><i class="fa fa-angle-left"></i>Previous</a></li>
+                <li><a (click)="nextDay()">Next <i class="fa fa-angle-right"></i></a></li>
+            </ul>
+        </div>
     </div>
     <div class="col-md-4">
         <div class="navbar-collapse collapse pull-right">

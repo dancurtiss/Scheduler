@@ -1,6 +1,6 @@
 ﻿<div class="row">
     <div class="col-md-6">
-        <h2>Schedule</h2>
+        <h2>Upcoming Schedule</h2>
     </div>
     <div class="col-md-6">
         <div class="navbar-collapse collapse pull-right">
@@ -13,9 +13,12 @@
     </div>
 </div>
 
+<h4>Choose a day below to view schedule</h4>
 
-<ul>
-    <li *ngFor="let i of nextTenDays">
-        <a (click)="goToEmployeeScheduling(organizationId, i)">{{i | date: 'MM/dd/yyyy'}}</a>
-    </li>
-</ul>
+<div class="row">
+    <div class="col-md-3">
+        <div style="display:inline-block; min-height:290px;">
+            <datepicker [(ngModel)]="calendarDate" (ngModelChange)="goToEmployeeScheduling()"></datepicker>
+        </div>
+    </div>
+</div>
