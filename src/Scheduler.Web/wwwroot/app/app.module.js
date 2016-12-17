@@ -48,6 +48,7 @@ var AppModule = (function () {
                 http_1.HttpModule,
                 ng2_bootstrap_1.AlertModule,
                 ng2_bootstrap_1.DatepickerModule,
+                ng2_bootstrap_1.TimepickerModule,
                 router_1.RouterModule.forRoot([
                     {
                         path: '',

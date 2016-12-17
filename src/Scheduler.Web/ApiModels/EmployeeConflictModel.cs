@@ -9,6 +9,7 @@ namespace Scheduler.Web.ApiModels
 {
     public class EmployeeDetailModel
     {
+        public int OrganizationId { get; set; }
         public List<EmployeeConflictModel> Conflicts { get; set; }
         public List<EmployeeShiftDisplayModel> Shifts { get; set; }
     }
@@ -48,8 +49,8 @@ namespace Scheduler.Web.ApiModels
         public EmployeeConflict Export(EmployeeConflict employeeConflict)
         {
             employeeConflict.EmployeeConflictId = this.EmployeeConflictId;
-            employeeConflict.ConflictStart = this.ConflictDate.AddHours(StartHour.HasValue ? StartHour.Value : 0);
-            employeeConflict.ConflictEnd = this.ConflictDate.AddHours(EndHour.HasValue ? EndHour.Value : 24);
+            employeeConflict.ConflictStart = this.ConflictDate.Date.AddHours(StartHour.HasValue ? StartHour.Value : 0);
+            employeeConflict.ConflictEnd = this.ConflictDate.Date.AddHours(EndHour.HasValue ? EndHour.Value : 24);
             employeeConflict.Reason = this.Reason;
 
             return employeeConflict;
@@ -65,8 +66,8 @@ namespace Scheduler.Web.ApiModels
             ShiftId = employeeShift.Shift.ShiftId;
             PositionName = employeeShift.Shift.Position.Name;
             PositionCategory = employeeShift.Shift.Position.Category;
-            ShiftStartTime = employeeShift.ShiftStartTime;
-            ShiftEndTime = employeeShift.ShiftEndTime;
+            ShiftStartTime = DateTime.SpecifyKind(employeeShift.ShiftStartTime, DateTimeKind.Local);
+            ShiftEndTime = DateTime.SpecifyKind(employeeShift.ShiftEndTime, DateTimeKind.Local);
             Cancelled = employeeShift.Canceled;
             CancelReason = employeeShift.CancelReason;
         }

@@ -51,32 +51,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="position" style="width: 100px;">Start Time</label>
-                                <select class="form-control" id="startHour" [(ngModel)]="selectedShift.startHour" name="startHour">
-                                    <option [value]="i" *ngFor="let i of hours">{{("00"+i).slice(-2)}}</option>
-                                </select>
-                                <select class="form-control" id="startMinute" [(ngModel)]="selectedShift.startMinute" name="startMinute">
-                                    <option [value]="i" *ngFor="let i of minutes">{{("00"+i).slice(-2)}}</option>
-                                </select>
-                                <select class="form-control" id="isStartAM" [(ngModel)]="selectedShift.isStartAM" name="isStartAM">
-                                    <option [value]="i" *ngFor="let i of [true,false]">{{i ? "AM" : "PM"}}</option>
-                                </select>
+                                <label for="position" class="pull-left" style="width: 100px;">Start Time</label>
+                                <timepicker class="pull-left" name="startTime" [(ngModel)]="selectedShift.startTime" [minuteStep]="15"></timepicker>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="position" style="width: 100px;">End Time</label>
-                                <select class="form-control" id="endHour" [(ngModel)]="selectedShift.endHour" name="endHour">
-                                    <option [value]="i" *ngFor="let i of hours">{{("00"+i).slice(-2)}}</option>
-                                </select>
-                                <select class="form-control" id="endMinute" [(ngModel)]="selectedShift.endMinute" name="endMinute">
-                                    <option [value]="i" *ngFor="let i of minutes">{{("00"+i).slice(-2)}}</option>
-                                </select>
-                                <select class="form-control" id="isEndAM" [(ngModel)]="selectedShift.isEndAM" name="isEndAM">
-                                    <option [value]="i" *ngFor="let i of [true,false]">{{i ? "AM" : "PM"}}</option>
-                                </select>
+                                <label for="position" class="pull-left" style="width: 100px;">End Time</label>
+                                <timepicker class="pull-left" name="endTime" [(ngModel)]="selectedShift.endTime" [minuteStep]="15"></timepicker>
                             </div>
                         </div>
                     </div>
@@ -122,7 +106,7 @@
                         <tr *ngFor="let shift of getDayShifts(gridDay)" (click)="onShiftSelect(shift)">
                             <td>{{positionName(shift.positionId, positions)}}</td>
                             <td>{{shift.day}}</td>
-                            <td>{{("00"+shift.startHour).slice(-2)}}:{{("00"+shift.startMinute).slice(-2)}} {{shift.isStartAM?"AM":"PM"}}-{{("00"+shift.endHour).slice(-2)}}:{{("00"+shift.endMinute).slice(-2)}} {{shift.isEndAM?"AM":"PM"}}</td>
+                            <td>{{shift.startTimeDisplay}}-{{shift.endTimeDisplay}}</td>
                             <td><button class="btn btn-danger" (click)="onDeleteShift(shift.shiftId); $event.stopPropagation()">Delete</button></td>
                         </tr>
                     </tbody>

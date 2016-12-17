@@ -1,7 +1,9 @@
 ﻿import { Component, OnInit }                                from '@angular/core';
 import { Router, ActivatedRoute, Params }                   from '@angular/router';
 import { Shift, Schedule, ScheduleDetails, Position }       from '../models/schedule';
-import { ShiftService }                                     from '../services/shift.service';
+import { ShiftService } from '../services/shift.service';
+
+import * as moment from 'moment'
 
 @Component({
     moduleId: module.id,
@@ -24,9 +26,6 @@ export class ScheduleDetailComponent implements OnInit {
     selectedShift: Shift;
 
     days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    hours: number[] = [1,2,3,4,5,6,7,8,9,10,11,12];
-    minutes: number[] = [0,15,30,45];
-    ampm: string[] = ['AM','PM'];
     
     constructor(
         private shiftService: ShiftService,
@@ -42,6 +41,11 @@ export class ScheduleDetailComponent implements OnInit {
             this.scheduleEnd = scheduleDetails.endDate;
             this.positions = scheduleDetails.positions;
             this.shifts = scheduleDetails.shifts;
+
+            this.shifts.forEach((s) => {
+                s.startTimeDisplay = moment(s.startTime).format('LT');
+                s.endTimeDisplay = moment(s.endTime).format('LT');
+            });
         });
     }
 
@@ -65,7 +69,13 @@ export class ScheduleDetailComponent implements OnInit {
     }
 
     onAddShift(day): void {
-        this.selectedShift = { shiftId: 0, day: day, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
+        var startTime = new Date();
+        var endTime = new Date();
+
+        startTime.setHours(8, 0);
+        endTime.setHours(16, 0);
+
+        this.selectedShift = { shiftId: 0, day: day, startTime: startTime, endTime: endTime, positionId: 0 };
     }
 
     onSaveShift(): void {

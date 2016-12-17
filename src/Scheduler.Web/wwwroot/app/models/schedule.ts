@@ -20,12 +20,10 @@ export class ScheduleDetails {
 export class Shift {
     shiftId: number;
     day: string;
-    startHour: number;
-    startMinute: number;
-    isStartAM: boolean;
-    endHour: number;
-    endMinute: number;
-    isEndAM: boolean;
+    startTime: Date;
+    startTimeDisplay?: string;
+    endTime: Date;
+    endTimeDisplay?: string;
     positionId: number;
 }
 

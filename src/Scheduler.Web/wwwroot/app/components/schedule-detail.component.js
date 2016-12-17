@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var shift_service_1 = require('../services/shift.service');
+var moment = require('moment');
 var ScheduleDetailComponent = (function () {
     function ScheduleDetailComponent(shiftService, router, route) {
         this.shiftService = shiftService;
@@ -18,9 +19,6 @@ var ScheduleDetailComponent = (function () {
         this.route = route;
         this.showDay = 'all';
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        this.minutes = [0, 15, 30, 45];
-        this.ampm = ['AM', 'PM'];
     }
     ScheduleDetailComponent.prototype.getScheduleDetails = function () {
         var _this = this;
@@ -31,6 +29,10 @@ var ScheduleDetailComponent = (function () {
             _this.scheduleEnd = scheduleDetails.endDate;
             _this.positions = scheduleDetails.positions;
             _this.shifts = scheduleDetails.shifts;
+            _this.shifts.forEach(function (s) {
+                s.startTimeDisplay = moment(s.startTime).format('LT');
+                s.endTimeDisplay = moment(s.endTime).format('LT');
+            });
         });
     };
     ScheduleDetailComponent.prototype.ngOnInit = function () {
@@ -50,7 +52,11 @@ var ScheduleDetailComponent = (function () {
         return positions.filter(function (p) { return p.positionId == positionId; })[0].name;
     };
     ScheduleDetailComponent.prototype.onAddShift = function (day) {
-        this.selectedShift = { shiftId: 0, day: day, startHour: 8, startMinute: 0, isStartAM: true, endHour: 4, endMinute: 0, isEndAM: false, positionId: 0 };
+        var startTime = new Date();
+        var endTime = new Date();
+        startTime.setHours(8, 0);
+        endTime.setHours(16, 0);
+        this.selectedShift = { shiftId: 0, day: day, startTime: startTime, endTime: endTime, positionId: 0 };
     };
     ScheduleDetailComponent.prototype.onSaveShift = function () {
         var _this = this;

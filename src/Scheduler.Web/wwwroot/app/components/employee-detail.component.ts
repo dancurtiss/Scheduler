@@ -3,7 +3,10 @@ import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { EmployeeDetails, CancelEmployeeShift, EmployeeShiftDisplay, EmployeeConflict }       from '../models/employee-schedule';
 import { ShiftService }          from '../services/shift.service';
 import { EmployeeConflictService }          from '../services/employee-conflict.service';
-import { EmployeeScheduleService }          from '../services/employee-schedule.service';
+import { EmployeeScheduleService } from '../services/employee-schedule.service';
+import { AuthorizationService } from '../services/authorization.service';
+import { AuthorizationDetails } from '../models/authorization';
+
 import * as moment from 'moment'
 
 @Component({
@@ -15,6 +18,7 @@ import * as moment from 'moment'
 export class EmployeeDetailComponent implements OnInit {
 
     employeeId: number;
+    organizationId: number;
 
     conflicts: EmployeeConflict[];
     selectedEmployeeConflict: EmployeeConflict;
@@ -22,9 +26,12 @@ export class EmployeeDetailComponent implements OnInit {
     shifts: EmployeeShiftDisplay[];
     selectedShift: EmployeeShiftDisplay;
 
+    canViewOrganization: boolean = true;
+
     hours: number[] = [];
     
     constructor(
+        private authService: AuthorizationService,
         private employeeScheduleService: EmployeeScheduleService,
         private employeeConflictService: EmployeeConflictService,
         private router: Router,
@@ -32,13 +39,13 @@ export class EmployeeDetailComponent implements OnInit {
     ) { }
 
     getEmployeeConflicts(): void {
+        this.authService.getAuthorization().then((authDetails) => {
+            this.canViewOrganization = authDetails.permissions.indexOf('organization.details') > -1;
+        });
+
         this.employeeConflictService.getEmployeeDetails(this.employeeId).then((details) => {
+            this.organizationId = details.organizationId;
             this.conflicts = details.conflicts;
-
-            this.conflicts.forEach((c) => {
-                c.conflictDate = moment(c.conflictDate).format('MM/DD/YYYY');
-            });
-
             this.shifts = details.shifts;
         });
     }
@@ -57,7 +64,11 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     onAddEmployeeConflict(): void {
-        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().format('MM/DD/YYYY'), startHour: 8, endHour: 20, reason: null };
+        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
+    }
+
+    setConflictDate(conflictDate: Date) {
+        this.selectedEmployeeConflict.conflictDate = conflictDate
     }
 
     onSaveEmployeeConflict(): void {

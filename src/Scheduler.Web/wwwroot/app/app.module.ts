@@ -5,7 +5,7 @@ import { HttpModule }    from '@angular/http';
 import { RouterModule }  from '@angular/router';
 import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { AlertModule, DatepickerModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AlertModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppComponent }         from './app.component';
 
@@ -42,6 +42,7 @@ import { EmployeeConflictService }             from './services/employee-conflic
         HttpModule,
         AlertModule,
         DatepickerModule,
+        TimepickerModule,
         RouterModule.forRoot([
         {
             path: '',

@@ -44,13 +44,14 @@ export class CancelEmployeeShift {
 }
 
 export class EmployeeDetails {
+    organizationId: number;
     conflicts: EmployeeConflict[];
     shifts: EmployeeShiftDisplay[];
 }
 
 export class EmployeeConflict {
     employeeConflictId: number;
-    conflictDate: string;
+    conflictDate: Date;
     startHour: number;
     endHour: number;
     reason: string;

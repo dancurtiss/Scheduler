@@ -12,22 +12,26 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var employee_conflict_service_1 = require('../services/employee-conflict.service');
 var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var authorization_service_1 = require('../services/authorization.service');
 var moment = require('moment');
 var EmployeeDetailComponent = (function () {
-    function EmployeeDetailComponent(employeeScheduleService, employeeConflictService, router, route) {
+    function EmployeeDetailComponent(authService, employeeScheduleService, employeeConflictService, router, route) {
+        this.authService = authService;
         this.employeeScheduleService = employeeScheduleService;
         this.employeeConflictService = employeeConflictService;
         this.router = router;
         this.route = route;
+        this.canViewOrganization = true;
         this.hours = [];
     }
     EmployeeDetailComponent.prototype.getEmployeeConflicts = function () {
         var _this = this;
+        this.authService.getAuthorization().then(function (authDetails) {
+            _this.canViewOrganization = authDetails.permissions.indexOf('organization.details') > -1;
+        });
         this.employeeConflictService.getEmployeeDetails(this.employeeId).then(function (details) {
+            _this.organizationId = details.organizationId;
             _this.conflicts = details.conflicts;
-            _this.conflicts.forEach(function (c) {
-                c.conflictDate = moment(c.conflictDate).format('MM/DD/YYYY');
-            });
             _this.shifts = details.shifts;
         });
     };
@@ -43,7 +47,10 @@ var EmployeeDetailComponent = (function () {
         this.getEmployeeConflicts();
     };
     EmployeeDetailComponent.prototype.onAddEmployeeConflict = function () {
-        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().format('MM/DD/YYYY'), startHour: 8, endHour: 20, reason: null };
+        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
+    };
+    EmployeeDetailComponent.prototype.setConflictDate = function (conflictDate) {
+        this.selectedEmployeeConflict.conflictDate = conflictDate;
     };
     EmployeeDetailComponent.prototype.onSaveEmployeeConflict = function () {
         var _this = this;
@@ -87,7 +94,7 @@ var EmployeeDetailComponent = (function () {
             templateUrl: 'employee-detail.component.html',
             styleUrls: ['employee-detail.component.css']
         }), 
-        __metadata('design:paramtypes', [employee_schedule_service_1.EmployeeScheduleService, employee_conflict_service_1.EmployeeConflictService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [authorization_service_1.AuthorizationService, employee_schedule_service_1.EmployeeScheduleService, employee_conflict_service_1.EmployeeConflictService, router_1.Router, router_1.ActivatedRoute])
     ], EmployeeDetailComponent);
     return EmployeeDetailComponent;
 }());
