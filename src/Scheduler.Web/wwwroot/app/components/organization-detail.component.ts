@@ -61,6 +61,13 @@ export class OrganizationDetailComponent implements OnInit {
         this.selectedSchedule = schedule;
     }
 
+    setScheduleStartDate(date: Date) {
+        this.selectedSchedule.startDate = date;
+    }
+    setScheduleEndDate(date: Date) {
+        this.selectedSchedule.endDate = date;
+    }
+
     onSaveSchedule(): void {
         if (this.selectedSchedule.scheduleId) {
             this.scheduleService.update(this.selectedSchedule).then((schedule) => {

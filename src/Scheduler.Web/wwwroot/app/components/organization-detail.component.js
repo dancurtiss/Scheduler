@@ -49,6 +49,12 @@ var OrganizationDetailComponent = (function () {
     OrganizationDetailComponent.prototype.onEditSchedule = function (schedule) {
         this.selectedSchedule = schedule;
     };
+    OrganizationDetailComponent.prototype.setScheduleStartDate = function (date) {
+        this.selectedSchedule.startDate = date;
+    };
+    OrganizationDetailComponent.prototype.setScheduleEndDate = function (date) {
+        this.selectedSchedule.endDate = date;
+    };
     OrganizationDetailComponent.prototype.onSaveSchedule = function () {
         var _this = this;
         if (this.selectedSchedule.scheduleId) {

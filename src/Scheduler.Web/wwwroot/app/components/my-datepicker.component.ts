@@ -5,9 +5,14 @@ import * as moment from 'moment'
 @Component({
     selector: 'my-datepicker',
     template: `
-      <label>{{label}}</label>
-      <input type="text" [(ngModel)]="dateString" (ngModelChange)="dateStringChange($event)" class="form-control" (focus)="showPopup()" />
-      <datepicker class="popup" *ngIf="showDatepicker" [(ngModel)]="dateModel" [showWeeks]="true" (ngModelChange)="dateModelChanged($event)" (selectionDone)="hidePopup($event)" ></datepicker>
+        <div class="form-group">
+            <label>{{label}}</label>
+            <div class="input-group col-md-6">
+                <input type="text" [(ngModel)]="dateString" (ngModelChange)="dateStringChange($event)" class="form-control" (focus)="showPopup()" />
+                <div class="input-group-addon" (click)="toggleCalendar()"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+        <datepicker class="popup" *ngIf="showDatepicker" [(ngModel)]="dateModel" [showWeeks]="true" (ngModelChange)="dateModelChanged($event)" (selectionDone)="hidePopup($event)" ></datepicker>
   `,
     styles: [`
     .popup {
@@ -16,6 +21,7 @@ import * as moment from 'moment'
       border-radius: 3px;
       border: 1px solid #ddd;
       height: 251px;
+      z-index: 99;
     }
   `],
 })
@@ -25,7 +31,7 @@ export class IsdDatepickerComponent {
     @Input()
     label: string;
     @Output()
-    dateModelChange: EventEmitter<string> = new EventEmitter();
+    dateModelChange: EventEmitter<Date> = new EventEmitter();
     private showDatepicker: boolean = false;
     private dateString: string = null;
 
@@ -37,11 +43,16 @@ export class IsdDatepickerComponent {
         this.showDatepicker = true;
     }
 
+    toggleCalendar() {
+        this.showDatepicker = !this.showDatepicker;
+    }
+
     dateStringChange($event: string) {
         var setDate = moment($event, 'MM/DD/YYYY');
         if (setDate.isValid()) {
             this.dateString = $event;
             this.dateModel = setDate.toDate();
+            this.dateModelChange.emit(this.dateModel);
             this.showDatepicker = false;
         }
     }

@@ -61,10 +61,10 @@
                         <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="selectedSchedule.name" required>
                     </div>
                     <div class="form-group">
-                        <my-datepicker [dateModel]="selectedSchedule.startDate" [label]="'Start Date'"></my-datepicker>
+                        <my-datepicker [dateModel]="selectedSchedule.startDate" [label]="'Start Date'" (dateModelChange)="setScheduleStartDate($event)"></my-datepicker>
                     </div>
                     <div class="form-group">
-                        <my-datepicker [dateModel]="selectedSchedule.endDate" [label]="'End Date'"></my-datepicker>
+                        <my-datepicker [dateModel]="selectedSchedule.endDate" [label]="'End Date'" (dateModelChange)="setScheduleEndDate($event)"></my-datepicker>
                     </div>
                     <div class="form-group">
                         <label for="message">Active</label>

@@ -22,11 +22,15 @@ var IsdDatepickerComponent = (function () {
     IsdDatepickerComponent.prototype.showPopup = function () {
         this.showDatepicker = true;
     };
+    IsdDatepickerComponent.prototype.toggleCalendar = function () {
+        this.showDatepicker = !this.showDatepicker;
+    };
     IsdDatepickerComponent.prototype.dateStringChange = function ($event) {
         var setDate = moment($event, 'MM/DD/YYYY');
         if (setDate.isValid()) {
             this.dateString = $event;
             this.dateModel = setDate.toDate();
+            this.dateModelChange.emit(this.dateModel);
             this.showDatepicker = false;
         }
     };
@@ -53,8 +57,8 @@ var IsdDatepickerComponent = (function () {
     IsdDatepickerComponent = __decorate([
         core_1.Component({
             selector: 'my-datepicker',
-            template: "\n      <label>{{label}}</label>\n      <input type=\"text\" [(ngModel)]=\"dateString\" (ngModelChange)=\"dateStringChange($event)\" class=\"form-control\" (focus)=\"showPopup()\" />\n      <datepicker class=\"popup\" *ngIf=\"showDatepicker\" [(ngModel)]=\"dateModel\" [showWeeks]=\"true\" (ngModelChange)=\"dateModelChanged($event)\" (selectionDone)=\"hidePopup($event)\" ></datepicker>\n  ",
-            styles: ["\n    .popup {\n      position: absolute;\n      background-color: #fff;\n      border-radius: 3px;\n      border: 1px solid #ddd;\n      height: 251px;\n    }\n  "],
+            template: "\n        <div class=\"form-group\">\n            <label>{{label}}</label>\n            <div class=\"input-group col-md-6\">\n                <input type=\"text\" [(ngModel)]=\"dateString\" (ngModelChange)=\"dateStringChange($event)\" class=\"form-control\" (focus)=\"showPopup()\" />\n                <div class=\"input-group-addon\" (click)=\"toggleCalendar()\"><i class=\"fa fa-calendar\"></i></div>\n            </div>\n        </div>\n        <datepicker class=\"popup\" *ngIf=\"showDatepicker\" [(ngModel)]=\"dateModel\" [showWeeks]=\"true\" (ngModelChange)=\"dateModelChanged($event)\" (selectionDone)=\"hidePopup($event)\" ></datepicker>\n  ",
+            styles: ["\n    .popup {\n      position: absolute;\n      background-color: #fff;\n      border-radius: 3px;\n      border: 1px solid #ddd;\n      height: 251px;\n      z-index: 99;\n    }\n  "],
         }), 
         __metadata('design:paramtypes', [])
     ], IsdDatepickerComponent);
