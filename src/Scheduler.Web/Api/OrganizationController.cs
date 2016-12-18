@@ -25,12 +25,14 @@ namespace Scheduler.Web.Api
             return _schedulerContext.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
         }
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+        // GET api/values/5
+        [HttpGet("{id}")]
+        [Authorize("Manage Organization Details")]
+        public OrganizationModel Get(int id)
+        {
+            UserCanAccessOrganization(id);
+            return new OrganizationModel(_schedulerContext.Organizations.Single(o => o.OrganizationId == id));
+        }
 
         // POST api/values
         [HttpPost]

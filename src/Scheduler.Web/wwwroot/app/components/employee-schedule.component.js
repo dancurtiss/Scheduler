@@ -28,6 +28,7 @@ var EmployeeScheduleComponent = (function () {
             return el.className.toLowerCase() === 'employee-item';
         };
         this.dragAccepts = function (el, target, source, sibling) {
+            _this.message = "";
             var ownContainer = el.contains(target);
             if (ownContainer) {
                 return false;
@@ -55,11 +56,13 @@ var EmployeeScheduleComponent = (function () {
             allEmployeeShifts.forEach(function (existingShift) {
                 var shiftStartWithinOtherShift = shift.shiftStartMinute >= existingShift.shiftStartMinute && shift.shiftStartMinute < existingShift.shiftEndMinute;
                 var shiftEndWithinOtherShift = shift.shiftEndMinute > existingShift.shiftStartMinute && shift.shiftEndMinute <= existingShift.shiftEndMinute;
+                //console.log('conflicta1?', shiftStartWithinOtherShift, shiftEndWithinOtherShift, shift, existingShift.shiftStartMinute, existingShift.shiftEndMinute);
                 if (shiftStartWithinOtherShift || shiftEndWithinOtherShift) {
                     hasConflict = true;
                     return;
                 }
-                var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute <= shift.shiftEndMinute;
+                var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute < shift.shiftEndMinute;
+                //console.log('conflicta2?', existingShiftWithin, shift, existingShift.shiftStartMinute, existingShift.shiftEndMinute);
                 if (existingShiftWithin) {
                     hasConflict = true;
                     return;
@@ -67,6 +70,33 @@ var EmployeeScheduleComponent = (function () {
             });
             if (hasConflict) {
                 _this.message = "Employee is already working another shift at this time.";
+                return false;
+            }
+            // employee conflict overlap
+            var allEmployeeConflicts = _this.getAllEmployeeConflicts(employeeId);
+            hasConflict = false;
+            var reason = "";
+            allEmployeeConflicts.forEach(function (existingConflict) {
+                var conflictStartMinute = existingConflict.startHour * 60;
+                var conflictEndMinute = existingConflict.endHour * 60;
+                var shiftStartWithinConflict = shift.shiftStartMinute >= conflictStartMinute && shift.shiftStartMinute < conflictEndMinute;
+                var shiftEndWithinConflict = shift.shiftEndMinute > conflictStartMinute && shift.shiftEndMinute <= conflictEndMinute;
+                //console.log('conflict?', shiftStartWithinConflict, shiftEndWithinConflict, shift, conflictStartMinute, conflictEndMinute);
+                if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                    hasConflict = true;
+                    reason = existingConflict.reason;
+                    return;
+                }
+                var existingShiftWithin = conflictStartMinute >= shift.shiftStartMinute && conflictStartMinute < shift.shiftEndMinute;
+                //console.log('conflict2?', existingShiftWithin, shift, conflictStartMinute, conflictEndMinute);
+                if (existingShiftWithin) {
+                    hasConflict = true;
+                    reason = existingConflict.reason;
+                    return;
+                }
+            });
+            if (hasConflict) {
+                _this.message = "Employee has conflict at this time (" + reason + ").";
                 return false;
             }
             return true;
@@ -82,6 +112,7 @@ var EmployeeScheduleComponent = (function () {
             _this.availableEmployees = model.employees;
             _this.availableShifts = model.shifts;
             _this.employeeShifts = model.employeeShifts;
+            _this.employeeConflicts = model.employeeConflicts;
             _this.positionCategories = model.positionCategories;
             _this.availableGroupedShifts = {};
             _this.positionCategories.forEach(function (pc) {
@@ -162,6 +193,11 @@ var EmployeeScheduleComponent = (function () {
             }
         }
         return allShifts;
+    };
+    EmployeeScheduleComponent.prototype.getAllEmployeeConflicts = function (employeeId) {
+        return this.employeeConflicts.filter(function (ec) {
+            return ec.employeeId == employeeId;
+        });
     };
     EmployeeScheduleComponent.prototype.dragulaSetup = function () {
         var _this = this;

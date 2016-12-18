@@ -9,7 +9,7 @@ namespace Scheduler.Web.ApiModels
 {
     public class EmployeeScheduleModel
     {
-        public EmployeeScheduleModel(DateTime startDate, DateTime endDate, List<EmployeeShift> employeeShifts, List<Shift> shifts, List<Employee> employees)
+        public EmployeeScheduleModel(DateTime startDate, DateTime endDate, List<EmployeeShift> employeeShifts, List<EmployeeConflict> employeeConflicts, List<Shift> shifts, List<Employee> employees)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -17,6 +17,7 @@ namespace Scheduler.Web.ApiModels
             Shifts = shifts.Select(s => new ShiftDisplayModel(s)).ToList();
             Employees = employees.Select(e => new EmployeeDisplayModel(e)).ToList();
             EmployeeShifts = employeeShifts.Select(es => new EmployeeShiftModel(es)).ToList();
+            EmployeeConflicts = employeeConflicts.Select(ec => new EmployeeConflictModel(ec)).ToList();
 
             Shifts = Shifts.OrderBy(s => s.PositionCategory).ThenBy(s => s.PositionName).ThenBy(s => s.ShiftStartMinute).ToList();
             PositionCategories = Shifts.Select(s => s.PositionCategory).Distinct().ToList();
@@ -29,6 +30,7 @@ namespace Scheduler.Web.ApiModels
         public List<ShiftDisplayModel> Shifts { get; set; }
         public List<EmployeeDisplayModel> Employees { get; set; }
         public List<EmployeeShiftModel> EmployeeShifts { get; set; }
+        public List<EmployeeConflictModel> EmployeeConflicts { get; set; }
     }
 
     public class EmployeeShiftModel

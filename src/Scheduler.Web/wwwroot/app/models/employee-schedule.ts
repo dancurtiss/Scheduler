@@ -4,6 +4,7 @@
     shifts: ShiftDisplay[];
     employees: EmployeeDisplay[];
     employeeShifts: EmployeeShift[];
+    employeeConflicts: EmployeeConflict[];
     positionCategories: string[];
 }
 
@@ -45,12 +46,14 @@ export class CancelEmployeeShift {
 
 export class EmployeeDetails {
     organizationId: number;
+    organizationMessage: string;
     conflicts: EmployeeConflict[];
     shifts: EmployeeShiftDisplay[];
 }
 
 export class EmployeeConflict {
     employeeConflictId: number;
+    employeeId: number;
     conflictDate: Date;
     startHour: number;
     endHour: number;

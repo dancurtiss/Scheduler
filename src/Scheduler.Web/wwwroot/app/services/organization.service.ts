@@ -21,6 +21,16 @@ export class OrganizationService {
             .catch(this.handleError);
     }
 
+    getOrganization(id: number): Promise<Organization> {
+        const url = `${this.organizationsUrl}/${id}`;
+        return this.http.get(url)
+            .toPromise()
+            .then((response) => {
+                return response.json() as Organization;
+            })
+            .catch(this.handleError);
+    }
+
     delete(id: number): Promise<void> {
         const url = `${this.organizationsUrl}/${id}`;
         return this.http.delete(url, { headers: this.headers })

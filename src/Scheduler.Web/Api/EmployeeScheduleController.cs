@@ -31,13 +31,14 @@ namespace Scheduler.Web.Api
             var endScheduleDate = scheduleDate.AddDays(1);
 
             var employeeShifts = _schedulerContext.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
+            var employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee).Where(ec => ec.ConflictStart > scheduleDate && ec.ConflictEnd < endScheduleDate).ToList();
             var employees = _schedulerContext.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
             var shifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position)
                 .Where(s => s.Schedule.StartDate < scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)
                 .ToList();
 
-            return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, shifts, employees);
+            return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, employeeConflicts, shifts, employees);
         }
 
         // POST api/values

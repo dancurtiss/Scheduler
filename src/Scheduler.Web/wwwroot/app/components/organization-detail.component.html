@@ -142,3 +142,95 @@
         </div>
     </div>
 </div>
+
+
+<div class="row" *ngIf="selectedOrganization">
+    <div class="col-md-6">
+        <form name="organizationForm">
+            <div class="form-group">
+                <label for="organizationName">Name</label>
+                <input type="text" class="form-control" id="organizationName" placeholder="" name="name" [(ngModel)]="selectedOrganization.name" required>
+            </div>
+            <div class="form-group">
+                <label for="contactName">Contact Name</label>
+                <input type="text" class="form-control" id="contactName" placeholder="" name="contactName" [(ngModel)]="selectedOrganization.contactName">
+            </div>
+            <div class="form-group">
+                <label for="contactPhone">Contact Phone</label>
+                <input type="tel" class="form-control" id="contactPhone" placeholder="" name="contactPhone" [(ngModel)]="selectedOrganization.contactPhone">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <input type="text" class="form-control" id="message" placeholder="Message to staff" name="message" [(ngModel)]="selectedOrganization.message">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Submit</button>
+            <button type="reset" class="btn btn-default" (click)="selectedOrganization = null;$event.stopPropagation()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary pull-right" (click)="onAddOrganizationManager();">
+                            Add Manager
+                        </button>
+                    </div>
+                </div>
+                <div class="row" *ngIf="createOrganizationManager">
+                    <div class="col-md-12">
+                        <form name="organizationManagerForm">
+                            <div class="form-group">
+                                <label for="organizationName">Username</label>
+                                <input type="text" class="form-control" id="username" placeholder="" name="userName" [(ngModel)]="createOrganizationManager.userName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactName">Password</label>
+                                <input type="text" class="form-control" id="password" placeholder="" name="password" [(ngModel)]="createOrganizationManager.password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone</label>
+                                <input type="tel" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="createOrganizationManager.phoneNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="emailAddress">Email</label>
+                                <input type="email" class="form-control" id="emailAddress" placeholder="" name="emailAddress" [(ngModel)]="createOrganizationManager.emailAddress" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" (click)="onSaveOrganizationManager();">Submit</button>
+                            <button type="reset" class="btn btn-default" (click)="createOrganizationManager = null;$event.stopPropagation()">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let organizationManager of organizationManagers">
+                            <td>{{organizationManager.userName}}</td>
+                            <td>{{organizationManager.phoneNumber}}</td>
+                            <td>{{organizationManager.email}}</td>
+                            <td><button class="btn btn-danger" (click)="onDeleteOrganizationManager(organizationManager.username); $event.stopPropagation()">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

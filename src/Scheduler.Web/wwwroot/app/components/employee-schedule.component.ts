@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, ShiftDisplay }             from '../models/employee-schedule';
+import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, EmployeeConflict, ShiftDisplay } from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
 import { EmployeeScheduleService }      from '../services/employee-schedule.service';
 import * as moment from 'moment'
@@ -29,6 +29,7 @@ export class EmployeeScheduleComponent implements OnInit {
     availableGroupedShifts: any;
     availableShifts: ShiftDisplay[];
     employeeShifts: EmployeeShift[];
+    employeeConflicts: EmployeeConflict[];
     positionCategories: string[];
 
     message: string;
@@ -48,6 +49,7 @@ export class EmployeeScheduleComponent implements OnInit {
             this.availableEmployees = model.employees;
             this.availableShifts = model.shifts;
             this.employeeShifts = model.employeeShifts;
+            this.employeeConflicts = model.employeeConflicts;
             this.positionCategories = model.positionCategories;
 
             this.availableGroupedShifts = {};
@@ -128,7 +130,7 @@ export class EmployeeScheduleComponent implements OnInit {
         return employeeShiftObject;
     }
 
-    getAllEmployeeShifts(employeeId: number):ShiftDisplay[] {
+    getAllEmployeeShifts(employeeId: number): ShiftDisplay[] {
         var allShifts = [];
         for (var shiftId in this.shiftBags) {
             if (this.shiftBags.hasOwnProperty(shiftId)) {
@@ -141,6 +143,12 @@ export class EmployeeScheduleComponent implements OnInit {
             }
         }
         return allShifts;
+    }
+
+    getAllEmployeeConflicts(employeeId: number): EmployeeConflict[] {
+        return this.employeeConflicts.filter((ec) => {
+            return ec.employeeId == employeeId;
+        });
     }
 
     dragulaSetup() {
@@ -167,6 +175,7 @@ export class EmployeeScheduleComponent implements OnInit {
     }
 
     private dragAccepts = (el, target, source, sibling): boolean => {
+        this.message = "";
         var ownContainer = el.contains(target);
         if (ownContainer) {
             return false;
@@ -202,12 +211,16 @@ export class EmployeeScheduleComponent implements OnInit {
             var shiftStartWithinOtherShift = shift.shiftStartMinute >= existingShift.shiftStartMinute && shift.shiftStartMinute < existingShift.shiftEndMinute;
             var shiftEndWithinOtherShift = shift.shiftEndMinute > existingShift.shiftStartMinute && shift.shiftEndMinute <= existingShift.shiftEndMinute;
 
+            //console.log('conflicta1?', shiftStartWithinOtherShift, shiftEndWithinOtherShift, shift, existingShift.shiftStartMinute, existingShift.shiftEndMinute);
+
             if (shiftStartWithinOtherShift || shiftEndWithinOtherShift) {
                 hasConflict = true;
                 return;
             }
 
-            var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute <= shift.shiftEndMinute;
+            var existingShiftWithin = existingShift.shiftStartMinute >= shift.shiftStartMinute && existingShift.shiftStartMinute < shift.shiftEndMinute;
+
+            //console.log('conflicta2?', existingShiftWithin, shift, existingShift.shiftStartMinute, existingShift.shiftEndMinute);
 
             if (existingShiftWithin) {
                 hasConflict = true;
@@ -217,6 +230,42 @@ export class EmployeeScheduleComponent implements OnInit {
 
         if (hasConflict) {
             this.message = "Employee is already working another shift at this time.";
+            return false;
+        }
+
+        // employee conflict overlap
+        var allEmployeeConflicts = this.getAllEmployeeConflicts(employeeId);
+
+        hasConflict = false;
+        var reason = "";
+        allEmployeeConflicts.forEach((existingConflict) => {
+            var conflictStartMinute = existingConflict.startHour * 60;
+            var conflictEndMinute = existingConflict.endHour * 60;
+
+            var shiftStartWithinConflict = shift.shiftStartMinute >= conflictStartMinute && shift.shiftStartMinute < conflictEndMinute;
+            var shiftEndWithinConflict = shift.shiftEndMinute > conflictStartMinute && shift.shiftEndMinute <= conflictEndMinute;
+
+            //console.log('conflict?', shiftStartWithinConflict, shiftEndWithinConflict, shift, conflictStartMinute, conflictEndMinute);
+
+            if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                hasConflict = true;
+                reason = existingConflict.reason;
+                return;
+            }
+
+            var existingShiftWithin = conflictStartMinute >= shift.shiftStartMinute && conflictStartMinute < shift.shiftEndMinute;
+
+            //console.log('conflict2?', existingShiftWithin, shift, conflictStartMinute, conflictEndMinute);
+
+            if (existingShiftWithin) {
+                hasConflict = true;
+                reason = existingConflict.reason;
+                return;
+            }
+        });
+
+        if (hasConflict) {
+            this.message = "Employee has conflict at this time (" + reason + ").";
             return false;
         }
 

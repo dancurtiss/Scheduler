@@ -27,7 +27,7 @@ namespace Scheduler.Web.Api
 
             var employee = _schedulerContext.Employees.Include(e => e.Organization).Single(e => e.EmployeeId == id);
 
-            List<EmployeeConflictModel> employeeConflicts = _schedulerContext.EmployeeConflicts
+            List<EmployeeConflictModel> employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee)
                 .Where(ec => ec.Employee.EmployeeId == id).ToList()
                 .Select(ec => new EmployeeConflictModel(ec)).ToList();
 
@@ -36,7 +36,7 @@ namespace Scheduler.Web.Api
                 .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > DateTime.Today).ToList()
                 .Select(es => new EmployeeShiftDisplayModel(es)).ToList();
 
-            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, Conflicts = employeeConflicts, Shifts = employeeShifts };
+            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message, Conflicts = employeeConflicts, Shifts = employeeShifts };
         }
 
         // POST api/values
@@ -80,7 +80,7 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            var employeeConflictEntity = _schedulerContext.EmployeeConflicts.Include(ec=>ec.Employee)
+            var employeeConflictEntity = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee)
                 .Single(o => o.EmployeeConflictId == id);
 
             UserCanAccessEmployee(employeeConflictEntity.Employee.EmployeeId);

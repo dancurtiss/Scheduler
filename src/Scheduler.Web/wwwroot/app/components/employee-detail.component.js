@@ -31,6 +31,7 @@ var EmployeeDetailComponent = (function () {
         });
         this.employeeConflictService.getEmployeeDetails(this.employeeId).then(function (details) {
             _this.organizationId = details.organizationId;
+            _this.organizationMessage = details.organizationMessage;
             _this.conflicts = details.conflicts;
             _this.shifts = details.shifts;
         });
@@ -47,7 +48,7 @@ var EmployeeDetailComponent = (function () {
         this.getEmployeeConflicts();
     };
     EmployeeDetailComponent.prototype.onAddEmployeeConflict = function () {
-        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
+        this.selectedEmployeeConflict = { employeeConflictId: 0, employeeId: this.employeeId, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
     };
     EmployeeDetailComponent.prototype.setConflictDate = function (conflictDate) {
         this.selectedEmployeeConflict.conflictDate = conflictDate;

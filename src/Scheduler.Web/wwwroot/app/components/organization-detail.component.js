@@ -12,13 +12,30 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var position_service_1 = require('../services/position.service');
 var schedule_service_1 = require('../services/schedule.service');
+var organization_service_1 = require('../services/organization.service');
+var organization_manager_service_1 = require('../services/organization-manager.service');
 var OrganizationDetailComponent = (function () {
-    function OrganizationDetailComponent(positionService, scheduleService, router, route) {
+    function OrganizationDetailComponent(organizationService, organizationManagerService, positionService, scheduleService, router, route) {
+        this.organizationService = organizationService;
+        this.organizationManagerService = organizationManagerService;
         this.positionService = positionService;
         this.scheduleService = scheduleService;
         this.router = router;
         this.route = route;
     }
+    OrganizationDetailComponent.prototype.getOrganization = function () {
+        var _this = this;
+        this.organizationService.getOrganization(this.organizationId).then(function (organization) {
+            _this.selectedOrganization = organization;
+        });
+    };
+    OrganizationDetailComponent.prototype.getOrganizationManagers = function (organizationId) {
+        var _this = this;
+        this.organizationManagerService.getOrganizationManagers(organizationId)
+            .then(function (managers) {
+            _this.organizationManagers = managers;
+        });
+    };
     OrganizationDetailComponent.prototype.getSchedules = function () {
         var _this = this;
         this.scheduleService.getSchedules(this.organizationId).then(function (schedules) {
@@ -37,8 +54,32 @@ var OrganizationDetailComponent = (function () {
             var id = +params['id'];
             _this.organizationId = id;
         });
+        this.getOrganization();
+        this.getOrganizationManagers(this.organizationId);
         this.getSchedules();
         this.getPositions();
+    };
+    OrganizationDetailComponent.prototype.onAddOrganizationManager = function () {
+        this.createOrganizationManager = { userName: null, password: null, phoneNumber: null, emailAddress: null };
+    };
+    OrganizationDetailComponent.prototype.onSaveOrganizationManager = function () {
+        var _this = this;
+        if (this.selectedOrganization.organizationId) {
+            this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then(function (manager) {
+                _this.createOrganizationManager = null;
+                _this.getOrganizationManagers(_this.selectedOrganization.organizationId);
+            });
+        }
+    };
+    OrganizationDetailComponent.prototype.onDeleteOrganizationManager = function (username) {
+        var _this = this;
+        this.organizationManagerService.delete(username).then(function () {
+            _this.getOrganizationManagers(_this.selectedOrganization.organizationId);
+        });
+    };
+    OrganizationDetailComponent.prototype.onSaveOrganization = function () {
+        this.organizationService.update(this.selectedOrganization).then(function (organization) {
+        });
     };
     OrganizationDetailComponent.prototype.onAddSchedule = function () {
         this.selectedSchedule = { scheduleId: 0, name: null, startDate: null, endDate: null, isActive: true };
@@ -118,7 +159,7 @@ var OrganizationDetailComponent = (function () {
             templateUrl: 'organization-detail.component.html',
             styleUrls: ['organization-detail.component.css']
         }), 
-        __metadata('design:paramtypes', [position_service_1.PositionService, schedule_service_1.ScheduleService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [organization_service_1.OrganizationService, organization_manager_service_1.OrganizationManagerService, position_service_1.PositionService, schedule_service_1.ScheduleService, router_1.Router, router_1.ActivatedRoute])
     ], OrganizationDetailComponent);
     return OrganizationDetailComponent;
 }());

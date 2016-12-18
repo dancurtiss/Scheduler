@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { Position, Schedule }       from '../models/schedule';
 import { PositionService }          from '../services/position.service';
 import { ScheduleService }          from '../services/schedule.service';
+import { Organization, CreateOrganizationManager, ApplicationUser } from '../models/organization';
+import { OrganizationService } from '../services/organization.service';
+import { OrganizationManagerService } from '../services/organization-manager.service';
 
 @Component({
     moduleId: module.id,
@@ -13,6 +16,9 @@ import { ScheduleService }          from '../services/schedule.service';
 export class OrganizationDetailComponent implements OnInit {
 
     organizationId: number;
+    selectedOrganization: Organization;
+    organizationManagers: ApplicationUser[];
+    createOrganizationManager: CreateOrganizationManager;
 
     positions: Position[];
     selectedPosition: Position;
@@ -21,11 +27,26 @@ export class OrganizationDetailComponent implements OnInit {
     selectedSchedule: Schedule;
     
     constructor(
+        private organizationService: OrganizationService,
+        private organizationManagerService: OrganizationManagerService,
         private positionService: PositionService,
         private scheduleService: ScheduleService,
         private router: Router,
         private route: ActivatedRoute
     ) { }
+
+    getOrganization(): void {
+        this.organizationService.getOrganization(this.organizationId).then((organization) => {
+            this.selectedOrganization = organization;
+        });
+    }
+
+    getOrganizationManagers(organizationId: number): void {
+        this.organizationManagerService.getOrganizationManagers(organizationId)
+            .then((managers) => {
+                this.organizationManagers = managers;
+            });
+    }
 
     getSchedules(): void {
         this.scheduleService.getSchedules(this.organizationId).then((schedules) => {
@@ -45,8 +66,36 @@ export class OrganizationDetailComponent implements OnInit {
             this.organizationId = id;
         });
 
+        this.getOrganization();
+        this.getOrganizationManagers(this.organizationId);
+
         this.getSchedules();
         this.getPositions();
+    }
+
+    onAddOrganizationManager(): void {
+        this.createOrganizationManager = { userName: null, password: null, phoneNumber: null, emailAddress: null };
+    }
+
+    onSaveOrganizationManager(): void {
+        if (this.selectedOrganization.organizationId) {
+            this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then((manager) => {
+                this.createOrganizationManager = null;
+                this.getOrganizationManagers(this.selectedOrganization.organizationId);
+            });
+        }
+    }
+
+    onDeleteOrganizationManager(username: string) {
+        this.organizationManagerService.delete(username).then(() => {
+            this.getOrganizationManagers(this.selectedOrganization.organizationId);
+        });
+    }
+
+
+    onSaveOrganization(): void {
+        this.organizationService.update(this.selectedOrganization).then((organization) => {
+        });
     }
 
     onAddSchedule(): void {

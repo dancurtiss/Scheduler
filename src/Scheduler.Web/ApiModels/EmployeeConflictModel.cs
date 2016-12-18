@@ -10,6 +10,7 @@ namespace Scheduler.Web.ApiModels
     public class EmployeeDetailModel
     {
         public int OrganizationId { get; set; }
+        public string OrganizationMessage { get; set; }
         public List<EmployeeConflictModel> Conflicts { get; set; }
         public List<EmployeeShiftDisplayModel> Shifts { get; set; }
     }
@@ -24,6 +25,7 @@ namespace Scheduler.Web.ApiModels
         public EmployeeConflictModel(EmployeeConflict employeeConflict)
         {
             EmployeeConflictId = employeeConflict.EmployeeConflictId;
+            EmployeeId = employeeConflict.Employee.EmployeeId;
             ConflictDate = employeeConflict.ConflictStart.Date;
             StartHour = employeeConflict.ConflictStart.Hour;
             EndHour = employeeConflict.ConflictEnd.Hour;
@@ -31,6 +33,7 @@ namespace Scheduler.Web.ApiModels
         }
 
         public int EmployeeConflictId { get; set; }
+        public int EmployeeId { get; set; }
 
         [Required]
         public DateTime ConflictDate { get; set; }

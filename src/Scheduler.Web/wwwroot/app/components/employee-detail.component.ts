@@ -19,6 +19,7 @@ export class EmployeeDetailComponent implements OnInit {
 
     employeeId: number;
     organizationId: number;
+    organizationMessage: string;
 
     conflicts: EmployeeConflict[];
     selectedEmployeeConflict: EmployeeConflict;
@@ -45,6 +46,7 @@ export class EmployeeDetailComponent implements OnInit {
 
         this.employeeConflictService.getEmployeeDetails(this.employeeId).then((details) => {
             this.organizationId = details.organizationId;
+            this.organizationMessage = details.organizationMessage;
             this.conflicts = details.conflicts;
             this.shifts = details.shifts;
         });
@@ -64,7 +66,7 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     onAddEmployeeConflict(): void {
-        this.selectedEmployeeConflict = { employeeConflictId: 0, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
+        this.selectedEmployeeConflict = { employeeConflictId: 0, employeeId: this.employeeId, conflictDate: moment().toDate(), startHour: 8, endHour: 20, reason: null };
     }
 
     setConflictDate(conflictDate: Date) {

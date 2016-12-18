@@ -13,6 +13,11 @@
     </div>
 </div>
 
+<div class="row bg-info" *ngIf="!canViewOrganization">
+    <div class="col-sm-12">
+        {{organizationMessage}}
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-6">

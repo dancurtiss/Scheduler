@@ -25,6 +25,15 @@ var OrganizationService = (function () {
         })
             .catch(this.handleError);
     };
+    OrganizationService.prototype.getOrganization = function (id) {
+        var url = this.organizationsUrl + "/" + id;
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError);
+    };
     OrganizationService.prototype.delete = function (id) {
         var url = this.organizationsUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
