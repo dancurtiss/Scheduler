@@ -22,6 +22,10 @@ var OrganizationDetailComponent = (function () {
         this.scheduleService = scheduleService;
         this.router = router;
         this.route = route;
+        this.scheduleErrors = [];
+        this.positionErrors = [];
+        this.organizationErrors = [];
+        this.managerErrors = [];
     }
     OrganizationDetailComponent.prototype.getOrganization = function () {
         var _this = this;
@@ -64,6 +68,19 @@ var OrganizationDetailComponent = (function () {
     };
     OrganizationDetailComponent.prototype.onSaveOrganizationManager = function () {
         var _this = this;
+        this.managerErrors = [];
+        if (!this.createOrganizationManager.userName) {
+            this.managerErrors.push('Username is required.');
+        }
+        if (!this.createOrganizationManager.password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (!this.createOrganizationManager.emailAddress) {
+            this.managerErrors.push('Email is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
         if (this.selectedOrganization.organizationId) {
             this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then(function (manager) {
                 _this.createOrganizationManager = null;
@@ -78,6 +95,13 @@ var OrganizationDetailComponent = (function () {
         });
     };
     OrganizationDetailComponent.prototype.onSaveOrganization = function () {
+        this.organizationErrors = [];
+        if (!this.selectedOrganization.name) {
+            this.organizationErrors.push('Name is required.');
+        }
+        if (this.organizationErrors.length > 0) {
+            return;
+        }
         this.organizationService.update(this.selectedOrganization).then(function (organization) {
         });
     };
@@ -98,6 +122,19 @@ var OrganizationDetailComponent = (function () {
     };
     OrganizationDetailComponent.prototype.onSaveSchedule = function () {
         var _this = this;
+        this.scheduleErrors = [];
+        if (!this.selectedSchedule.name) {
+            this.scheduleErrors.push('Name is required.');
+        }
+        if (!this.selectedSchedule.startDate) {
+            this.scheduleErrors.push('Start Date is required.');
+        }
+        if (!this.selectedSchedule.endDate) {
+            this.scheduleErrors.push('End Date is required.');
+        }
+        if (this.scheduleErrors.length > 0) {
+            return;
+        }
         if (this.selectedSchedule.scheduleId) {
             this.scheduleService.update(this.selectedSchedule).then(function (schedule) {
                 _this.selectedSchedule = null;
@@ -123,6 +160,16 @@ var OrganizationDetailComponent = (function () {
     };
     OrganizationDetailComponent.prototype.onSavePosition = function () {
         var _this = this;
+        this.positionErrors = [];
+        if (!this.selectedPosition.name) {
+            this.positionErrors.push('Name is required.');
+        }
+        if (!this.selectedPosition.category) {
+            this.positionErrors.push('Category is required.');
+        }
+        if (this.positionErrors.length > 0) {
+            return;
+        }
         if (this.selectedPosition.positionId) {
             this.positionService.update(this.selectedPosition).then(function (position) {
                 _this.selectedPosition = null;

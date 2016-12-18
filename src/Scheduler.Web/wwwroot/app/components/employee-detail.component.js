@@ -22,6 +22,8 @@ var EmployeeDetailComponent = (function () {
         this.router = router;
         this.route = route;
         this.canViewOrganization = true;
+        this.conflictErrors = [];
+        this.cancelErrors = [];
         this.hours = [];
     }
     EmployeeDetailComponent.prototype.getEmployeeConflicts = function () {
@@ -55,6 +57,16 @@ var EmployeeDetailComponent = (function () {
     };
     EmployeeDetailComponent.prototype.onSaveEmployeeConflict = function () {
         var _this = this;
+        this.conflictErrors = [];
+        if (!this.selectedEmployeeConflict.reason) {
+            this.conflictErrors.push('Reason is required.');
+        }
+        if (!this.selectedEmployeeConflict.conflictDate && moment.isDate(this.selectedEmployeeConflict.conflictDate)) {
+            this.conflictErrors.push('Date is required.');
+        }
+        if (this.conflictErrors.length > 0) {
+            return;
+        }
         if (this.selectedEmployeeConflict.employeeConflictId) {
             this.employeeConflictService.update(this.selectedEmployeeConflict).then(function (conflict) {
                 _this.selectedEmployeeConflict = null;
@@ -80,6 +92,13 @@ var EmployeeDetailComponent = (function () {
     };
     EmployeeDetailComponent.prototype.onCancelShift = function (employeeShiftId, reason) {
         var _this = this;
+        this.cancelErrors = [];
+        if (!reason) {
+            this.cancelErrors.push('Reason is required.');
+        }
+        if (this.cancelErrors.length > 0) {
+            return;
+        }
         this.employeeScheduleService.update({ employeeShiftId: employeeShiftId, reason: reason }).then(function () {
             _this.selectedShift = null;
             _this.getEmployeeConflicts();

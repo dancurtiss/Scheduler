@@ -18,6 +18,8 @@ var OrganizationsComponent = (function () {
         this.organizationManagerService = organizationManagerService;
         this.router = router;
         this.showAdd = false;
+        this.managerErrors = [];
+        this.organizationErrors = [];
     }
     OrganizationsComponent.prototype.getOrganizations = function () {
         var _this = this;
@@ -40,6 +42,13 @@ var OrganizationsComponent = (function () {
     };
     OrganizationsComponent.prototype.onSaveOrganization = function (organizationId, name, contactName, contactPhone, message) {
         var _this = this;
+        this.organizationErrors = [];
+        if (!this.selectedOrganization.name) {
+            this.organizationErrors.push('Name is required.');
+        }
+        if (this.organizationErrors.length > 0) {
+            return;
+        }
         if (this.selectedOrganization.organizationId) {
             this.organizationService.update(this.selectedOrganization).then(function (organization) {
                 _this.selectedOrganization = null;
@@ -65,6 +74,19 @@ var OrganizationsComponent = (function () {
     };
     OrganizationsComponent.prototype.onSaveOrganizationManager = function () {
         var _this = this;
+        this.managerErrors = [];
+        if (!this.createOrganizationManager.userName) {
+            this.managerErrors.push('Username is required.');
+        }
+        if (!this.createOrganizationManager.password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (!this.createOrganizationManager.emailAddress) {
+            this.managerErrors.push('Email is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
         if (this.selectedOrganization.organizationId) {
             this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then(function (manager) {
                 _this.createOrganizationManager = null;

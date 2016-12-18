@@ -170,3 +170,7 @@ timepicker .form-control {
 timepicker btn {
     padding: 3px;
 }
+
+input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
+    border: 2px solid darkred;
+}

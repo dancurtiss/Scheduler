@@ -21,10 +21,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="selectedShift = null;$event.stopPropagation()">&times;</button>
                 <h4 class="modal-title">Add Shift</h4>
             </div>
             <div class="modal-body">
+                <my-errors [errors]="shiftErrors"></my-errors>
                 <form class="form-inline" name="addShiftForm">
                     <div class="row">
                         <div class="col-md-12">

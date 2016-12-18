@@ -25,6 +25,11 @@ export class OrganizationDetailComponent implements OnInit {
 
     schedules: Schedule[];
     selectedSchedule: Schedule;
+
+    scheduleErrors: string[] = [];
+    positionErrors: string[] = [];
+    organizationErrors: string[] = [];
+    managerErrors: string[] = [];
     
     constructor(
         private organizationService: OrganizationService,
@@ -78,6 +83,20 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onSaveOrganizationManager(): void {
+        this.managerErrors = [];
+        if (!this.createOrganizationManager.userName) {
+            this.managerErrors.push('Username is required.');
+        }
+        if (!this.createOrganizationManager.password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (!this.createOrganizationManager.emailAddress) {
+            this.managerErrors.push('Email is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedOrganization.organizationId) {
             this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then((manager) => {
                 this.createOrganizationManager = null;
@@ -94,6 +113,14 @@ export class OrganizationDetailComponent implements OnInit {
 
 
     onSaveOrganization(): void {
+        this.organizationErrors = [];
+        if (!this.selectedOrganization.name) {
+            this.organizationErrors.push('Name is required.');
+        }
+        if (this.organizationErrors.length > 0) {
+            return;
+        }
+
         this.organizationService.update(this.selectedOrganization).then((organization) => {
         });
     }
@@ -118,6 +145,20 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onSaveSchedule(): void {
+        this.scheduleErrors = [];
+        if (!this.selectedSchedule.name) {
+            this.scheduleErrors.push('Name is required.');
+        }
+        if (!this.selectedSchedule.startDate) {
+            this.scheduleErrors.push('Start Date is required.');
+        }
+        if (!this.selectedSchedule.endDate) {
+            this.scheduleErrors.push('End Date is required.');
+        }
+        if (this.scheduleErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedSchedule.scheduleId) {
             this.scheduleService.update(this.selectedSchedule).then((schedule) => {
                 this.selectedSchedule = null;
@@ -142,6 +183,17 @@ export class OrganizationDetailComponent implements OnInit {
     }
 
     onSavePosition(): void {
+        this.positionErrors = [];
+        if (!this.selectedPosition.name) {
+            this.positionErrors.push('Name is required.');
+        }
+        if (!this.selectedPosition.category) {
+            this.positionErrors.push('Category is required.');
+        }
+        if (this.positionErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedPosition.positionId) {
             this.positionService.update(this.selectedPosition).then((position) => {
                 this.selectedPosition = null;

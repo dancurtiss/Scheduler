@@ -21,6 +21,9 @@ export class EmployeesComponent implements OnInit {
     selectedEmployeeAccess: ApplicationUser;
     showAdd: boolean = false;
     availablePositions: Position[];
+
+    errors: string[];
+    accessErrors: string[];
     
     constructor(
         private employeeService: EmployeeService,
@@ -64,6 +67,25 @@ export class EmployeesComponent implements OnInit {
     onSaveEmployee(employeeId: number, name: string, contactName: string, contactPhone: string, message: string): void {
         this.selectedEmployee.employeePositionIds = this.selectedEmployeePositions.filter((sp) => { return sp.checked; }).map((sp) => { return sp.positionId });
 
+        this.errors = [];
+        if (!this.selectedEmployee.firstName) {
+            this.errors.push('First Name is required.');
+        }
+        if (!this.selectedEmployee.lastName) {
+            this.errors.push('Last Name is required.');
+        }
+        if (!this.selectedEmployee.phoneNumber) {
+            this.errors.push('Phone Number is required.');
+        }
+        if (!this.selectedEmployee.employeePositionIds.length) {
+            this.errors.push('Positions are required.');
+        }
+
+        if (this.errors.length > 0) {
+            return;
+        }
+
+
         if (this.selectedEmployee.employeeId) {
             this.employeeService.update(this.selectedEmployee).then((employee) => {
                 this.selectedEmployee = null;
@@ -89,6 +111,14 @@ export class EmployeesComponent implements OnInit {
     }
 
     onAddEmployeeAccess(password: string): void {
+        this.accessErrors = [];
+        if (!password) {
+            this.accessErrors.push('Password is required.');
+        }
+        if (this.accessErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedEmployee.employeeId && this.selectedEmployee.phoneNumber) {
             this.employeeAccessService.create(this.organizationId,
             {

@@ -50,6 +50,7 @@
 
 <div class="row" *ngIf="selectedOrganization">
     <div class="col-md-6">
+        <my-errors [errors]="organizationErrors"></my-errors>
         <form name="organizationForm">
             <div class="form-group">
                 <label for="organizationName">Name</label>
@@ -89,6 +90,7 @@
                 </div>
                 <div class="row" *ngIf="createOrganizationManager">
                     <div class="col-md-12">
+                        <my-errors [errors]="manager"></my-errors>
                         <form name="organizationManagerForm">
                             <div class="form-group">
                                 <label for="organizationName">Username</label>

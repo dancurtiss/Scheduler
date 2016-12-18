@@ -52,6 +52,7 @@
 
 <div class="row" *ngIf="selectedEmployee">
     <div class="col-md-6">
+        <my-errors [errors]="errors"></my-errors>
         <form name="employeeForm">
             <div class="row">
                 <div class="col-md-6">
@@ -100,6 +101,7 @@
         </form>
     </div>
     <div class="col-md-6">
+        <my-errors [errors]="accessErrors"></my-errors>
         <form name="accessForm" *ngIf="!selectedEmployeeAccess">
             <div class="form-group">
                 <label for="employeePassword">Password</label>

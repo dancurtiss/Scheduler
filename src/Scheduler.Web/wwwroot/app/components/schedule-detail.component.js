@@ -18,6 +18,7 @@ var ScheduleDetailComponent = (function () {
         this.router = router;
         this.route = route;
         this.showDay = 'all';
+        this.shiftErrors = [];
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     }
     ScheduleDetailComponent.prototype.getScheduleDetails = function () {
@@ -60,6 +61,22 @@ var ScheduleDetailComponent = (function () {
     };
     ScheduleDetailComponent.prototype.onSaveShift = function () {
         var _this = this;
+        this.shiftErrors = [];
+        if (!this.selectedShift.day) {
+            this.shiftErrors.push('Day is required.');
+        }
+        if (!this.selectedShift.positionId) {
+            this.shiftErrors.push('Position is required.');
+        }
+        if (!this.selectedShift.startTime) {
+            this.shiftErrors.push('Start is required.');
+        }
+        if (!this.selectedShift.endTime) {
+            this.shiftErrors.push('End is required.');
+        }
+        if (this.shiftErrors.length > 0) {
+            return;
+        }
         if (this.selectedShift.shiftId) {
             this.shiftService.update(this.selectedShift).then(function (shift) {
                 _this.selectedShift = null;

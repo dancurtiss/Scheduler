@@ -29,6 +29,9 @@ export class EmployeeDetailComponent implements OnInit {
 
     canViewOrganization: boolean = true;
 
+    conflictErrors: string[] = [];
+    cancelErrors: string[] = [];
+
     hours: number[] = [];
     
     constructor(
@@ -74,6 +77,17 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     onSaveEmployeeConflict(): void {
+        this.conflictErrors = [];
+        if (!this.selectedEmployeeConflict.reason) {
+            this.conflictErrors.push('Reason is required.');
+        }
+        if (!this.selectedEmployeeConflict.conflictDate && moment.isDate(this.selectedEmployeeConflict.conflictDate)) {
+            this.conflictErrors.push('Date is required.');
+        }
+        if (this.conflictErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedEmployeeConflict.employeeConflictId) {
             this.employeeConflictService.update(this.selectedEmployeeConflict).then((conflict) => {
                 this.selectedEmployeeConflict = null;
@@ -99,6 +113,14 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     onCancelShift(employeeShiftId: number, reason: string) {
+        this.cancelErrors = [];
+        if (!reason) {
+            this.cancelErrors.push('Reason is required.');
+        }
+        if (this.cancelErrors.length > 0) {
+            return;
+        }
+
         this.employeeScheduleService.update({ employeeShiftId: employeeShiftId, reason: reason }).then(() => {
             this.selectedShift = null;
             this.getEmployeeConflicts();

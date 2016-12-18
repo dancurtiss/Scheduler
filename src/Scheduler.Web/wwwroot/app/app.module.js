@@ -17,6 +17,7 @@ var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
 var ng2_bootstrap_1 = require('ng2-bootstrap/ng2-bootstrap');
 var app_component_1 = require('./app.component');
 var auth_guard_service_1 = require('./services/auth-guard.service');
+var my_errors_component_1 = require('./components/my-errors.component');
 var my_datepicker_component_1 = require('./components/my-datepicker.component');
 var organization_schedule_component_1 = require('./components/organization-schedule.component');
 var organizations_component_1 = require('./components/organizations.component');
@@ -101,6 +102,7 @@ var AppModule = (function () {
             declarations: [
                 app_component_1.AppComponent,
                 landing_component_1.LandingComponent,
+                my_errors_component_1.MyErrorsComponent,
                 my_datepicker_component_1.IsdDatepickerComponent,
                 organization_schedule_component_1.OrganizationScheduleComponent,
                 organizations_component_1.OrganizationsComponent,

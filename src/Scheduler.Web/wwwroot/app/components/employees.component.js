@@ -50,6 +50,22 @@ var EmployeesComponent = (function () {
     EmployeesComponent.prototype.onSaveEmployee = function (employeeId, name, contactName, contactPhone, message) {
         var _this = this;
         this.selectedEmployee.employeePositionIds = this.selectedEmployeePositions.filter(function (sp) { return sp.checked; }).map(function (sp) { return sp.positionId; });
+        this.errors = [];
+        if (!this.selectedEmployee.firstName) {
+            this.errors.push('First Name is required.');
+        }
+        if (!this.selectedEmployee.lastName) {
+            this.errors.push('Last Name is required.');
+        }
+        if (!this.selectedEmployee.phoneNumber) {
+            this.errors.push('Phone Number is required.');
+        }
+        if (!this.selectedEmployee.employeePositionIds.length) {
+            this.errors.push('Positions are required.');
+        }
+        if (this.errors.length > 0) {
+            return;
+        }
         if (this.selectedEmployee.employeeId) {
             this.employeeService.update(this.selectedEmployee).then(function (employee) {
                 _this.selectedEmployee = null;
@@ -76,6 +92,13 @@ var EmployeesComponent = (function () {
     };
     EmployeesComponent.prototype.onAddEmployeeAccess = function (password) {
         var _this = this;
+        this.accessErrors = [];
+        if (!password) {
+            this.accessErrors.push('Password is required.');
+        }
+        if (this.accessErrors.length > 0) {
+            return;
+        }
         if (this.selectedEmployee.employeeId && this.selectedEmployee.phoneNumber) {
             this.employeeAccessService.create(this.organizationId, {
                 employeeId: this.selectedEmployee.employeeId,

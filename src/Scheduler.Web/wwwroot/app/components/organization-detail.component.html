@@ -51,10 +51,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="selectedSchedule = null;$event.stopPropagation()">&times;</button>
                 <h4 class="modal-title">Schedule Details</h4>
             </div>
             <div class="modal-body">
+                <my-errors [errors]="scheduleErrors"></my-errors>
                 <form name="addScheduleForm">
                     <div class="form-group">
                         <label for="scheduleName">Name</label>
@@ -126,10 +127,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="selectedPosition = null;$event.stopPropagation()">&times;</button>
                 <h4 class="modal-title">Position Details</h4>
             </div>
             <div class="modal-body">
+                <my-errors [errors]="positionErrors"></my-errors>
                 <form name="addPositionForm">
                     <div class="form-group">
                         <label for="positionName">Name</label>
@@ -169,6 +171,7 @@
 
 <div class="row" *ngIf="selectedOrganization">
     <div class="col-md-6">
+        <my-errors [errors]="organizationErrors"></my-errors>
         <form name="organizationForm">
             <div class="form-group">
                 <label for="organizationName">Name</label>
@@ -195,6 +198,7 @@
             <div class="col-md-12">
                 <div class="row" *ngIf="createOrganizationManager">
                     <div class="col-md-12">
+                        <my-errors [errors]="managerErrors"></my-errors>
                         <form name="organizationManagerForm">
                             <div class="form-group">
                                 <label for="organizationName">Username</label>

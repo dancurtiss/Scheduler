@@ -11,6 +11,7 @@ import { AppComponent }         from './app.component';
 
 import { AuthGuard }    from './services/auth-guard.service';
 
+import { MyErrorsComponent } from './components/my-errors.component'
 import { IsdDatepickerComponent } from './components/my-datepicker.component';
 import { OrganizationScheduleComponent } from './components/organization-schedule.component';
 import { OrganizationsComponent }       from './components/organizations.component';
@@ -95,6 +96,7 @@ import { EmployeeConflictService }             from './services/employee-conflic
     declarations: [
         AppComponent,
         LandingComponent,
+        MyErrorsComponent,
         IsdDatepickerComponent,
         OrganizationScheduleComponent,
         OrganizationsComponent,

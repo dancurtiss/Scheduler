@@ -25,6 +25,8 @@ export class ScheduleDetailComponent implements OnInit {
     positions: Position[];
     selectedShift: Shift;
 
+    shiftErrors: string[] = [];
+
     days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
     constructor(
@@ -79,6 +81,23 @@ export class ScheduleDetailComponent implements OnInit {
     }
 
     onSaveShift(): void {
+        this.shiftErrors = [];
+        if (!this.selectedShift.day) {
+            this.shiftErrors.push('Day is required.');
+        }
+        if (!this.selectedShift.positionId) {
+            this.shiftErrors.push('Position is required.');
+        }
+        if (!this.selectedShift.startTime) {
+            this.shiftErrors.push('Start is required.');
+        }
+        if (!this.selectedShift.endTime) {
+            this.shiftErrors.push('End is required.');
+        }
+        if (this.shiftErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedShift.shiftId) {
             this.shiftService.update(this.selectedShift).then((shift) => {
                 this.selectedShift = null;

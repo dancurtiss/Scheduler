@@ -18,6 +18,9 @@ export class OrganizationsComponent implements OnInit {
     organizationManagers: ApplicationUser[];
     createOrganizationManager: CreateOrganizationManager;
     showAdd: boolean = false;
+
+    managerErrors: string[] = [];
+    organizationErrors: string[] = [];
     
     constructor(
         private organizationService: OrganizationService,
@@ -46,6 +49,14 @@ export class OrganizationsComponent implements OnInit {
     }
 
     onSaveOrganization(organizationId: number, name: string, contactName: string, contactPhone: string, message: string): void {
+        this.organizationErrors = [];
+        if (!this.selectedOrganization.name) {
+            this.organizationErrors.push('Name is required.');
+        }
+        if (this.organizationErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedOrganization.organizationId) {
             this.organizationService.update(this.selectedOrganization).then((organization) => {
                 this.selectedOrganization = null;
@@ -72,6 +83,20 @@ export class OrganizationsComponent implements OnInit {
 
 
     onSaveOrganizationManager(): void {
+        this.managerErrors = [];
+        if (!this.createOrganizationManager.userName) {
+            this.managerErrors.push('Username is required.');
+        }
+        if (!this.createOrganizationManager.password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (!this.createOrganizationManager.emailAddress) {
+            this.managerErrors.push('Email is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
+
         if (this.selectedOrganization.organizationId) {
             this.organizationManagerService.create(this.selectedOrganization.organizationId, this.createOrganizationManager).then((manager) => {
                 this.createOrganizationManager = null;
