@@ -8,7 +8,7 @@ import * as moment from 'moment'
         <div class="form-group">
             <label>{{label}}</label>
             <div class="input-group col-md-6">
-                <input type="text" [(ngModel)]="dateString" (ngModelChange)="dateStringChange($event)" class="form-control" (focus)="showPopup()" />
+                <input type="text" [(ngModel)]="dateString" (ngModelChange)="dateStringChange($event)" class="form-control" (focus)="showPopup()" required="{{required}}" />
                 <div class="input-group-addon" (click)="toggleCalendar()"><i class="fa fa-calendar"></i></div>
             </div>
         </div>
@@ -28,6 +28,8 @@ import * as moment from 'moment'
 export class IsdDatepickerComponent {
     @Input()
     dateModel: Date;
+    @Input()
+    required: boolean;
     @Input()
     label: string;
     @Output()

@@ -61,10 +61,10 @@
                         <input type="text" class="form-control" id="scheduleName" placeholder="" name="name" [(ngModel)]="selectedSchedule.name" required>
                     </div>
                     <div class="form-group">
-                        <my-datepicker [dateModel]="selectedSchedule.startDate" [label]="'Start Date'" (dateModelChange)="setScheduleStartDate($event)"></my-datepicker>
+                        <my-datepicker [dateModel]="selectedSchedule.startDate" [label]="'Start Date'" [required]="true" (dateModelChange)="setScheduleStartDate($event)"></my-datepicker>
                     </div>
                     <div class="form-group">
-                        <my-datepicker [dateModel]="selectedSchedule.endDate" [label]="'End Date'" (dateModelChange)="setScheduleEndDate($event)"></my-datepicker>
+                        <my-datepicker [dateModel]="selectedSchedule.endDate" [label]="'End Date'" [required]="true" (dateModelChange)="setScheduleEndDate($event)"></my-datepicker>
                     </div>
                     <div class="form-group">
                         <label for="message">Active</label>
@@ -79,6 +79,12 @@
                 <button type="reset" class="btn btn-default" (click)="selectedSchedule = null;$event.stopPropagation()">Cancel</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <hr />
     </div>
 </div>
 
@@ -127,11 +133,11 @@
                 <form name="addPositionForm">
                     <div class="form-group">
                         <label for="positionName">Name</label>
-                        <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name">
+                        <input type="text" class="form-control" id="positionName" placeholder="" name="name" [(ngModel)]="selectedPosition.name" required>
                     </div>
                     <div class="form-group">
                         <label for="positionCategory">Category</label>
-                        <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category">
+                        <input type="text" class="form-control" id="positionCategory" placeholder="" name="category" [(ngModel)]="selectedPosition.category" required>
                     </div>
                 </form>
             </div>
@@ -143,6 +149,23 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-12">
+        <hr />
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Details</h2>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-primary pull-right" (click)="onAddOrganizationManager();">
+            Add Manager
+        </button>
+    </div>
+</div>
 
 <div class="row" *ngIf="selectedOrganization">
     <div class="col-md-6">
@@ -163,26 +186,13 @@
                 <label for="message">Message</label>
                 <input type="text" class="form-control" id="message" placeholder="Message to staff" name="message" [(ngModel)]="selectedOrganization.message">
             </div>
-            <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Submit</button>
-            <button type="reset" class="btn btn-default" (click)="selectedOrganization = null;$event.stopPropagation()">Cancel</button>
+            <button type="submit" class="btn btn-primary" (click)="onSaveOrganization();">Save</button>
         </form>
     </div>
 
     <div class="col-md-6">
         <div class="row">
             <div class="col-md-12">
-                <hr />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-primary pull-right" (click)="onAddOrganizationManager();">
-                            Add Manager
-                        </button>
-                    </div>
-                </div>
                 <div class="row" *ngIf="createOrganizationManager">
                     <div class="col-md-12">
                         <form name="organizationManagerForm">

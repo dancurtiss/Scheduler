@@ -57,11 +57,11 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="employeeFirstName">First Name</label>
-                        <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName">
+                        <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName" required>
                     </div>
                     <div class="form-group">
                         <label for="employeeLastName">Last Name</label>
-                        <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName">
+                        <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName" required>
                     </div>
                     <div class="form-group">
                         <label for="employeeNumber">Employee Number</label>
@@ -69,11 +69,11 @@
                     </div>
                     <div class="form-group">
                         <label for="phoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber">
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber" required>
                     </div>
                     <div class="form-group">
                         <label for="message">Active</label>
-                        <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive">
+                        <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive" required>
                             <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
                         </select>
                     </div>
@@ -103,7 +103,7 @@
         <form name="accessForm" *ngIf="!selectedEmployeeAccess">
             <div class="form-group">
                 <label for="employeePassword">Password</label>
-                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password">
+                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
             </div>
 
             <button type="submit" class="btn btn-primary" (click)="onAddEmployeeAccess(selectedEmployee.password);">Add Access</button>

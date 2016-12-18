@@ -30,7 +30,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="position" style="width: 100px;">Position</label>
-                                <select class="form-control" id="position" [(ngModel)]="selectedShift.positionId" name="positionId">
+                                <select class="form-control" id="position" [(ngModel)]="selectedShift.positionId" name="positionId" required>
                                     <option>Please Select</option>
                                     <option [value]="i.positionId" *ngFor="let i of positions">{{i.name}}</option>
                                 </select>
@@ -41,7 +41,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="position" style="width: 100px;">Day</label>
-                                <select class="form-control" id="day" [(ngModel)]="selectedShift.day" name="day">
+                                <select class="form-control" id="day" [(ngModel)]="selectedShift.day" name="day" required>
                                     <option>Please Select</option>
                                     <option [value]="i" *ngFor="let i of days">{{i}}</option>
                                 </select>

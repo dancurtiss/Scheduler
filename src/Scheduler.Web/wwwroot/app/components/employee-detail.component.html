@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6 col-xs-12">
-                                <my-datepicker [dateModel]="selectedEmployeeConflict.conflictDate" [label]="'Conflict Date'" (dateModelChange)="setConflictDate($event)"></my-datepicker>
+                                <my-datepicker [dateModel]="selectedEmployeeConflict.conflictDate" [label]="'Conflict Date'" [required]="true" (dateModelChange)="setConflictDate($event)"></my-datepicker>
                             </div>
                         </div>
                     </div>

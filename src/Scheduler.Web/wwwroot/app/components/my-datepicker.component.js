@@ -48,6 +48,10 @@ var IsdDatepickerComponent = (function () {
     ], IsdDatepickerComponent.prototype, "dateModel", void 0);
     __decorate([
         core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], IsdDatepickerComponent.prototype, "required", void 0);
+    __decorate([
+        core_1.Input(), 
         __metadata('design:type', String)
     ], IsdDatepickerComponent.prototype, "label", void 0);
     __decorate([
@@ -57,7 +61,7 @@ var IsdDatepickerComponent = (function () {
     IsdDatepickerComponent = __decorate([
         core_1.Component({
             selector: 'my-datepicker',
-            template: "\n        <div class=\"form-group\">\n            <label>{{label}}</label>\n            <div class=\"input-group col-md-6\">\n                <input type=\"text\" [(ngModel)]=\"dateString\" (ngModelChange)=\"dateStringChange($event)\" class=\"form-control\" (focus)=\"showPopup()\" />\n                <div class=\"input-group-addon\" (click)=\"toggleCalendar()\"><i class=\"fa fa-calendar\"></i></div>\n            </div>\n        </div>\n        <datepicker class=\"popup\" *ngIf=\"showDatepicker\" [(ngModel)]=\"dateModel\" [showWeeks]=\"true\" (ngModelChange)=\"dateModelChanged($event)\" (selectionDone)=\"hidePopup($event)\" ></datepicker>\n  ",
+            template: "\n        <div class=\"form-group\">\n            <label>{{label}}</label>\n            <div class=\"input-group col-md-6\">\n                <input type=\"text\" [(ngModel)]=\"dateString\" (ngModelChange)=\"dateStringChange($event)\" class=\"form-control\" (focus)=\"showPopup()\" required=\"{{required}}\" />\n                <div class=\"input-group-addon\" (click)=\"toggleCalendar()\"><i class=\"fa fa-calendar\"></i></div>\n            </div>\n        </div>\n        <datepicker class=\"popup\" *ngIf=\"showDatepicker\" [(ngModel)]=\"dateModel\" [showWeeks]=\"true\" (ngModelChange)=\"dateModelChanged($event)\" (selectionDone)=\"hidePopup($event)\" ></datepicker>\n  ",
             styles: ["\n    .popup {\n      position: absolute;\n      background-color: #fff;\n      border-radius: 3px;\n      border: 1px solid #ddd;\n      height: 251px;\n      z-index: 99;\n    }\n  "],
         }), 
         __metadata('design:paramtypes', [])
