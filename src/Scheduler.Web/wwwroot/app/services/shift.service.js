@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 require('rxjs/add/operator/toPromise');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var ShiftService = (function () {
-    function ShiftService(http) {
+    function ShiftService(http, handleErrorService) {
         this.http = http;
+        this.handleErrorService = handleErrorService;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.shiftsUrl = 'api/shift'; // URL to web api
     }
@@ -24,14 +26,14 @@ var ShiftService = (function () {
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     ShiftService.prototype.delete = function (id) {
         var url = this.shiftsUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     ShiftService.prototype.create = function (scheduleId, shift) {
         var url = this.shiftsUrl + "/" + scheduleId;
@@ -39,7 +41,7 @@ var ShiftService = (function () {
             .post(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     ShiftService.prototype.update = function (shift) {
         var url = this.shiftsUrl + "/" + shift.shiftId;
@@ -47,15 +49,11 @@ var ShiftService = (function () {
             .put(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(function () { return shift; })
-            .catch(this.handleError);
-    };
-    ShiftService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     };
     ShiftService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
     ], ShiftService);
     return ShiftService;
 }());

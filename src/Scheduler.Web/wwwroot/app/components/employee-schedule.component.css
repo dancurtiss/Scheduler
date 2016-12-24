@@ -50,6 +50,13 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   transition: opacity 0.4s ease-in-out;
 }
+
+    .container div.bg-canceled,
+    .gu-mirror.bg-canceled {
+      background-color: red;
+      color: #fff;
+    }
+
 .container div {
   cursor: move;
   cursor: grab;

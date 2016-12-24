@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 require('rxjs/add/operator/toPromise');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var EmployeeConflictService = (function () {
-    function EmployeeConflictService(http) {
+    function EmployeeConflictService(http, handleErrorService) {
         this.http = http;
+        this.handleErrorService = handleErrorService;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.employeesConflictUrl = 'api/employeeconflict'; // URL to web api
     }
@@ -24,14 +26,14 @@ var EmployeeConflictService = (function () {
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeConflictService.prototype.delete = function (id) {
         var url = this.employeesConflictUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeConflictService.prototype.create = function (employeeId, employeeConflict) {
         var url = this.employeesConflictUrl + "/" + employeeId;
@@ -39,7 +41,7 @@ var EmployeeConflictService = (function () {
             .post(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeConflictService.prototype.update = function (employeeConflict) {
         var url = this.employeesConflictUrl + "/" + employeeConflict.employeeConflictId;
@@ -47,15 +49,11 @@ var EmployeeConflictService = (function () {
             .put(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(function () { return employeeConflict; })
-            .catch(this.handleError);
-    };
-    EmployeeConflictService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeConflictService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
     ], EmployeeConflictService);
     return EmployeeConflictService;
 }());

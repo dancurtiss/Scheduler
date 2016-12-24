@@ -3,6 +3,7 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Organization } from '../models/organization';
+import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
 export class OrganizationService {
@@ -10,7 +11,7 @@ export class OrganizationService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private organizationsUrl = 'api/organization';  // URL to web api
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private handleErrorService: HandleErrorService) { }
 
     getOrganizations(): Promise<Organization[]> {
         return this.http.get(this.organizationsUrl)
@@ -18,7 +19,7 @@ export class OrganizationService {
             .then((response) => {
                 return response.json() as Organization[];
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     getOrganization(id: number): Promise<Organization> {
@@ -28,7 +29,7 @@ export class OrganizationService {
             .then((response) => {
                 return response.json() as Organization;
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     delete(id: number): Promise<void> {
@@ -36,7 +37,7 @@ export class OrganizationService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     create(organization: Organization): Promise<Organization> {
@@ -44,7 +45,7 @@ export class OrganizationService {
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     update(organization: Organization): Promise<Organization> {
@@ -53,11 +54,6 @@ export class OrganizationService {
             .put(url, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(() => organization)
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     }
 }

@@ -3,6 +3,7 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { EmployeeDetails, EmployeeConflict } from '../models/employee-schedule';
+import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
 export class EmployeeConflictService {
@@ -10,7 +11,7 @@ export class EmployeeConflictService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private employeesConflictUrl = 'api/employeeconflict';  // URL to web api
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private handleErrorService: HandleErrorService) { }
 
     getEmployeeDetails(employeeId: number): Promise<EmployeeDetails> {
         const url = `${this.employeesConflictUrl}/${employeeId}`;
@@ -19,7 +20,7 @@ export class EmployeeConflictService {
             .then((response) => {
                 return response.json() as EmployeeDetails;
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     delete(id: number): Promise<void> {
@@ -27,7 +28,7 @@ export class EmployeeConflictService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     create(employeeId: number, employeeConflict: EmployeeConflict): Promise<EmployeeConflict> {
@@ -36,7 +37,7 @@ export class EmployeeConflictService {
             .post(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     update(employeeConflict: EmployeeConflict): Promise<EmployeeConflict> {
@@ -45,11 +46,6 @@ export class EmployeeConflictService {
             .put(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(() => employeeConflict)
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     }
 }

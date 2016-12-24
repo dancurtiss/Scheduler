@@ -3,6 +3,7 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { ApplicationUser, CreateOrganizationManager } from '../models/organization';
+import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
 export class OrganizationManagerService {
@@ -10,7 +11,7 @@ export class OrganizationManagerService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private organizationsUrl = 'api/organizationmanager';  // URL to web api
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private handleErrorService: HandleErrorService) { }
 
     getOrganizationManagers(organizationId: number): Promise<ApplicationUser[]> {
         const url = `${this.organizationsUrl}/${organizationId}`;
@@ -20,7 +21,7 @@ export class OrganizationManagerService {
             .then((response) => {
                 return response.json() as ApplicationUser[];
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     delete(username: string): Promise<void> {
@@ -28,7 +29,7 @@ export class OrganizationManagerService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     create(organizationId: number, organizationManager: CreateOrganizationManager): Promise<ApplicationUser> {
@@ -38,11 +39,6 @@ export class OrganizationManagerService {
             .post(url, JSON.stringify(organizationManager), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     }
 }

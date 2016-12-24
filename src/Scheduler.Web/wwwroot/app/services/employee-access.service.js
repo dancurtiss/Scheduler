@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 require('rxjs/add/operator/toPromise');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var EmployeeAccessService = (function () {
-    function EmployeeAccessService(http) {
+    function EmployeeAccessService(http, handleErrorService) {
         this.http = http;
+        this.handleErrorService = handleErrorService;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.employeesAccessUrl = 'api/employeeaccess'; // URL to web api
     }
@@ -24,14 +26,14 @@ var EmployeeAccessService = (function () {
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeAccessService.prototype.delete = function (phone) {
         var url = this.employeesAccessUrl + "/" + phone;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeAccessService.prototype.create = function (organizationId, createEmployeeAccess) {
         var url = this.employeesAccessUrl + "/" + organizationId;
@@ -39,15 +41,11 @@ var EmployeeAccessService = (function () {
             .post(url, JSON.stringify(createEmployeeAccess), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleError);
-    };
-    EmployeeAccessService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     };
     EmployeeAccessService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
     ], EmployeeAccessService);
     return EmployeeAccessService;
 }());

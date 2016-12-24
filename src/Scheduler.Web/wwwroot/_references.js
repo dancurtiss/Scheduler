@@ -25,6 +25,7 @@
 /// <reference path="app/services/employee-access.service.js" />
 /// <reference path="app/services/employee-conflict.service.js" />
 /// <reference path="app/services/employee-schedule.service.js" />
+/// <reference path="app/services/handle-error.service.js" />
 /// <reference path="app/services/organization.service.js" />
 /// <reference path="app/services/organization-manager.service.js" />
 /// <reference path="app/services/position.service.js" />

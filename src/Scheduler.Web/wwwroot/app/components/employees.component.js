@@ -60,6 +60,9 @@ var EmployeesComponent = (function () {
         if (!this.selectedEmployee.phoneNumber) {
             this.errors.push('Phone Number is required.');
         }
+        if (!!this.selectedEmployee.phoneNumber && !/^\d{10}$/.test(this.selectedEmployee.phoneNumber)) {
+            this.errors.push('Phone Number is invalid (10 digits).');
+        }
         if (!this.selectedEmployee.employeePositionIds.length) {
             this.errors.push('Positions are required.');
         }

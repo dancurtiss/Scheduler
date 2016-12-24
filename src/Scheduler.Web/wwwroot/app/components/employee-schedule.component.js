@@ -128,8 +128,11 @@ var EmployeeScheduleComponent = (function () {
             _this.shiftBags[s.shiftId] = [];
         });
         this.employeeShifts.forEach(function (es) {
-            var employee = _this.availableEmployees.filter(function (e) { return e.employeeId == es.employeeId; })[0];
+            var employeeFound = _this.availableEmployees.filter(function (e) { return e.employeeId == es.employeeId; })[0];
+            var employee = JSON.parse(JSON.stringify(employeeFound));
             employee['employeeShiftId'] = es.employeeShiftId;
+            employee['canceled'] = es.canceled;
+            employee['reason'] = es.reason;
             _this.shiftBags[es.shiftId].push(employee);
         });
     };
@@ -157,6 +160,8 @@ var EmployeeScheduleComponent = (function () {
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then(function (employeeShiftId) {
             var employeeShiftObject = _this.getEmployeeShiftObject(employeeId, shiftId);
             employeeShiftObject.employeeShiftId = employeeShiftId;
+            employeeShiftObject.canceled = false;
+            employeeShiftObject.reason = '';
             console.log('shift added', employeeShiftId);
         });
     };

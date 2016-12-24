@@ -23,6 +23,7 @@ import { EmployeeScheduleComponent }       from './components/employee-schedule.
 import { EmployeeDetailComponent }       from './components/employee-detail.component';
 
 
+import { HandleErrorService } from './services/handle-error.service'
 import { AuthorizationService }      from './services/authorization.service';
 import { OrganizationService } from './services/organization.service';
 import { OrganizationManagerService } from './services/organization-manager.service';
@@ -108,6 +109,7 @@ import { EmployeeConflictService }             from './services/employee-conflic
     ],
     providers: [
         AuthGuard,
+        HandleErrorService,
         AuthorizationService,
         DragulaService,
         OrganizationService,

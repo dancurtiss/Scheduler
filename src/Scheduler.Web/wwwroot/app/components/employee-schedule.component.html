@@ -57,8 +57,8 @@
                             <span class="small">{{shift.shiftTime}}</span>
 
                             <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
-                                <div>drop here</div>
-                                <div *ngFor='let employee of shiftBags[shift.shiftId]'>
+                                <div>Drop Here</div>
+                                <div *ngFor='let employee of shiftBags[shift.shiftId]' [ngClass]="{'bg-canceled': employee.canceled}" title="{{employee.canceled?'Canceled: '+employee.reason:''}}" >
                                     {{employee.firstName}} {{employee.lastName}}
                                     <button class="btn btn-danger btn-xs pull-right" (click)="remove(employee.employeeId, shift.shiftId)">X</button>
                                 </div>

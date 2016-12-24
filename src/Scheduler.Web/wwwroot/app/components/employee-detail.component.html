@@ -62,7 +62,7 @@
             </div>
             <div class="modal-body">
                 <my-errors [errors]="conflictErrors"></my-errors>
-                <form name="selectedEmployeeConflictForm">
+                <form name="selectedEmployeeConflictForm" novalidate>
                     <div class="form-group">
                         <label for="employeeConflictReason">Reason</label>
                         <input type="text" class="form-control" id="employeeConflictReason" placeholder="" name="reason" [(ngModel)]="selectedEmployeeConflict.reason" required>
@@ -144,7 +144,7 @@
             </div>
             <div class="modal-body">
                 <my-errors [errors]="cancelErrors"></my-errors>
-                <form name="selectedShiftForm">
+                <form name="selectedShiftForm" novalidate>
                     <h4>{{selectedShift.positionName}} {{selectedShift.shiftStartTime | date: 'short'}}-{{selectedShift.shiftEndTime | date: 'shortTime'}}</h4>
                     <div class="form-group">
                         <label for="shiftCancelReason">Reason</label>

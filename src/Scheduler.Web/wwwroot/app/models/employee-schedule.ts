@@ -12,6 +12,8 @@ export class EmployeeShift {
     employeeShiftId: number;
     employeeId: number;
     shiftId: number;
+    canceled: boolean;
+    reason: string;
 }
 
 export class ShiftDisplay {

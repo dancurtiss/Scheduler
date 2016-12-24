@@ -3,6 +3,7 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Shift, ScheduleDetails } from '../models/schedule';
+import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
 export class ShiftService {
@@ -10,7 +11,7 @@ export class ShiftService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private shiftsUrl = 'api/shift';  // URL to web api
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private handleErrorService: HandleErrorService) { }
 
     getShifts(scheduleId: number): Promise<ScheduleDetails> {
         const url = `${this.shiftsUrl}/${scheduleId}`;
@@ -19,7 +20,7 @@ export class ShiftService {
             .then((response) => {
                 return response.json() as ScheduleDetails;
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     delete(id: number): Promise<void> {
@@ -27,7 +28,7 @@ export class ShiftService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     create(scheduleId: number, shift: Shift): Promise<Shift> {
@@ -36,7 +37,7 @@ export class ShiftService {
             .post(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     update(shift: Shift): Promise<Shift> {
@@ -45,11 +46,6 @@ export class ShiftService {
             .put(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(() => shift)
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     }
 }

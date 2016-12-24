@@ -40,11 +40,15 @@ namespace Scheduler.Web.ApiModels
             EmployeeShiftId = employeeShift.EmployeeShiftId;
             EmployeeId = employeeShift.Employee.EmployeeId;
             ShiftId = employeeShift.Shift.ShiftId;
+            Canceled = employeeShift.Canceled;
+            Reason = employeeShift.CancelReason;
         }
 
         public int EmployeeShiftId { get; set; }
         public int EmployeeId { get; set; }
         public int ShiftId { get; set; }
+        public bool Canceled { get; set; }
+        public string Reason { get; set; }
     }
 
     public class ShiftDisplayModel

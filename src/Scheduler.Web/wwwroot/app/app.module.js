@@ -27,6 +27,7 @@ var schedule_detail_component_1 = require('./components/schedule-detail.componen
 var employees_component_1 = require('./components/employees.component');
 var employee_schedule_component_1 = require('./components/employee-schedule.component');
 var employee_detail_component_1 = require('./components/employee-detail.component');
+var handle_error_service_1 = require('./services/handle-error.service');
 var authorization_service_1 = require('./services/authorization.service');
 var organization_service_1 = require('./services/organization.service');
 var organization_manager_service_1 = require('./services/organization-manager.service');
@@ -114,6 +115,7 @@ var AppModule = (function () {
             ],
             providers: [
                 auth_guard_service_1.AuthGuard,
+                handle_error_service_1.HandleErrorService,
                 authorization_service_1.AuthorizationService,
                 ng2_dragula_1.DragulaService,
                 organization_service_1.OrganizationService,

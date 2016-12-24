@@ -4,6 +4,7 @@ import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { ApplicationUser } from '../models/organization';
 import { CreateEmployeeAccess } from '../models/employee'
+import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
 export class EmployeeAccessService {
@@ -11,7 +12,7 @@ export class EmployeeAccessService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private employeesAccessUrl = 'api/employeeaccess';  // URL to web api
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private handleErrorService: HandleErrorService) { }
 
     getEmployeeAccess(employeeId: number): Promise<ApplicationUser> {
         const url = `${this.employeesAccessUrl}/${employeeId}`;
@@ -20,7 +21,7 @@ export class EmployeeAccessService {
             .then((response) => {
                 return response.json() as ApplicationUser;
             })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     delete(phone: string): Promise<void> {
@@ -28,7 +29,7 @@ export class EmployeeAccessService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     }
 
     create(organizationId: number, createEmployeeAccess: CreateEmployeeAccess): Promise<ApplicationUser> {
@@ -37,11 +38,6 @@ export class EmployeeAccessService {
             .post(url, JSON.stringify(createEmployeeAccess), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     }
 }

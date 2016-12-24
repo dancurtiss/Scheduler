@@ -46,6 +46,9 @@ var OrganizationsComponent = (function () {
         if (!this.selectedOrganization.name) {
             this.organizationErrors.push('Name is required.');
         }
+        if (!!this.selectedOrganization.contactPhone && !/^\d{10}$/.test(this.selectedOrganization.contactPhone)) {
+            this.organizationErrors.push('Contact Phone is invalid (10 digits).');
+        }
         if (this.organizationErrors.length > 0) {
             return;
         }
@@ -74,15 +77,22 @@ var OrganizationsComponent = (function () {
     };
     OrganizationsComponent.prototype.onSaveOrganizationManager = function () {
         var _this = this;
+        var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.managerErrors = [];
         if (!this.createOrganizationManager.userName) {
             this.managerErrors.push('Username is required.');
+        }
+        if (!!this.createOrganizationManager.phoneNumber && !/^\d{10}$/.test(this.createOrganizationManager.phoneNumber)) {
+            this.managerErrors.push('Phone is invalid (10 digits).');
         }
         if (!this.createOrganizationManager.password) {
             this.managerErrors.push('Password is required.');
         }
         if (!this.createOrganizationManager.emailAddress) {
             this.managerErrors.push('Email is required.');
+        }
+        if (!!this.createOrganizationManager.emailAddress && !emailRegex.test(this.createOrganizationManager.emailAddress)) {
+            this.managerErrors.push('Email is invalid.');
         }
         if (this.managerErrors.length > 0) {
             return;

@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 require('rxjs/add/operator/toPromise');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var PositionService = (function () {
-    function PositionService(http) {
+    function PositionService(http, handleErrorService) {
         this.http = http;
+        this.handleErrorService = handleErrorService;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.positionsUrl = 'api/position'; // URL to web api
     }
@@ -24,14 +26,14 @@ var PositionService = (function () {
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     PositionService.prototype.delete = function (id) {
         var url = this.positionsUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     PositionService.prototype.create = function (organizationId, position) {
         var url = this.positionsUrl + "/" + organizationId;
@@ -39,7 +41,7 @@ var PositionService = (function () {
             .post(url, JSON.stringify(position), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleError);
+            .catch(this.handleErrorService.handleError);
     };
     PositionService.prototype.update = function (position) {
         var url = this.positionsUrl + "/" + position.positionId;
@@ -47,15 +49,11 @@ var PositionService = (function () {
             .put(url, JSON.stringify(position), { headers: this.headers })
             .toPromise()
             .then(function () { return position; })
-            .catch(this.handleError);
-    };
-    PositionService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+            .catch(this.handleErrorService.handleError);
     };
     PositionService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
     ], PositionService);
     return PositionService;
 }());

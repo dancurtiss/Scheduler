@@ -69,8 +69,12 @@ export class EmployeeScheduleComponent implements OnInit {
         });
 
         this.employeeShifts.forEach((es) => {
-            var employee = this.availableEmployees.filter((e) => { return e.employeeId == es.employeeId; })[0];
+            var employeeFound = this.availableEmployees.filter((e) => { return e.employeeId == es.employeeId; })[0];
+
+            var employee = JSON.parse(JSON.stringify(employeeFound));
             employee['employeeShiftId'] = es.employeeShiftId;
+            employee['canceled'] = es.canceled;
+            employee['reason'] = es.reason;
             this.shiftBags[es.shiftId].push(employee);
         });
     }
@@ -101,6 +105,8 @@ export class EmployeeScheduleComponent implements OnInit {
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then((employeeShiftId) => {
             var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
             employeeShiftObject.employeeShiftId = employeeShiftId;
+            employeeShiftObject.canceled = false;
+            employeeShiftObject.reason = '';
             console.log('shift added', employeeShiftId);
         });
     }
