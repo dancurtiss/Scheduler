@@ -20,36 +20,40 @@ var EmployeeScheduleService = (function () {
         this.employeesUrl = 'api/employeeschedule'; // URL to web api
     }
     EmployeeScheduleService.prototype.getEmployeeShifts = function (organizationId, date) {
+        var _this = this;
         var url = this.employeesUrl + "/" + organizationId + "?date=" + date;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeScheduleService.prototype.delete = function (id) {
+        var _this = this;
         var url = this.employeesUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeScheduleService.prototype.create = function (organizationId, addShift) {
+        var _this = this;
         var url = this.employeesUrl + "/" + organizationId;
         return this.http
             .post(url, JSON.stringify(addShift), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeScheduleService.prototype.update = function (cancelShift) {
+        var _this = this;
         var url = this.employeesUrl + "/" + cancelShift.employeeShiftId;
         return this.http
             .put(url, JSON.stringify(cancelShift), { headers: this.headers })
             .toPromise()
             .then(function () { return cancelShift; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeScheduleService = __decorate([
         core_1.Injectable(), 

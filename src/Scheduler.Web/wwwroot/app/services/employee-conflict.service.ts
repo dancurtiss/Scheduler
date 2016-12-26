@@ -20,7 +20,7 @@ export class EmployeeConflictService {
             .then((response) => {
                 return response.json() as EmployeeDetails;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -28,7 +28,7 @@ export class EmployeeConflictService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(employeeId: number, employeeConflict: EmployeeConflict): Promise<EmployeeConflict> {
@@ -37,7 +37,7 @@ export class EmployeeConflictService {
             .post(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(employeeConflict: EmployeeConflict): Promise<EmployeeConflict> {
@@ -46,6 +46,6 @@ export class EmployeeConflictService {
             .put(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(() => employeeConflict)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

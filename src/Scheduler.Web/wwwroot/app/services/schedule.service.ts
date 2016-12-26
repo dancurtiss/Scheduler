@@ -20,7 +20,7 @@ export class ScheduleService {
             .then((response) => {
                 return response.json() as Schedule[];
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -28,7 +28,7 @@ export class ScheduleService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organizationId: number, schedule: Schedule): Promise<Schedule> {
@@ -37,7 +37,7 @@ export class ScheduleService {
             .post(url, JSON.stringify(schedule), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(schedule: Schedule): Promise<Schedule> {
@@ -46,6 +46,6 @@ export class ScheduleService {
             .put(url, JSON.stringify(schedule), { headers: this.headers })
             .toPromise()
             .then(() => schedule)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

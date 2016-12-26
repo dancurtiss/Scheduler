@@ -19,7 +19,7 @@ export class OrganizationService {
             .then((response) => {
                 return response.json() as Organization[];
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     getOrganization(id: number): Promise<Organization> {
@@ -29,7 +29,7 @@ export class OrganizationService {
             .then((response) => {
                 return response.json() as Organization;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -37,7 +37,7 @@ export class OrganizationService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organization: Organization): Promise<Organization> {
@@ -45,7 +45,7 @@ export class OrganizationService {
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(organization: Organization): Promise<Organization> {
@@ -54,6 +54,6 @@ export class OrganizationService {
             .put(url, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(() => organization)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

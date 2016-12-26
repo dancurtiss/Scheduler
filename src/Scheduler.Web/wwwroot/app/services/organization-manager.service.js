@@ -20,28 +20,31 @@ var OrganizationManagerService = (function () {
         this.organizationsUrl = 'api/organizationmanager'; // URL to web api
     }
     OrganizationManagerService.prototype.getOrganizationManagers = function (organizationId) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + organizationId;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationManagerService.prototype.delete = function (username) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + username;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationManagerService.prototype.create = function (organizationId, organizationManager) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + organizationId;
         return this.http
             .post(url, JSON.stringify(organizationManager), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationManagerService = __decorate([
         core_1.Injectable(), 

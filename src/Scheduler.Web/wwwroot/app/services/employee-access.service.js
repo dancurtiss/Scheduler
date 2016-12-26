@@ -20,28 +20,31 @@ var EmployeeAccessService = (function () {
         this.employeesAccessUrl = 'api/employeeaccess'; // URL to web api
     }
     EmployeeAccessService.prototype.getEmployeeAccess = function (employeeId) {
+        var _this = this;
         var url = this.employeesAccessUrl + "/" + employeeId;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeAccessService.prototype.delete = function (phone) {
+        var _this = this;
         var url = this.employeesAccessUrl + "/" + phone;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeAccessService.prototype.create = function (organizationId, createEmployeeAccess) {
+        var _this = this;
         var url = this.employeesAccessUrl + "/" + organizationId;
         return this.http
             .post(url, JSON.stringify(createEmployeeAccess), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeAccessService = __decorate([
         core_1.Injectable(), 

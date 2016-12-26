@@ -20,36 +20,40 @@ var ShiftService = (function () {
         this.shiftsUrl = 'api/shift'; // URL to web api
     }
     ShiftService.prototype.getShifts = function (scheduleId) {
+        var _this = this;
         var url = this.shiftsUrl + "/" + scheduleId;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     ShiftService.prototype.delete = function (id) {
+        var _this = this;
         var url = this.shiftsUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     ShiftService.prototype.create = function (scheduleId, shift) {
+        var _this = this;
         var url = this.shiftsUrl + "/" + scheduleId;
         return this.http
             .post(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     ShiftService.prototype.update = function (shift) {
+        var _this = this;
         var url = this.shiftsUrl + "/" + shift.shiftId;
         return this.http
             .put(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(function () { return shift; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     ShiftService = __decorate([
         core_1.Injectable(), 

@@ -20,36 +20,40 @@ var EmployeeConflictService = (function () {
         this.employeesConflictUrl = 'api/employeeconflict'; // URL to web api
     }
     EmployeeConflictService.prototype.getEmployeeDetails = function (employeeId) {
+        var _this = this;
         var url = this.employeesConflictUrl + "/" + employeeId;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeConflictService.prototype.delete = function (id) {
+        var _this = this;
         var url = this.employeesConflictUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeConflictService.prototype.create = function (employeeId, employeeConflict) {
+        var _this = this;
         var url = this.employeesConflictUrl + "/" + employeeId;
         return this.http
             .post(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeConflictService.prototype.update = function (employeeConflict) {
+        var _this = this;
         var url = this.employeesConflictUrl + "/" + employeeConflict.employeeConflictId;
         return this.http
             .put(url, JSON.stringify(employeeConflict), { headers: this.headers })
             .toPromise()
             .then(function () { return employeeConflict; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeConflictService = __decorate([
         core_1.Injectable(), 

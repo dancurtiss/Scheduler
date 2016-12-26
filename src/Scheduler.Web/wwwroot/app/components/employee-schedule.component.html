@@ -7,6 +7,7 @@
             <ul class="nav navbar-nav">
                 <li><a (click)="previousDay()"><i class="fa fa-angle-left"></i>Previous</a></li>
                 <li><a (click)="nextDay()">Next <i class="fa fa-angle-right"></i></a></li>
+                <li><a target="_blank" href="/report/week?organizationId={{organizationId}}&date={{scheduleDate.format('MM/DD/YYYY')}}">Print</a></li>
             </ul>
         </div>
     </div>

@@ -20,7 +20,7 @@ export class ShiftService {
             .then((response) => {
                 return response.json() as ScheduleDetails;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -28,7 +28,7 @@ export class ShiftService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(scheduleId: number, shift: Shift): Promise<Shift> {
@@ -37,7 +37,7 @@ export class ShiftService {
             .post(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(shift: Shift): Promise<Shift> {
@@ -46,6 +46,6 @@ export class ShiftService {
             .put(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()
             .then(() => shift)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

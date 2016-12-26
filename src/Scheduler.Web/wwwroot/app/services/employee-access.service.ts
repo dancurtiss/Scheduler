@@ -21,7 +21,7 @@ export class EmployeeAccessService {
             .then((response) => {
                 return response.json() as ApplicationUser;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(phone: string): Promise<void> {
@@ -29,7 +29,7 @@ export class EmployeeAccessService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organizationId: number, createEmployeeAccess: CreateEmployeeAccess): Promise<ApplicationUser> {
@@ -38,6 +38,6 @@ export class EmployeeAccessService {
             .post(url, JSON.stringify(createEmployeeAccess), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

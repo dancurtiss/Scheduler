@@ -20,7 +20,7 @@ export class PositionService {
             .then((response) => {
                 return response.json() as Position[];
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -28,7 +28,7 @@ export class PositionService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organizationId: number, position: Position): Promise<Position> {
@@ -37,7 +37,7 @@ export class PositionService {
             .post(url, JSON.stringify(position), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(position: Position): Promise<Position> {
@@ -46,6 +46,6 @@ export class PositionService {
             .put(url, JSON.stringify(position), { headers: this.headers })
             .toPromise()
             .then(() => position)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

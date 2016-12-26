@@ -20,36 +20,40 @@ var EmployeeService = (function () {
         this.employeesUrl = 'api/employee'; // URL to web api
     }
     EmployeeService.prototype.getEmployees = function (organizationId) {
+        var _this = this;
         var url = this.employeesUrl + "/" + organizationId;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeService.prototype.delete = function (id) {
+        var _this = this;
         var url = this.employeesUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeService.prototype.create = function (organizationId, employee) {
+        var _this = this;
         var url = this.employeesUrl + "/" + organizationId;
         return this.http
             .post(url, JSON.stringify(employee), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeService.prototype.update = function (employee) {
+        var _this = this;
         var url = this.employeesUrl + "/" + employee.employeeId;
         return this.http
             .put(url, JSON.stringify(employee), { headers: this.headers })
             .toPromise()
             .then(function () { return employee; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     EmployeeService = __decorate([
         core_1.Injectable(), 

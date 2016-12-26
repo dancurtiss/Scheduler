@@ -20,43 +20,48 @@ var OrganizationService = (function () {
         this.organizationsUrl = 'api/organization'; // URL to web api
     }
     OrganizationService.prototype.getOrganizations = function () {
+        var _this = this;
         return this.http.get(this.organizationsUrl)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationService.prototype.getOrganization = function (id) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + id;
         return this.http.get(url)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationService.prototype.delete = function (id) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationService.prototype.create = function (organization) {
+        var _this = this;
         return this.http
             .post(this.organizationsUrl, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationService.prototype.update = function (organization) {
+        var _this = this;
         var url = this.organizationsUrl + "/" + organization.organizationId;
         return this.http
             .put(url, JSON.stringify(organization), { headers: this.headers })
             .toPromise()
             .then(function () { return organization; })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     OrganizationService = __decorate([
         core_1.Injectable(), 

@@ -21,7 +21,7 @@ export class OrganizationManagerService {
             .then((response) => {
                 return response.json() as ApplicationUser[];
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(username: string): Promise<void> {
@@ -29,7 +29,7 @@ export class OrganizationManagerService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organizationId: number, organizationManager: CreateOrganizationManager): Promise<ApplicationUser> {
@@ -39,6 +39,6 @@ export class OrganizationManagerService {
             .post(url, JSON.stringify(organizationManager), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

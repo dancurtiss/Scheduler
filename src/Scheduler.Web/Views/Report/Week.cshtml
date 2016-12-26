@@ -1,0 +1,61 @@
+﻿@model Scheduler.Web.Models.ReportViewModels.WeekScheduleViewModel
+@{
+    Layout = "_ReportLayout";
+} 
+
+<div class="row">
+    <div class="col-md-8 h3"><h3>@Model.Organization <small>@Model.WeekDescription</small></h3></div>
+</div>
+
+@foreach (var employee in Model.Employees)
+{
+    <div class="row">
+        <div class="col-md-8">
+            <h4>
+                @employee.FirstName @employee.LastName (@employee.PhoneNumber)
+            </h4>
+        </div>
+        <div class="col-md-4">
+            @employee.TotalShifts Shifts / @employee.TotalHours Hours
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var day in employee.Days)
+        {
+            <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver;">
+                @day.Day
+            </div>
+        }
+    </div>
+    <div class="row">
+        @foreach (var day in employee.Days)
+        {
+            var shiftIndex = 0;
+            <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver;">
+                @foreach (var shift in day.Shifts)
+                {
+                    shiftIndex++;
+                    if (shiftIndex > 1){
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                --------------
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <small>@shift.Name<text> - </text>@shift.Category</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <small>@shift.StartTime.ToString("t")<text> - </text>@shift.EndTime.ToString("t")</small>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+  

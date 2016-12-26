@@ -20,7 +20,7 @@ export class EmployeeScheduleService {
             .then((response) => {
                 return response.json() as EmployeeSchedule;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     delete(id: number): Promise<void> {
@@ -28,7 +28,7 @@ export class EmployeeScheduleService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     create(organizationId: number, addShift: AddEmployeeShift): Promise<number> {
@@ -37,7 +37,7 @@ export class EmployeeScheduleService {
             .post(url, JSON.stringify(addShift), { headers: this.headers })
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
     update(cancelShift: CancelEmployeeShift): Promise<CancelEmployeeShift> {
@@ -46,6 +46,6 @@ export class EmployeeScheduleService {
             .put(url, JSON.stringify(cancelShift), { headers: this.headers })
             .toPromise()
             .then(() => cancelShift)
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }
