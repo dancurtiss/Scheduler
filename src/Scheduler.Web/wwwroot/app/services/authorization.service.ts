@@ -19,6 +19,6 @@ export class AuthorizationService {
             .then((response) => {
                 return response.json() as AuthorizationDetails;
             })
-            .catch(this.handleErrorService.handleError);
+            .catch((err) => { this.handleErrorService.handleError(err); });
     }
 }

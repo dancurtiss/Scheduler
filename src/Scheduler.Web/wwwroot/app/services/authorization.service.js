@@ -20,12 +20,13 @@ var AuthorizationService = (function () {
         this.authorizationUrl = 'api/authorization'; // URL to web api
     }
     AuthorizationService.prototype.getAuthorization = function () {
+        var _this = this;
         return this.http.get(this.authorizationUrl)
             .toPromise()
             .then(function (response) {
             return response.json();
         })
-            .catch(this.handleErrorService.handleError);
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
     AuthorizationService = __decorate([
         core_1.Injectable(), 

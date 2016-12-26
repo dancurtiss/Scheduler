@@ -1,1 +1,6 @@
-﻿<router-outlet></router-outlet>
+﻿<div class="row" style="margin-top: 20px;">
+    <div *ngIf="applicationError" class="col-sm-12 bg-danger" style="color: #fff;">
+        <h5>{{applicationError}}</h5>
+    </div>
+</div>
+<router-outlet></router-outlet>

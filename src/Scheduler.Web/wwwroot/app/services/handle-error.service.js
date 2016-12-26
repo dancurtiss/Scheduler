@@ -9,12 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var BehaviorSubject_1 = require('rxjs/BehaviorSubject');
 var HandleErrorService = (function () {
     function HandleErrorService() {
+        // Observable navItem source
+        this._applicationError = new BehaviorSubject_1.BehaviorSubject('');
+        // Observable navItem stream
+        this.applicationError$ = this._applicationError.asObservable();
     }
     HandleErrorService.prototype.handleError = function (error) {
         console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
+        var errorbody = error._body ? JSON.parse(error._body) : error;
+        var errorString = errorbody.message || error;
+        this._applicationError.next(errorString);
+        return Promise.reject(errorString);
     };
     HandleErrorService = __decorate([
         core_1.Injectable(), 

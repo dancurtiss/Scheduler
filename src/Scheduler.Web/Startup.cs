@@ -14,6 +14,8 @@ using Scheduler.Web.Models;
 using Scheduler.Web.Services;
 using System.IO;
 using Scheduler.Data;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace Scheduler.Web
 {
@@ -112,6 +114,7 @@ namespace Scheduler.Web
             }
             else
             {
+                //app.UseAzureAppServices();
                 app.UseExceptionHandler("/Home/Error");
             }
 
@@ -133,6 +136,31 @@ namespace Scheduler.Web
 
             app.UseIdentity();
 
+
+            app.UseExceptionHandler(errorApp =>
+            {
+                var log = loggerFactory.CreateLogger<Program>();
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = 500; // or another Status accordingly to Exception Type
+                    context.Response.ContentType = "application/json";
+
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+                    if (error != null)
+                    {
+                        var ex = error.Error;
+
+                        log.LogError("Handling Web Exception", error);
+
+                        await context.Response.WriteAsync(new ApiModels.ErrorModel()
+                        {
+                            code = 500,
+                            message = ex.Message // or your custom message
+                            // other custom data
+                        }.ToString(), System.Text.Encoding.UTF8);
+                    }
+                });
+            });
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
