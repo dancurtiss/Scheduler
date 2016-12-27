@@ -30,15 +30,48 @@ namespace Scheduler.Web.Api
 
             var endScheduleDate = scheduleDate.AddDays(1);
 
-            var employeeShifts = _schedulerContext.EmployeeShifts.Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
+            var employeeShifts = _schedulerContext.EmployeeShifts.Include(es=>es.Shift).Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
             var employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee).Where(ec => ec.ConflictStart > scheduleDate && ec.ConflictEnd < endScheduleDate).ToList();
             var employees = _schedulerContext.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
             var shifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position)
-                .Where(s => s.Schedule.StartDate < scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
+                .Where(s => s.Schedule.StartDate <= scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)
                 .ToList();
 
             return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, employeeConflicts, shifts, employees);
+        }
+
+        // POST api/values
+        [HttpPost("copyweek/{id}")]
+        public IActionResult CopyWeek(int id, [FromBody]CopyWeekModel copyWeek)
+        {
+            UserCanAccessOrganization(id);
+            DateTime copyStartDate = copyWeek.StartDate.Date;
+            DateTime copyEndDate = copyStartDate.AddDays(7);
+
+            var employeeShifts = _schedulerContext.EmployeeShifts
+                .Include(es => es.Employee)
+                .Include(es => es.Shift)
+                .Where(es => es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
+                .ToList();
+
+            foreach(var sourceShift in employeeShifts)
+            {
+                EmployeeShift employeeShiftEntity = new EmployeeShift
+                {
+                    Employee = sourceShift.Employee,
+                    Shift = sourceShift.Shift,
+                    ShiftStartTime = sourceShift.ShiftStartTime.AddDays(7),
+                    ShiftEndTime = sourceShift.ShiftEndTime.AddDays(7),
+                    ConfirmationNumber = 1
+                };
+
+                _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
+            }
+
+            _schedulerContext.SaveChanges();
+
+            return new ObjectResult(true);
         }
 
         // POST api/values

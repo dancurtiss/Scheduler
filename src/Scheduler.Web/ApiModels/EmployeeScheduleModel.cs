@@ -103,6 +103,11 @@ namespace Scheduler.Web.ApiModels
         public List<int> PositionIds { get; set; }
     }
 
+    public class CopyWeekModel
+    {
+        public DateTime StartDate { get; set; }
+    }
+
     public class AddEmployeeShiftModel
     {
         public int EmployeeId { get; set; }

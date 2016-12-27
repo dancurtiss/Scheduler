@@ -45,8 +45,8 @@ namespace Scheduler.Web.ApiModels
         public Schedule Export(Schedule schedule)
         {
             schedule.Name = this.Name;
-            schedule.StartDate = this.StartDate;
-            schedule.EndDate = this.EndDate;
+            schedule.StartDate = this.StartDate.Date;
+            schedule.EndDate = this.EndDate.Date;
             schedule.IsActive = this.IsActive;
 
             return schedule;

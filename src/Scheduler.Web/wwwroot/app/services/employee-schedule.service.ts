@@ -2,7 +2,7 @@
 
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
-import { ShiftDisplay, EmployeeDisplay, EmployeeSchedule, AddEmployeeShift, CancelEmployeeShift } from '../models/employee-schedule';
+import { ShiftDisplay, EmployeeDisplay, EmployeeSchedule, AddEmployeeShift, CancelEmployeeShift, CopyWeek } from '../models/employee-schedule';
 import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
@@ -28,6 +28,18 @@ export class EmployeeScheduleService {
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
+    copyWeek(organizationId: number, date: Date): Promise<boolean> {
+        const url = `${this.employeesUrl}/copyweek/${organizationId}`;
+
+        var copyWeek: CopyWeek = { startDate: date };
+
+        return this.http
+            .post(url, JSON.stringify(copyWeek), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json())
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 

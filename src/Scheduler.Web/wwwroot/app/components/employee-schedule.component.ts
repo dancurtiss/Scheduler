@@ -33,6 +33,7 @@ export class EmployeeScheduleComponent implements OnInit {
     positionCategories: string[];
 
     message: string;
+    successMessage: string;
     scheduleDate: moment.Moment;
     
     constructor(
@@ -99,6 +100,13 @@ export class EmployeeScheduleComponent implements OnInit {
     nextDay() {
         this.scheduleDate = this.scheduleDate.add(1, 'days');
         this.getSchedule();
+    }
+
+    copyWeek() {
+        this.employeeScheduleService.copyWeek(this.organizationId, this.scheduleDate.toDate()).then((success) => {
+            this.successMessage = 'Week was successfully copied!';
+            console.log('Week Copied:', this.scheduleDate);
+        });
     }
 
     added(employeeId: number, shiftId: number) {

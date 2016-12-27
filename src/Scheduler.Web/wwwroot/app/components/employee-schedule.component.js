@@ -155,6 +155,13 @@ var EmployeeScheduleComponent = (function () {
         this.scheduleDate = this.scheduleDate.add(1, 'days');
         this.getSchedule();
     };
+    EmployeeScheduleComponent.prototype.copyWeek = function () {
+        var _this = this;
+        this.employeeScheduleService.copyWeek(this.organizationId, this.scheduleDate.toDate()).then(function (success) {
+            _this.successMessage = 'Week was successfully copied!';
+            console.log('Week Copied:', _this.scheduleDate);
+        });
+    };
     EmployeeScheduleComponent.prototype.added = function (employeeId, shiftId) {
         var _this = this;
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then(function (employeeShiftId) {

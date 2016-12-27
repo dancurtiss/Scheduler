@@ -41,6 +41,10 @@ export class AddEmployeeShift {
     shiftDate: Date;
 }
 
+export class CopyWeek {
+    startDate: Date;
+}
+
 export class CancelEmployeeShift {
     employeeShiftId: number;
     reason: string;

@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit }        from '@angular/core';
 import { Router, ActivatedRoute, Params }      from '@angular/router';
-import { Position, Schedule }       from '../models/schedule';
+import { Position, Schedule, CopySchedule }       from '../models/schedule';
 import { PositionService }          from '../services/position.service';
 import { ScheduleService }          from '../services/schedule.service';
 import { Organization, CreateOrganizationManager, ApplicationUser } from '../models/organization';
@@ -25,7 +25,9 @@ export class OrganizationDetailComponent implements OnInit {
 
     schedules: Schedule[];
     selectedSchedule: Schedule;
+    copySchedule: CopySchedule;
 
+    copyScheduleErrors: string[] = [];
     scheduleErrors: string[] = [];
     positionErrors: string[] = [];
     organizationErrors: string[] = [];
@@ -143,6 +145,32 @@ export class OrganizationDetailComponent implements OnInit {
 
     onAddPosition(): void {
         this.selectedPosition = { positionId: 0, name: null, category: null };
+    }
+
+    showCopySchedule(schedule: Schedule): void {
+        this.copySchedule = {
+            name: 'Copy of ' + schedule.name,
+            sourceName: schedule.name,
+            startDate: schedule.startDate,
+            endDate: schedule.endDate,
+            isActive: true,
+            scheduleId: schedule.scheduleId
+        };
+    }
+
+    onCopySchedule(): void {
+        this.scheduleService.copySchedule(this.copySchedule.scheduleId, this.copySchedule.name, this.copySchedule.startDate, this.copySchedule.endDate).then((success) => {
+            this.copySchedule = null;
+            this.getSchedules();
+        });
+    }
+
+    setCopyStartDate(date: Date) {
+        this.copySchedule.startDate = date;
+    }
+
+    setCopyEndDate(date: Date) {
+        this.copySchedule.endDate = date;
     }
 
     onEditSchedule(schedule: Schedule): void {

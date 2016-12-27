@@ -35,9 +35,10 @@ namespace Scheduler.Web.Api
             if (employeeUser != null)
             {
                 UserCanAccessOrganization(employeeUser.OrganizationId.Value);
+                return new ObjectResult(employeeUser);
             }
 
-            return new ObjectResult(employeeUser);
+            return new ObjectResult("null");
         }
 
         // POST api/values
@@ -65,7 +66,7 @@ namespace Scheduler.Web.Api
                 throw new InvalidOperationException("User already exists.");
             }
 
-            user = new ApplicationUser { UserName = employee.PhoneNumber + "@test.com", EmployeeId = employee.EmployeeId, OrganizationId = organizationId,
+            user = new ApplicationUser { UserName = employee.PhoneNumber, EmployeeId = employee.EmployeeId, OrganizationId = organizationId,
                 Phone = employee.PhoneNumber, PhoneNumber = employee.PhoneNumber, Email = employee.PhoneNumber + "@test.com" };
             IdentityResult identity = await _userManager.CreateAsync(user, employee.Password);
 

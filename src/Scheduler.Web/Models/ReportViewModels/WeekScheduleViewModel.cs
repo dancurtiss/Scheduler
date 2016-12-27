@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Scheduler.Web.Models.ReportViewModels
 {
-    public class WeekScheduleViewModel
+    public class WeekScheduleReportViewModel
     {
         public string Organization { get; set; }
         public string WeekDescription { get; set; }
-        public List<EmployeeScheduleModel> Employees { get; set; }
+        public List<EmployeeScheduleReportViewModel> Employees { get; set; }
     }
 
-    public class EmployeeScheduleModel
+    public class EmployeeScheduleReportViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -23,16 +23,16 @@ namespace Scheduler.Web.Models.ReportViewModels
         public double TotalHours { get; set; }
         public int TotalShifts { get; set; }
 
-        public List<EmployeeDayModel> Days { get; set; }
+        public List<EmployeeDayReportViewModel> Days { get; set; }
     }
 
-    public class EmployeeDayModel
+    public class EmployeeDayReportViewModel
     {
         public string Day { get; set; }
-        public List<EmployeeShiftModel> Shifts { get; set; }
+        public List<EmployeeShiftReportViewModel> Shifts { get; set; }
     }
 
-    public class EmployeeShiftModel
+    public class EmployeeShiftReportViewModel
     {
         public string Name { get; set; }
         public string Category { get; set; }

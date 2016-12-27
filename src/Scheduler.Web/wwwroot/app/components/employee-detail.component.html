@@ -13,9 +13,15 @@
     </div>
 </div>
 
-<div class="row bg-info" *ngIf="!canViewOrganization">
-    <div class="col-sm-12">
+<div class="row" *ngIf="!canViewOrganization && !!organizationMessage">
+    <div class="col-sm-12 bg-info h3" style="color:#fff; padding:10px;">
         {{organizationMessage}}
+    </div>
+</div>
+
+<div class="row" *ngIf="!canViewOrganization && !!organizationMessage">
+    <div class="col-sm-12">
+        <hr />
     </div>
 </div>
 

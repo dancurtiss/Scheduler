@@ -6,6 +6,10 @@
     isActive: boolean;
 }
 
+export class CopySchedule extends Schedule {
+    sourceName: string;
+}
+
 export class ScheduleDetails {
     organizationId: number;
     scheduleId: number;

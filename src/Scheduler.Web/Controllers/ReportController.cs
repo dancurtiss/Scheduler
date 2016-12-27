@@ -21,7 +21,7 @@ namespace Scheduler.Web.Controllers
         [Authorize]
         public IActionResult Week(int organizationId, string date)
         {
-            WeekScheduleViewModel model = new WeekScheduleViewModel();
+            WeekScheduleReportViewModel model = new WeekScheduleReportViewModel();
 
             DateTime startTime = DateTime.Parse(date);
             DateTime endTime = startTime.AddDays(7);
@@ -42,10 +42,10 @@ namespace Scheduler.Web.Controllers
             model.Organization = organization.Name;
             model.WeekDescription = startTime.ToString("MM/dd/yyyy") + " - " + endTime.ToString("MM/dd/yyyy");
 
-            model.Employees = new List<EmployeeScheduleModel>();
+            model.Employees = new List<EmployeeScheduleReportViewModel>();
             foreach(var employeeGroup in employees)
             {
-                EmployeeScheduleModel employeeModel = new EmployeeScheduleModel();
+                EmployeeScheduleReportViewModel employeeModel = new EmployeeScheduleReportViewModel();
                 employeeModel.EmployeeNumber = employeeGroup.Key.EmployeeNumber;
                 employeeModel.FirstName = employeeGroup.Key.FirstName;
                 employeeModel.LastName = employeeGroup.Key.LastName;
@@ -56,16 +56,16 @@ namespace Scheduler.Web.Controllers
                 employeeModel.TotalHours = employeeGroup.Sum(es => es.ShiftEndTime.Subtract(es.ShiftStartTime).TotalMinutes)/60;
 
                 var days = employeeGroup.GroupBy(es => es.ShiftStartTime.Date);
-                employeeModel.Days = new List<EmployeeDayModel>();
+                employeeModel.Days = new List<EmployeeDayReportViewModel>();
                 foreach(var dayGroup in days)
                 {
-                    EmployeeDayModel dayModel = new EmployeeDayModel();
+                    EmployeeDayReportViewModel dayModel = new EmployeeDayReportViewModel();
                     dayModel.Day = dayGroup.Key.DayOfWeek.ToString();
-                    dayModel.Shifts = new List<EmployeeShiftModel>();
+                    dayModel.Shifts = new List<EmployeeShiftReportViewModel>();
                     
                     foreach(var shift in dayGroup)
                     {
-                        EmployeeShiftModel shiftModel = new EmployeeShiftModel();
+                        EmployeeShiftReportViewModel shiftModel = new EmployeeShiftReportViewModel();
 
                         shiftModel.Name = shift.Shift.Position.Name;
                         shiftModel.Category = shift.Shift.Position.Category;

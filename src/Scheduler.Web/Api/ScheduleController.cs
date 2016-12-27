@@ -61,6 +61,44 @@ namespace Scheduler.Web.Api
             return new ObjectResult(schedule);
         }
 
+        // POST api/values
+        [HttpPost("copyschedule/{id}")]
+        public IActionResult CopySchedule(int id, [FromBody]ScheduleModel schedule)
+        {
+            var sourceSchedule = _schedulerContext.Schedules.Include(s => s.Organization).Single(s => s.ScheduleId == id);
+            var sourceShifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position).Where(s=>s.Schedule.ScheduleId == id).ToList();
+
+            UserCanAccessOrganization(sourceSchedule.Organization.OrganizationId);
+
+            var scheduleEntity = new Schedule();
+            scheduleEntity.Name = schedule.Name;
+            scheduleEntity.IsActive = true;
+            scheduleEntity.Organization = sourceSchedule.Organization;
+            scheduleEntity.StartDate = schedule.StartDate.Date;
+            scheduleEntity.EndDate = schedule.EndDate.Date;
+
+            _schedulerContext.Schedules.Add(scheduleEntity);
+            _schedulerContext.SaveChanges();
+
+            foreach(var sourceShift in sourceShifts)
+            {
+                Shift shiftEntity = new Shift();
+
+                shiftEntity.Schedule = scheduleEntity;
+                shiftEntity.Day = sourceShift.Day;
+                shiftEntity.Position = sourceShift.Position;
+                shiftEntity.StartTime = sourceShift.StartTime;
+                shiftEntity.EndTime = sourceShift.EndTime;
+
+                _schedulerContext.Shifts.Add(shiftEntity);
+            }
+
+            _schedulerContext.SaveChanges();
+
+            return new ObjectResult(true);
+        }
+
+
         // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]ScheduleModel schedule)
@@ -93,8 +131,15 @@ namespace Scheduler.Web.Api
 
             UserCanAccessOrganization(scheduleEntity.Organization.OrganizationId);
 
-            _schedulerContext.Schedules.Remove(scheduleEntity);
-            _schedulerContext.SaveChanges();
+            try
+            {
+                _schedulerContext.Schedules.Remove(scheduleEntity);
+                _schedulerContext.SaveChanges();
+            }
+            catch(DbUpdateException ex)
+            {
+                throw new InvalidOperationException("Could not remove schedule.  Remove shifts first.", ex);
+            }
         }
     }
 }

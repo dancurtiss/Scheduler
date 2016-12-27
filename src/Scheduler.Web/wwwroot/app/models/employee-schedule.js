@@ -29,6 +29,12 @@ var AddEmployeeShift = (function () {
     return AddEmployeeShift;
 }());
 exports.AddEmployeeShift = AddEmployeeShift;
+var CopyWeek = (function () {
+    function CopyWeek() {
+    }
+    return CopyWeek;
+}());
+exports.CopyWeek = CopyWeek;
 var CancelEmployeeShift = (function () {
     function CancelEmployeeShift() {
     }

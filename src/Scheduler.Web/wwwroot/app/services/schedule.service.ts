@@ -31,6 +31,15 @@ export class ScheduleService {
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
+    copySchedule(scheduleId: number, name: string, startDate: Date, endDate: Date): Promise<boolean> {
+        const url = `${this.schedulesUrl}/copyschedule/${scheduleId}`;
+        return this.http
+            .post(url, JSON.stringify({ name: name, startDate: startDate, endDate: endDate }), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json())
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
     create(organizationId: number, schedule: Schedule): Promise<Schedule> {
         const url = `${this.schedulesUrl}/${organizationId}`;
         return this.http

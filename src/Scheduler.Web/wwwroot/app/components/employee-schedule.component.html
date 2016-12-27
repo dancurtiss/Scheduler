@@ -5,9 +5,8 @@
     <div class="col-md-4">
         <div class="navbar-collapse collapse pull-left">
             <ul class="nav navbar-nav">
-                <li><a (click)="previousDay()"><i class="fa fa-angle-left"></i>Previous</a></li>
-                <li><a (click)="nextDay()">Next <i class="fa fa-angle-right"></i></a></li>
-                <li><a target="_blank" href="/report/week?organizationId={{organizationId}}&date={{scheduleDate.format('MM/DD/YYYY')}}">Print</a></li>
+                <li><a href="javascript:;" (click)="previousDay()"><i class="fa fa-angle-left"></i>Previous</a></li>
+                <li><a href="javascript:;" (click)="nextDay()">Next <i class="fa fa-angle-right"></i></a></li>
             </ul>
         </div>
     </div>
@@ -19,6 +18,20 @@
                 <li><a [routerLink]="['/organization','detail', organizationId]">Setup</a></li>
             </ul>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <a (click)="copyWeek()" href="javascript:;">Copy Week</a>
+        &nbsp;|&nbsp;
+        <a target="_blank" href="/report/week?organizationId={{organizationId}}&date={{scheduleDate.format('MM/DD/YYYY')}}">Print</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <label style="color:darkgreen;">{{successMessage}}</label>
     </div>
 </div>
 

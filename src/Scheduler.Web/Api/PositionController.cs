@@ -93,8 +93,15 @@ namespace Scheduler.Web.Api
 
             UserCanAccessOrganization(positionEntity.Organization.OrganizationId);
 
-            _schedulerContext.Positions.Remove(positionEntity);
-            _schedulerContext.SaveChanges();
+            try
+            {
+                _schedulerContext.Positions.Remove(positionEntity);
+                _schedulerContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException("Could not remove position.  Employees and shifts attached.", ex);
+            }
         }
     }
 }

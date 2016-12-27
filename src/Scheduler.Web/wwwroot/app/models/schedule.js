@@ -10,6 +10,14 @@ var Schedule = (function () {
     return Schedule;
 }());
 exports.Schedule = Schedule;
+var CopySchedule = (function (_super) {
+    __extends(CopySchedule, _super);
+    function CopySchedule() {
+        _super.apply(this, arguments);
+    }
+    return CopySchedule;
+}(Schedule));
+exports.CopySchedule = CopySchedule;
 var ScheduleDetails = (function () {
     function ScheduleDetails() {
     }

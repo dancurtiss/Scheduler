@@ -22,6 +22,7 @@ var OrganizationDetailComponent = (function () {
         this.scheduleService = scheduleService;
         this.router = router;
         this.route = route;
+        this.copyScheduleErrors = [];
         this.scheduleErrors = [];
         this.positionErrors = [];
         this.organizationErrors = [];
@@ -120,6 +121,29 @@ var OrganizationDetailComponent = (function () {
     };
     OrganizationDetailComponent.prototype.onAddPosition = function () {
         this.selectedPosition = { positionId: 0, name: null, category: null };
+    };
+    OrganizationDetailComponent.prototype.showCopySchedule = function (schedule) {
+        this.copySchedule = {
+            name: 'Copy of ' + schedule.name,
+            sourceName: schedule.name,
+            startDate: schedule.startDate,
+            endDate: schedule.endDate,
+            isActive: true,
+            scheduleId: schedule.scheduleId
+        };
+    };
+    OrganizationDetailComponent.prototype.onCopySchedule = function () {
+        var _this = this;
+        this.scheduleService.copySchedule(this.copySchedule.scheduleId, this.copySchedule.name, this.copySchedule.startDate, this.copySchedule.endDate).then(function (success) {
+            _this.copySchedule = null;
+            _this.getSchedules();
+        });
+    };
+    OrganizationDetailComponent.prototype.setCopyStartDate = function (date) {
+        this.copySchedule.startDate = date;
+    };
+    OrganizationDetailComponent.prototype.setCopyEndDate = function (date) {
+        this.copySchedule.endDate = date;
     };
     OrganizationDetailComponent.prototype.onEditSchedule = function (schedule) {
         this.selectedSchedule = schedule;
