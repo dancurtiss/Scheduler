@@ -262,20 +262,35 @@ namespace Scheduler.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                var user = await _userManager.FindByNameAsync(model.Username);
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
+
+                //bool isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+                //if (!isEmailConfirmed)
+                //{
+                //    // Don't reveal that the user does not exist or is not confirmed
+                //    return View("ForgotPasswordConfirmation");
+                //}
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
 
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                bool isUsernamePhone = user.UserName.IndexOf('@') < 0;
+                if (isUsernamePhone)
+                {
+                    await _smsSender.SendSmsAsync(model.Username, $"Reset password code: {code}");
+                }
+                else
+                {
+                    //await _emailSender.SendEmailAsync(model.Email, "Reset Password", $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                    await _smsSender.SendSmsAsync(user.PhoneNumber, $"Reset password code: {code}");
+                }
 
                 return View("ForgotPasswordConfirmation");
             }
@@ -313,7 +328,7 @@ namespace Scheduler.Web.Controllers
             {
                 return View(model);
             }
-            var user = await _userManager.FindByNameAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
