@@ -9,6 +9,7 @@ using Scheduler.Data;
 using Scheduler.Web.ApiModels;
 using System.Globalization;
 using Scheduler.Web.Data;
+using Scheduler.Web.Services;
 
 namespace Scheduler.Web.Api
 {
@@ -16,8 +17,10 @@ namespace Scheduler.Web.Api
     [Authorize("Manage Organization Details")]
     public class EmployeeScheduleController : BaseController
     {
-        public EmployeeScheduleController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
+        private ISmsSender _smsSender;
+        public EmployeeScheduleController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext, ISmsSender smsSender) : base(appDbContext, schedulerContext)
         {
+            _smsSender = smsSender;
         }
 
         // GET: api/values
@@ -112,6 +115,8 @@ namespace Scheduler.Web.Api
 
             _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
             _schedulerContext.SaveChanges();
+
+            //_smsSender.SendSmsAsync("9529131633", $"Shift added {startTime.ToString("MM/dd/yyyy")}");
 
             return new ObjectResult(employeeShiftEntity.EmployeeShiftId);
         }

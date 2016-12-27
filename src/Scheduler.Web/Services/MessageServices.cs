@@ -10,6 +10,13 @@ namespace Scheduler.Web.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
+        SmsSender _smsSender;
+
+        public AuthMessageSender(SmsSender smsSender)
+        {
+            _smsSender = smsSender;
+        }
+
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Plug in your email service here to send an email.
@@ -18,8 +25,7 @@ namespace Scheduler.Web.Services
 
         public Task SendSmsAsync(string number, string message)
         {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
+            return _smsSender.SendSmsAsync(number, message);
         }
     }
 }

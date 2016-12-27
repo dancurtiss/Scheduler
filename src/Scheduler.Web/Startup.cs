@@ -64,6 +64,9 @@ namespace Scheduler.Web
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<SmsSender, SmsSender>();
+
+            services.AddSingleton(_ => Configuration);
 
             services.Configure<IdentityOptions>(options =>
             {
