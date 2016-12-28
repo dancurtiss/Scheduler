@@ -62,6 +62,34 @@ namespace Scheduler.Web.Api
         }
 
         // POST api/values
+        [HttpPost("copyscheduleday/{id}")]
+        public IActionResult CopyScheduleDay(int id, [FromBody]ScheduleDayModel scheduleDay)
+        {
+            var schedule = _schedulerContext.Schedules.Include(s => s.Organization).Single(s => s.ScheduleId == id);
+            var sourceShifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position).Where(s => s.Schedule.ScheduleId == id && s.Day == scheduleDay.SourceDay).ToList();
+
+            UserCanAccessOrganization(schedule.Organization.OrganizationId);
+
+            foreach (var sourceShift in sourceShifts)
+            {
+                Shift shiftEntity = new Shift();
+
+                shiftEntity.Schedule = schedule;
+                shiftEntity.Day = scheduleDay.TargetDay;
+                shiftEntity.Position = sourceShift.Position;
+                shiftEntity.StartTime = sourceShift.StartTime;
+                shiftEntity.EndTime = sourceShift.EndTime;
+
+                _schedulerContext.Shifts.Add(shiftEntity);
+            }
+
+            _schedulerContext.SaveChanges();
+
+            return new ObjectResult(true);
+        }
+
+
+        // POST api/values
         [HttpPost("copyschedule/{id}")]
         public IActionResult CopySchedule(int id, [FromBody]ScheduleModel schedule)
         {

@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Scheduler.Web.ApiModels
 {
+    public class ScheduleDayModel
+    {
+        public string SourceDay { get; set; }
+        public string TargetDay { get; set; }
+    }
+
     public class ScheduleModel
     {
         public ScheduleModel()

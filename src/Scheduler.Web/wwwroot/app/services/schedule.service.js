@@ -37,6 +37,15 @@ var ScheduleService = (function () {
             .then(function () { return null; })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    ScheduleService.prototype.copyScheduleDay = function (scheduleId, sourceDay, targetDay) {
+        var _this = this;
+        var url = this.schedulesUrl + "/copyscheduleday/" + scheduleId;
+        return this.http
+            .post(url, JSON.stringify({ sourceDay: sourceDay, targetDay: targetDay }), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
     ScheduleService.prototype.copySchedule = function (scheduleId, name, startDate, endDate) {
         var _this = this;
         var url = this.schedulesUrl + "/copyschedule/" + scheduleId;

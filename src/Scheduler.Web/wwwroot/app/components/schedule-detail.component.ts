@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute, Params }                   from '@angular/router';
 import { Shift, Schedule, ScheduleDetails, Position }       from '../models/schedule';
 import { ShiftService } from '../services/shift.service';
+import { ScheduleService } from '../services/schedule.service';
 
 import * as moment from 'moment'
 
@@ -21,15 +22,20 @@ export class ScheduleDetailComponent implements OnInit {
     scheduleStart: Date;
     scheduleEnd: Date;
 
+    copyFromDay: string;
+    copyToDay: string;
+
     shifts: Shift[];
     positions: Position[];
     selectedShift: Shift;
 
+    copyDayErrors: string[] = [];
     shiftErrors: string[] = [];
 
     days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
     constructor(
+        private scheduleService: ScheduleService,
         private shiftService: ShiftService,
         private router: Router,
         private route: ActivatedRoute
@@ -109,6 +115,25 @@ export class ScheduleDetailComponent implements OnInit {
                 this.getScheduleDetails();
             });
         }
+    }
+
+    onCopySchedule(): void {
+        this.copyDayErrors = [];
+        if (!this.copyFromDay) {
+            this.copyDayErrors.push('Copy From Day is required.');
+        }
+        if (!this.copyToDay) {
+            this.copyDayErrors.push('Copy To Day is required.');
+        }
+        if (this.copyDayErrors.length > 0) {
+            return;
+        }
+        this.scheduleService.copyScheduleDay(this.scheduleId, this.copyFromDay, this.copyToDay)
+            .then((success) => {
+                this.copyFromDay = null;
+                this.copyToDay = null;
+                this.getScheduleDetails();
+            });
     }
 
     onDeleteShift(shiftId: number) {

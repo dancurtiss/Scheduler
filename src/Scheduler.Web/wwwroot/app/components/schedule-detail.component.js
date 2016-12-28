@@ -11,13 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var shift_service_1 = require('../services/shift.service');
+var schedule_service_1 = require('../services/schedule.service');
 var moment = require('moment');
 var ScheduleDetailComponent = (function () {
-    function ScheduleDetailComponent(shiftService, router, route) {
+    function ScheduleDetailComponent(scheduleService, shiftService, router, route) {
+        this.scheduleService = scheduleService;
         this.shiftService = shiftService;
         this.router = router;
         this.route = route;
         this.showDay = 'all';
+        this.copyDayErrors = [];
         this.shiftErrors = [];
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     }
@@ -90,6 +93,25 @@ var ScheduleDetailComponent = (function () {
             });
         }
     };
+    ScheduleDetailComponent.prototype.onCopySchedule = function () {
+        var _this = this;
+        this.copyDayErrors = [];
+        if (!this.copyFromDay) {
+            this.copyDayErrors.push('Copy From Day is required.');
+        }
+        if (!this.copyToDay) {
+            this.copyDayErrors.push('Copy To Day is required.');
+        }
+        if (this.copyDayErrors.length > 0) {
+            return;
+        }
+        this.scheduleService.copyScheduleDay(this.scheduleId, this.copyFromDay, this.copyToDay)
+            .then(function (success) {
+            _this.copyFromDay = null;
+            _this.copyToDay = null;
+            _this.getScheduleDetails();
+        });
+    };
     ScheduleDetailComponent.prototype.onDeleteShift = function (shiftId) {
         var _this = this;
         this.shiftService.delete(shiftId).then(function () {
@@ -107,7 +129,7 @@ var ScheduleDetailComponent = (function () {
             templateUrl: 'schedule-detail.component.html',
             styleUrls: ['schedule-detail.component.css']
         }), 
-        __metadata('design:paramtypes', [shift_service_1.ShiftService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [schedule_service_1.ScheduleService, shift_service_1.ShiftService, router_1.Router, router_1.ActivatedRoute])
     ], ScheduleDetailComponent);
     return ScheduleDetailComponent;
 }());
