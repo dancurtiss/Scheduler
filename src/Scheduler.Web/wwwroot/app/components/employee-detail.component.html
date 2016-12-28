@@ -71,7 +71,7 @@
                 <form name="selectedEmployeeConflictForm" novalidate>
                     <div class="form-group">
                         <label for="employeeConflictReason">Reason</label>
-                        <input type="text" class="form-control" id="employeeConflictReason" placeholder="" name="reason" [(ngModel)]="selectedEmployeeConflict.reason" required>
+                        <input type="text" maxlength="100" class="form-control" id="employeeConflictReason" placeholder="" name="reason" [(ngModel)]="selectedEmployeeConflict.reason" required>
                     </div>
                     <div class="form-group">
                         <div class="row">
@@ -154,7 +154,7 @@
                     <h4>{{selectedShift.positionName}} {{selectedShift.shiftStartTime | date: 'short'}}-{{selectedShift.shiftEndTime | date: 'shortTime'}}</h4>
                     <div class="form-group">
                         <label for="shiftCancelReason">Reason</label>
-                        <input type="text" class="form-control" id="shiftCancelReason" placeholder="" name="cancelReason" [(ngModel)]="selectedShift.cancelReason" required>
+                        <input type="text" maxlength="100" class="form-control" id="shiftCancelReason" placeholder="" name="cancelReason" [(ngModel)]="selectedShift.cancelReason" required>
                     </div>
                 </form>
             </div>

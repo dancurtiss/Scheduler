@@ -32,6 +32,16 @@ export class EmployeeAccessService {
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
+    setPassword(username: string, password: string): Promise<boolean> {
+        const url = `${this.employeesAccessUrl}/resetpassword/${username}`;
+
+        return this.http
+            .post(url, JSON.stringify({ password: password }), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json())
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
     create(organizationId: number, createEmployeeAccess: CreateEmployeeAccess): Promise<ApplicationUser> {
         const url = `${this.employeesAccessUrl}/${organizationId}`;
         return this.http

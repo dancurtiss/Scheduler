@@ -265,7 +265,7 @@
                         <tr>
                             <th>Username</th>
                             <th>Phone</th>
-                            <th>Email</th>
+                            <th>Action</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -273,7 +273,7 @@
                         <tr *ngFor="let organizationManager of organizationManagers">
                             <td>{{organizationManager.userName}}</td>
                             <td>{{organizationManager.phoneNumber}}</td>
-                            <td>{{organizationManager.email}}</td>
+                            <td><button class="btn btn-info" (click)="selectedManager = organizationManager;$event.stopPropagation()">Reset Password</button></td>
                             <td><button class="btn btn-danger" (click)="onDeleteOrganizationManager(organizationManager.username); $event.stopPropagation()">Delete</button></td>
                         </tr>
                     </tbody>
@@ -281,4 +281,30 @@
             </div>
         </div>
     </div>
+
+    <div *ngIf="selectedManager" class="modal fade show in danger" id="managerResetModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="selectedManager = null;$event.stopPropagation()">&times;</button>
+                    <h4 class="modal-title">Reset Manager Password</h4>
+                </div>
+                <div class="modal-body">
+                    <my-errors [errors]="managerErrors"></my-errors>
+                    <form name="resetManagerForm" novalidate>
+                        <h2>Reset Password for {{selectedManager.userName}}</h2>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="text" class="form-control" id="password" placeholder="" name="password" maxlength="20" [(ngModel)]="selectedManager.password" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" (click)="onResetManagerPassword(selectedManager.password);">Reset</button>
+                    <button type="reset" class="btn btn-default" (click)="selectedManager = null;$event.stopPropagation()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

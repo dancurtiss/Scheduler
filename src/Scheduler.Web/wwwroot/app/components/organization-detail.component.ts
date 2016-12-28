@@ -19,6 +19,7 @@ export class OrganizationDetailComponent implements OnInit {
     selectedOrganization: Organization;
     organizationManagers: ApplicationUser[];
     createOrganizationManager: CreateOrganizationManager;
+    selectedManager: ApplicationUser;
 
     positions: Position[];
     selectedPosition: Position;
@@ -122,6 +123,21 @@ export class OrganizationDetailComponent implements OnInit {
         });
     }
 
+    onResetManagerPassword(password: string): void {
+        this.managerErrors = [];
+        if (!password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
+
+        this.organizationManagerService.setPassword(this.selectedManager.userName, password)
+            .then((done) => {
+                // password updated
+                this.selectedManager = null;
+            });
+    }
 
     onSaveOrganization(): void {
         this.organizationErrors = [];

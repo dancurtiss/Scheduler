@@ -112,6 +112,19 @@ var EmployeesComponent = (function () {
             });
         }
     };
+    EmployeesComponent.prototype.onResetEmployeePassword = function (password) {
+        this.accessErrors = [];
+        if (!password) {
+            this.accessErrors.push('Password is required.');
+        }
+        if (this.accessErrors.length > 0) {
+            return;
+        }
+        this.employeeAccessService.setPassword(this.selectedEmployee.phoneNumber, password)
+            .then(function (done) {
+            // password updated
+        });
+    };
     EmployeesComponent.prototype.onRemoveEmployeeAccess = function () {
         var _this = this;
         this.employeeAccessService.delete(this.selectedEmployee.phoneNumber).then(function () {

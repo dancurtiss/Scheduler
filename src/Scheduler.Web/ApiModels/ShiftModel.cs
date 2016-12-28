@@ -48,8 +48,8 @@ namespace Scheduler.Web.ApiModels
 
         public Shift Export(Shift shift, List<Position> positions)
         {
-            shift.StartTime = StartTime.ToLocalTime().TimeOfDay.ToString();
-            shift.EndTime = EndTime.ToLocalTime().TimeOfDay.ToString();
+            shift.StartTime = StartTime.ToLocalTime().TimeOfDay.ToString(@"hh\:mm");
+            shift.EndTime = EndTime.ToLocalTime().TimeOfDay.ToString(@"hh\:mm");
 
             shift.Position = positions.Single(p => p.PositionId == PositionId);
 

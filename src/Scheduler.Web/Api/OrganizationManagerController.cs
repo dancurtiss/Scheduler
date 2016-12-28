@@ -37,6 +37,16 @@ namespace Scheduler.Web.Api
             return managers;
         }
 
+        [HttpPost("resetpassword/{id}")]
+        public async Task<IActionResult> ResetPassword(string id, [FromBody]SetPasswordModel setPassword)
+        {
+            var user = await _userManager.FindByNameAsync(id);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var identityResult = await _userManager.ResetPasswordAsync(user, token, setPassword.Password);
+
+            return new ObjectResult(true);
+        }
+
         // POST api/values
         [HttpPost("{id}")]
         public async Task<IActionResult> Post(int id, [FromBody]CreateOrganizationManagerModel manager)

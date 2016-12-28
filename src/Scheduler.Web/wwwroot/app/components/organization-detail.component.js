@@ -102,6 +102,21 @@ var OrganizationDetailComponent = (function () {
             _this.getOrganizationManagers(_this.selectedOrganization.organizationId);
         });
     };
+    OrganizationDetailComponent.prototype.onResetManagerPassword = function (password) {
+        var _this = this;
+        this.managerErrors = [];
+        if (!password) {
+            this.managerErrors.push('Password is required.');
+        }
+        if (this.managerErrors.length > 0) {
+            return;
+        }
+        this.organizationManagerService.setPassword(this.selectedManager.userName, password)
+            .then(function (done) {
+            // password updated
+            _this.selectedManager = null;
+        });
+    };
     OrganizationDetailComponent.prototype.onSaveOrganization = function () {
         this.organizationErrors = [];
         if (!this.selectedOrganization.name) {

@@ -57,13 +57,21 @@ namespace Scheduler.Web.Controllers
 
                 var days = employeeGroup.GroupBy(es => es.ShiftStartTime.Date);
                 employeeModel.Days = new List<EmployeeDayReportViewModel>();
-                foreach(var dayGroup in days)
+                foreach(var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
                 {
+                    var dayGroup = days.SingleOrDefault(dg => dg.Key.DayOfWeek == (DayOfWeek)dayOfWeek);
+
                     EmployeeDayReportViewModel dayModel = new EmployeeDayReportViewModel();
-                    dayModel.Day = dayGroup.Key.DayOfWeek.ToString();
+                    dayModel.Day = dayOfWeek.ToString();
                     dayModel.Shifts = new List<EmployeeShiftReportViewModel>();
-                    
-                    foreach(var shift in dayGroup)
+
+                    if (dayGroup == null)
+                    {
+                        employeeModel.Days.Add(dayModel);
+                        continue;
+                    }
+
+                    foreach (var shift in dayGroup)
                     {
                         EmployeeShiftReportViewModel shiftModel = new EmployeeShiftReportViewModel();
 

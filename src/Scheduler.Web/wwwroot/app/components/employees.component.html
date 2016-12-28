@@ -110,6 +110,16 @@
 
             <button type="submit" class="btn btn-primary" (click)="onAddEmployeeAccess(selectedEmployee.password);">Add Access</button>
         </form>
+        <form name="resetForm" *ngIf="selectedEmployeeAccess" novalidate>
+            <div class="form-group">
+                <label for="employeePassword">Password</label>
+                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" (click)="onResetEmployeePassword(selectedEmployee.password);">Reset Password</button>
+        </form>
+        <br />
+        <br />
         <form name="removeForm" *ngIf="selectedEmployeeAccess" novalidate>
             <button type="submit" class="btn btn-danger" (click)="onRemoveEmployeeAccess();">Remove Access</button>
         </form>

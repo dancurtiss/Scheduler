@@ -37,6 +37,15 @@ var OrganizationManagerService = (function () {
             .then(function () { return null; })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    OrganizationManagerService.prototype.setPassword = function (username, password) {
+        var _this = this;
+        var url = this.organizationsUrl + "/resetpassword/" + username;
+        return this.http
+            .post(url, JSON.stringify({ password: password }), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
     OrganizationManagerService.prototype.create = function (organizationId, organizationManager) {
         var _this = this;
         var url = this.organizationsUrl + "/" + organizationId;

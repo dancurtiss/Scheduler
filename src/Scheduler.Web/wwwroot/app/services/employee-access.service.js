@@ -37,6 +37,15 @@ var EmployeeAccessService = (function () {
             .then(function () { return null; })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    EmployeeAccessService.prototype.setPassword = function (username, password) {
+        var _this = this;
+        var url = this.employeesAccessUrl + "/resetpassword/" + username;
+        return this.http
+            .post(url, JSON.stringify({ password: password }), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
     EmployeeAccessService.prototype.create = function (organizationId, createEmployeeAccess) {
         var _this = this;
         var url = this.employeesAccessUrl + "/" + organizationId;

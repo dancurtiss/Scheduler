@@ -32,6 +32,16 @@ export class OrganizationManagerService {
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
+    setPassword(username: string, password: string): Promise<boolean> {
+        const url = `${this.organizationsUrl}/resetpassword/${username}`;
+
+        return this.http
+            .post(url, JSON.stringify({ password: password }), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json())
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
     create(organizationId: number, organizationManager: CreateOrganizationManager): Promise<ApplicationUser> {
         const url = `${this.organizationsUrl}/${organizationId}`;
 

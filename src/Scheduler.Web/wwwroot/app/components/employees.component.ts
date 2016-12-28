@@ -134,6 +134,21 @@ export class EmployeesComponent implements OnInit {
         }
     }
 
+    onResetEmployeePassword(password: string): void {
+        this.accessErrors = [];
+        if (!password) {
+            this.accessErrors.push('Password is required.');
+        }
+        if (this.accessErrors.length > 0) {
+            return;
+        }
+
+        this.employeeAccessService.setPassword(this.selectedEmployee.phoneNumber, password)
+            .then((done) => {
+                // password updated
+            });
+    }
+
     onRemoveEmployeeAccess() {
         this.employeeAccessService.delete(this.selectedEmployee.phoneNumber).then(() => {
             this.selectedEmployeeAccess = null;
