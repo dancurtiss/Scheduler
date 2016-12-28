@@ -100,7 +100,7 @@
             <button type="reset" class="btn btn-default" (click)="selectedEmployee = null;$event.stopPropagation()">Cancel</button>
         </form>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" *ngIf="selectedEmployee.employeeId">
         <my-errors [errors]="accessErrors"></my-errors>
         <form name="accessForm" *ngIf="!selectedEmployeeAccess" novalidate>
             <div class="form-group">

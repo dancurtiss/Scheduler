@@ -11,7 +11,6 @@ using Scheduler.Web.Data;
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    [Authorize("Manage Organizations")]
     public class OrganizationController : BaseController
     {
         public OrganizationController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext) : base(appDbContext, schedulerContext)
@@ -20,6 +19,7 @@ namespace Scheduler.Web.Api
 
         // GET: api/values
         [HttpGet]
+        [Authorize("Manage Organizations")]
         public IEnumerable<OrganizationModel> Get()
         {
             return _schedulerContext.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
@@ -36,6 +36,7 @@ namespace Scheduler.Web.Api
 
         // POST api/values
         [HttpPost]
+        [Authorize("Manage Organizations")]
         public IActionResult Post([FromBody]OrganizationModel organization)
         {
             if (organization == null)
@@ -82,6 +83,7 @@ namespace Scheduler.Web.Api
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
+        [Authorize("Manage Organizations")]
         public void Delete(int id)
         {
             var organizationEntity = _schedulerContext.Organizations.Single(o => o.OrganizationId == id);

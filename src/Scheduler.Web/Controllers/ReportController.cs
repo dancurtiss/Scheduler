@@ -24,6 +24,7 @@ namespace Scheduler.Web.Controllers
             WeekScheduleReportViewModel model = new WeekScheduleReportViewModel();
 
             DateTime startTime = DateTime.Parse(date);
+            startTime = StartOfWeek(startTime, DayOfWeek.Sunday);
             DateTime endTime = startTime.AddDays(7);
 
             UserCanAccessOrganization(organizationId);
@@ -32,9 +33,10 @@ namespace Scheduler.Web.Controllers
 
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Employee)
+                .Include(es => es.Employee.Organization)
                 .Include(es => es.Shift)
                 .Include(es => es.Shift.Position)
-                .Where(es => es.ShiftStartTime > startTime && es.ShiftEndTime < endTime)
+                .Where(es => es.Employee.Organization.OrganizationId == organizationId && es.ShiftStartTime > startTime && es.ShiftEndTime < endTime)
                 .ToList();
 
             var employees = employeeShifts.GroupBy(employeeGroup => employeeGroup.Employee);
@@ -89,6 +91,16 @@ namespace Scheduler.Web.Controllers
             }
 
             return View(model);
+        }
+
+        private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = dt.DayOfWeek - startOfWeek;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+            return dt.AddDays(-1 * diff).Date;
         }
     }
 }

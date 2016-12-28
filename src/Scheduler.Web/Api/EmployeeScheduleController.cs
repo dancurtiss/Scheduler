@@ -33,11 +33,29 @@ namespace Scheduler.Web.Api
 
             var endScheduleDate = scheduleDate.AddDays(1);
 
-            var employeeShifts = _schedulerContext.EmployeeShifts.Include(es=>es.Shift).Where(es => es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate).ToList();
-            var employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee).Where(ec => ec.ConflictStart > scheduleDate && ec.ConflictEnd < endScheduleDate).ToList();
-            var employees = _schedulerContext.Employees.Include(e => e.Positions).ThenInclude(p => p.Position).Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
-            var shifts = _schedulerContext.Shifts.Include(s => s.Schedule).Include(s => s.Position)
-                .Where(s => s.Schedule.StartDate <= scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
+            var employeeShifts = _schedulerContext.EmployeeShifts
+                .Include(es=>es.Shift)
+                .Include(es=>es.Employee)
+                .Include(es=>es.Employee.Organization)
+                .Where(es => es.Employee.Organization.OrganizationId == id && es.ShiftStartTime > scheduleDate && es.ShiftEndTime < endScheduleDate)
+                .ToList();
+
+            var employeeConflicts = _schedulerContext.EmployeeConflicts
+                .Include(ec => ec.Employee)
+                .Include(ec => ec.Employee.Organization)
+                .Where(ec => ec.Employee.Organization.OrganizationId == id && ec.ConflictStart > scheduleDate && ec.ConflictEnd < endScheduleDate)
+                .ToList();
+
+            var employees = _schedulerContext.Employees
+                .Include(e => e.Positions)
+                .ThenInclude(p => p.Position)
+                .Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
+
+            var shifts = _schedulerContext.Shifts
+                .Include(s => s.Schedule)
+                .Include(s => s.Schedule.Organization)
+                .Include(s => s.Position)
+                .Where(s => s.Schedule.Organization.OrganizationId == id && s.Schedule.StartDate <= scheduleDate && s.Schedule.EndDate > scheduleDate && s.Day == scheduleDate.DayOfWeek.ToString())
                 .Select(s => s)
                 .ToList();
 
@@ -49,13 +67,15 @@ namespace Scheduler.Web.Api
         public IActionResult CopyWeek(int id, [FromBody]CopyWeekModel copyWeek)
         {
             UserCanAccessOrganization(id);
+
             DateTime copyStartDate = copyWeek.StartDate.Date;
             DateTime copyEndDate = copyStartDate.AddDays(7);
 
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Employee)
+                .Include(es => es.Employee.Organization)
                 .Include(es => es.Shift)
-                .Where(es => es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
+                .Where(es => es.Employee.Organization.OrganizationId == id && es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
                 .ToList();
 
             foreach(var sourceShift in employeeShifts)

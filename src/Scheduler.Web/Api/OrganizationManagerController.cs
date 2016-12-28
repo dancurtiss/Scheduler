@@ -14,7 +14,7 @@ using Scheduler.Web.Models;
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
-    [Authorize("Manage System Setup")]
+    [Authorize("Manage Organization Details")]
     public class OrganizationManagerController : BaseController
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -41,6 +41,9 @@ namespace Scheduler.Web.Api
         public async Task<IActionResult> ResetPassword(string id, [FromBody]SetPasswordModel setPassword)
         {
             var user = await _userManager.FindByNameAsync(id);
+
+            UserCanAccessOrganization(user.OrganizationId.Value);
+
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var identityResult = await _userManager.ResetPasswordAsync(user, token, setPassword.Password);
 
@@ -60,6 +63,8 @@ namespace Scheduler.Web.Api
             {
                 return new ObjectResult(ModelState);
             }
+
+            UserCanAccessOrganization(id);
 
             // do saving and role creation
             var user = await _userManager.FindByNameAsync(manager.UserName);
@@ -99,6 +104,8 @@ namespace Scheduler.Web.Api
         public async void Delete(string id)
         {
             var user = await _userManager.FindByNameAsync(id);
+
+            UserCanAccessOrganization(user.OrganizationId.Value);
 
             await _userManager.DeleteAsync(user);
         }

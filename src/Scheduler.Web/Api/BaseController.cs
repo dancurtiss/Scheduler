@@ -26,40 +26,43 @@ namespace Scheduler.Web.Api
             return User.HasClaim(SchedulerClaims.CustomClaimTypes[CustomClaimType.Permissions], SchedulerClaims.PermissionClaimTypes[permission].ClaimName);
         }
 
-        protected bool UserCanAccessEmployee(int employeeId)
+        protected void UserCanAccessEmployee(int employeeId)
         {
-            if (UserHasPermission(PermissionClaimType.Employee_Details))
+            if (UserHasPermission(PermissionClaimType.Organization_Manage))
             {
-                return LoggedInUser.EmployeeId == employeeId;
+                return;
+            }
+
+            if (UserHasPermission(PermissionClaimType.Employee_Details) && LoggedInUser.EmployeeId == employeeId)
+            {
+                return;
             }
 
             if (UserHasPermission(PermissionClaimType.Organization_Details))
             {
                 var employeeOrganizationId = _schedulerContext.Employees.Include(e => e.Organization).Single(e => e.EmployeeId == employeeId).Organization.OrganizationId;
-                return LoggedInUser.OrganizationId == employeeOrganizationId;
+                if (LoggedInUser.OrganizationId == employeeOrganizationId)
+                {
+                    return;
+                }
             }
 
-            if (UserHasPermission(PermissionClaimType.Organization_Manage))
-            {
-                return true;
-            }
-
-            return false;
+            throw new UnauthorizedAccessException(string.Format("Cannot access employee: {0}.", employeeId));
         }
 
-        protected bool UserCanAccessOrganization(int organizationId)
+        protected void UserCanAccessOrganization(int organizationId)
         {
-            if (UserHasPermission(PermissionClaimType.Organization_Details))
-            {
-                return LoggedInUser.OrganizationId == organizationId;
-            }
-
             if (UserHasPermission(PermissionClaimType.Organization_Manage))
             {
-                return true;
+                return;
             }
 
-            return false;
+            if (UserHasPermission(PermissionClaimType.Organization_Details) && LoggedInUser.OrganizationId == organizationId)
+            {
+                return;
+            }
+
+            throw new UnauthorizedAccessException(string.Format("Cannot access organization: {0}.", organizationId));
         }
 
         private ApplicationUser _loggedInUser;
