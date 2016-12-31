@@ -241,3 +241,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# Ignore publish profiles
+/src/Scheduler.Web/Properties/PublishProfiles/
