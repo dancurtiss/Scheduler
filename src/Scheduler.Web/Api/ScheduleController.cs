@@ -19,7 +19,6 @@ namespace Scheduler.Web.Api
         {
         }
 
-        // GET: api/values
         [HttpGet("{id}")]
         public IEnumerable<ScheduleModel> Get(int id)
         {
@@ -28,14 +27,6 @@ namespace Scheduler.Web.Api
             return _schedulerContext.Schedules.Where(p => p.Organization.OrganizationId == id).ToList().Select(o => new ScheduleModel(o)).ToList();
         }
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/values
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]ScheduleModel schedule)
         {
@@ -61,7 +52,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(schedule);
         }
 
-        // POST api/values
         [HttpPost("copyscheduleday/{id}")]
         public IActionResult CopyScheduleDay(int id, [FromBody]ScheduleDayModel scheduleDay)
         {
@@ -89,7 +79,6 @@ namespace Scheduler.Web.Api
         }
 
 
-        // POST api/values
         [HttpPost("copyschedule/{id}")]
         public IActionResult CopySchedule(int id, [FromBody]ScheduleModel schedule)
         {
@@ -127,7 +116,6 @@ namespace Scheduler.Web.Api
         }
 
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]ScheduleModel schedule)
         {
@@ -151,7 +139,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(schedule);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -17,7 +17,6 @@ namespace Scheduler.Web.Api
         {
         }
 
-        // GET: api/values
         [HttpGet]
         [Authorize("Manage Organizations")]
         public IEnumerable<OrganizationModel> Get()
@@ -25,7 +24,6 @@ namespace Scheduler.Web.Api
             return _schedulerContext.Organizations.ToList().Select(o => new OrganizationModel(o)).ToList();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         [Authorize("Manage Organization Details")]
         public OrganizationModel Get(int id)
@@ -34,7 +32,6 @@ namespace Scheduler.Web.Api
             return new OrganizationModel(_schedulerContext.Organizations.Single(o => o.OrganizationId == id));
         }
 
-        // POST api/values
         [HttpPost]
         [Authorize("Manage Organizations")]
         public IActionResult Post([FromBody]OrganizationModel organization)
@@ -57,7 +54,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(organization);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         [Authorize("Manage Organization Details")]
         public IActionResult Put(int id, [FromBody]OrganizationModel organization)
@@ -81,7 +77,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(organization);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         [Authorize("Manage Organizations")]
         public void Delete(int id)

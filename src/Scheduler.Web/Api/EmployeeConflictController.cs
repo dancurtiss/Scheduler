@@ -19,7 +19,6 @@ namespace Scheduler.Web.Api
         {
         }
 
-        // GET: api/values
         [HttpGet("{id}")]
         public EmployeeDetailModel Get(int id)
         {
@@ -39,7 +38,6 @@ namespace Scheduler.Web.Api
             return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message, Conflicts = employeeConflicts, Shifts = employeeShifts };
         }
 
-        // POST api/values
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]EmployeeConflictModel employeeConflict)
         {
@@ -66,7 +64,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employeeConflict);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EmployeeConflictModel employeeConflict)
         {
@@ -92,7 +89,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employeeConflict);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

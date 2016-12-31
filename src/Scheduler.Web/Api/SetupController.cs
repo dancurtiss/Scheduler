@@ -15,9 +15,7 @@ using Scheduler.Web.Data;
 
 namespace Scheduler.Web.Api
 {
-    [Produces("application/json")]
     [Route("api/setup")]
-    //[Authorize("Manage System Setup")]
     public class SetupController : BaseController
     {
 
@@ -38,12 +36,6 @@ namespace Scheduler.Web.Api
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<SetupController>();
-        }
-
-        [HttpGet("secure")]
-        public IActionResult Secure()
-        {
-            return Json("I'm Secure");
         }
 
         [HttpGet("roles")]

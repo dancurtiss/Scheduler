@@ -23,7 +23,6 @@ namespace Scheduler.Web.Api
             _smsSender = smsSender;
         }
 
-        // GET: api/values
         [HttpGet("{id}")]
         public EmployeeScheduleModel Get(int id, string date)
         {
@@ -62,7 +61,6 @@ namespace Scheduler.Web.Api
             return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, employeeConflicts, shifts, employees);
         }
 
-        // POST api/values
         [HttpPost("copyweek/{id}")]
         public IActionResult CopyWeek(int id, [FromBody]CopyWeekModel copyWeek)
         {
@@ -97,7 +95,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(true);
         }
 
-        // POST api/values
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]AddEmployeeShiftModel employeeShift)
         {
@@ -141,7 +138,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employeeShiftEntity.EmployeeShiftId);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         [Authorize("Manage Employee Details")]
         public IActionResult Put(int id, [FromBody]CancelEmployeeShiftModel cancelShift)
@@ -169,7 +165,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employeeShiftEntity);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

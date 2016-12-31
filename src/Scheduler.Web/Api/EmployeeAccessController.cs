@@ -51,7 +51,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(true);
         }
 
-        // POST api/values
         [HttpPost("{id}")]
         public async Task<IActionResult> Post([FromQuery]int organizationId, [FromBody]CreateEmployeeAccessModel employee)
         {
@@ -86,9 +85,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employee);
         }
 
-
-        // PUT api/values/5
-        [Authorize("Manage Employee Details")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePassword(string id, [FromBody]UpdatePasswordModel passwordModel)
         {
@@ -111,6 +107,7 @@ namespace Scheduler.Web.Api
             return new ObjectResult(user);
         }
 
+        #region Reset Token Send
         //[HttpPut("{id}")]
         //public async Task<IActionResult> SetResetToken(string id, [FromBody]ResetPasswordModel passwordModel)
         //{
@@ -134,8 +131,8 @@ namespace Scheduler.Web.Api
 
         //    return new ObjectResult(user);
         //}
+        #endregion
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public async void Delete(string id)
         {

@@ -50,7 +50,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(true);
         }
 
-        // POST api/values
         [HttpPost("{id}")]
         public async Task<IActionResult> Post(int id, [FromBody]CreateOrganizationManagerModel manager)
         {
@@ -99,7 +98,6 @@ namespace Scheduler.Web.Api
             }
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public async void Delete(string id)
         {

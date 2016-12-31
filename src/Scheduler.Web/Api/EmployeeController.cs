@@ -19,7 +19,6 @@ namespace Scheduler.Web.Api
         {
         }
 
-        // GET: api/values
         [HttpGet("{id}")]
         public EmployeeListModel Get(int id)
         {
@@ -37,14 +36,6 @@ namespace Scheduler.Web.Api
             return new EmployeeListModel { AvailablePositions = availablePositions, Employees = employees };
         }
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/values
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]EmployeeModel employee)
         {
@@ -82,7 +73,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employee);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EmployeeModel employee)
         {
@@ -136,7 +126,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(employee);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

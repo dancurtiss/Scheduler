@@ -19,7 +19,6 @@ namespace Scheduler.Web.Api
         {
         }
 
-        // GET: api/values
         [HttpGet("{id}")]
         public IEnumerable<PositionModel> Get(int id)
         {
@@ -28,14 +27,6 @@ namespace Scheduler.Web.Api
             return _schedulerContext.Positions.Where(p => p.Organization.OrganizationId == id).ToList().Select(o => new PositionModel(o)).ToList();
         }
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/values
         [HttpPost("{id}")]
         public IActionResult Post(int id, [FromBody]PositionModel position)
         {
@@ -61,7 +52,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(position);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]PositionModel position)
         {
@@ -85,7 +75,6 @@ namespace Scheduler.Web.Api
             return new ObjectResult(position);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
