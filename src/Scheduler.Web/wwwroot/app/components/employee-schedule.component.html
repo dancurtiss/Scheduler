@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
-                    <div class="employee-item" *ngFor='let employee of availableEmployees' attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}} {{employee.lastName}}</div>
+                    <div class="employee-item" [ngClass]="{'bg-conflicts': employee.conflictSummary}" *ngFor='let employee of availableEmployees' title="{{employee.conflictSummary}}" attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}} {{employee.lastName}}</div>
                 </div>
             </div>
         </div>

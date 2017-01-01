@@ -53,6 +53,32 @@ export class EmployeeScheduleComponent implements OnInit {
             this.employeeConflicts = model.employeeConflicts;
             this.positionCategories = model.positionCategories;
 
+            this.employeeConflicts.forEach((ec) => {
+                var employee = this.availableEmployees.filter((e) => { return e.employeeId == ec.employeeId });
+                if (employee.length) {
+                    if (!employee[0].conflicts) {
+                        employee[0].conflicts = [];
+                    }
+                    employee[0].conflicts.push(ec);
+                }
+            });
+
+            this.availableEmployees.forEach((e) => {
+                var summary = '';
+                if (e.conflicts) {
+                    e.conflicts.forEach((ec) => {
+                        if (summary) {
+                            summary = summary + '; ';
+                        }
+                        var startTime = '' + (ec.startHour % 12 == 0 ? 12 : (ec.startHour % 12)) + (ec.startHour < 12 ? 'AM' : 'PM');
+                        var endTime = '' + (ec.endHour % 12 == 0 ? 12 : (ec.endHour % 12)) + (ec.endHour < 12 ? 'AM' : 'PM');
+
+                        summary = summary + ec.reason + ': ' + startTime + '-' + endTime;
+                    });
+                }
+                e.conflictSummary = summary;
+            });
+
             this.availableGroupedShifts = {};
 
             this.positionCategories.forEach((pc) => {

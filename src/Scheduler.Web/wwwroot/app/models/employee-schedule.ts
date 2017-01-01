@@ -32,6 +32,8 @@ export class EmployeeDisplay {
     firstName: string;
     lastName: string;
     phoneNumber: string;
+    conflictSummary?: string;
+    conflicts?: EmployeeConflict[];
     positionIds: number[];
 }
 

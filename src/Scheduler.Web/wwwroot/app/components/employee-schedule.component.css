@@ -57,6 +57,13 @@
       color: #fff;
     }
 
+    .container div.bg-conflicts,
+    .gu-mirror.bg-conflicts {
+      background-color: orangered;
+      color: #fff;
+    }
+
+
 .container div {
   cursor: move;
   cursor: grab;

@@ -114,6 +114,29 @@ var EmployeeScheduleComponent = (function () {
             _this.employeeShifts = model.employeeShifts;
             _this.employeeConflicts = model.employeeConflicts;
             _this.positionCategories = model.positionCategories;
+            _this.employeeConflicts.forEach(function (ec) {
+                var employee = _this.availableEmployees.filter(function (e) { return e.employeeId == ec.employeeId; });
+                if (employee.length) {
+                    if (!employee[0].conflicts) {
+                        employee[0].conflicts = [];
+                    }
+                    employee[0].conflicts.push(ec);
+                }
+            });
+            _this.availableEmployees.forEach(function (e) {
+                var summary = '';
+                if (e.conflicts) {
+                    e.conflicts.forEach(function (ec) {
+                        if (summary) {
+                            summary = summary + '; ';
+                        }
+                        var startTime = '' + (ec.startHour % 12 == 0 ? 12 : (ec.startHour % 12)) + (ec.startHour < 12 ? 'AM' : 'PM');
+                        var endTime = '' + (ec.endHour % 12 == 0 ? 12 : (ec.endHour % 12)) + (ec.endHour < 12 ? 'AM' : 'PM');
+                        summary = summary + ec.reason + ': ' + startTime + '-' + endTime;
+                    });
+                }
+                e.conflictSummary = summary;
+            });
             _this.availableGroupedShifts = {};
             _this.positionCategories.forEach(function (pc) {
                 _this.availableGroupedShifts[pc] = _this.availableShifts.filter(function (s) { return s.positionCategory == pc; });

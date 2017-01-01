@@ -27,7 +27,7 @@ namespace Scheduler.Web.ApiModels
         {
             EmployeeConflictId = employeeConflict.EmployeeConflictId;
             EmployeeId = employeeConflict.Employee.EmployeeId;
-            ConflictDate = employeeConflict.ConflictStart.Date;
+            ConflictDate = employeeConflict.ConflictStart.ToLocalTime().Date;
             StartHour = employeeConflict.ConflictStart.Hour;
             EndHour = employeeConflict.ConflictEnd.Hour;
             Reason = employeeConflict.Reason;
