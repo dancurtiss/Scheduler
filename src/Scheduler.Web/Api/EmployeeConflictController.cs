@@ -35,7 +35,7 @@ namespace Scheduler.Web.Api
                 .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > DateTime.Today).ToList()
                 .Select(es => new EmployeeShiftDisplayModel(es)).ToList();
 
-            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message, Conflicts = employeeConflicts, Shifts = employeeShifts };
+            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message, EmployeeName = employee.FirstName + " " + employee.LastName, Conflicts = employeeConflicts, Shifts = employeeShifts };
         }
 
         [HttpPost("{id}")]

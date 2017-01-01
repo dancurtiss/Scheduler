@@ -18,6 +18,7 @@ import * as moment from 'moment'
 export class EmployeeDetailComponent implements OnInit {
 
     employeeId: number;
+    employeeName: string;
     organizationId: number;
     organizationMessage: string;
 
@@ -52,6 +53,7 @@ export class EmployeeDetailComponent implements OnInit {
             this.organizationMessage = details.organizationMessage;
             this.conflicts = details.conflicts;
             this.shifts = details.shifts;
+            this.employeeName = details.employeeName;
         });
     }
 

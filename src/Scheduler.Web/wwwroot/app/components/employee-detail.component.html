@@ -1,10 +1,10 @@
 ﻿<div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h2>{{employeeName}}</h2>
     </div>
-    <div class="col-md-6" *ngIf="canViewOrganization">
-        <div class="navbar-collapse collapse pull-right">
-            <ul class="nav navbar-nav">
+    <div class="col-sm-6" *ngIf="canViewOrganization">
+        <div class="navbar pull-right">
+            <ul class="nav navbar-nav navbar-nav-float">
                 <li><a [routerLink]="['/organization','schedule', organizationId]">Schedule</a></li>
                 <li><a [routerLink]="['/organization','employees', organizationId]">Employees</a></li>
                 <li><a [routerLink]="['/organization','detail', organizationId]">Setup</a></li>
@@ -41,7 +41,6 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Action</th>
@@ -49,7 +48,6 @@
             </thead>
             <tbody>
                 <tr *ngFor="let employeeConflict of conflicts" (click)="onEmployeeConflictSelect(employeeConflict)">
-                    <th scope="row">{{employeeConflict.employeeConflictId}}</th>
                     <td>{{employeeConflict.conflictDate | date:'MM/dd/yyyy'}}</td>
                     <td>{{employeeConflict.startHour%12==0?12:employeeConflict.startHour%12}}{{employeeConflict.startHour<12?'AM':'PM'}} - {{employeeConflict.endHour%12==0?12:employeeConflict.endHour%12}}{{employeeConflict.endHour<12?'AM':'PM'}}</td>
                     <td><button class="btn btn-danger" (click)="onDeleteEmployeeConflict(employeeConflict.employeeConflictId); $event.stopPropagation()">Delete</button></td>
@@ -116,21 +114,19 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Position Name</th>
-                    <th>Postion Category</th>
+                    <th class="hidden-xs">Postion Category</th>
                     <th>Shift Start</th>
-                    <th>Shift End</th>
+                    <th class="hidden-xs">Shift End</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let shift of shifts">
-                    <th scope="row">{{shift.employeeShiftId}}</th>
                     <td>{{shift.positionName}}</td>
-                    <td>{{shift.positionCategory}}</td>
+                    <td class="hidden-xs">{{shift.positionCategory}}</td>
                     <td>{{shift.shiftStartTime | date:'short'}}</td>
-                    <td>{{shift.shiftEndTime | date:'shortTime'}}</td>
+                    <td class="hidden-xs">{{shift.shiftEndTime | date:'shortTime'}}</td>
                     <td>
                         <button class="btn btn-danger" *ngIf="!shift.cancelled" (click)="onShiftSelect(shift); $event.stopPropagation()">Cancel</button>
                         <span *ngIf="shift.cancelled">Cancelled: {{shift.cancelReason}}</span>

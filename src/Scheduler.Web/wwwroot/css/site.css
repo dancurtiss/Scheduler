@@ -58,6 +58,18 @@ textarea {
     margin-bottom: 7.5px;
 }
 
+.navbar-nav.navbar-nav-float {
+    float: left;
+    margin: 0;
+}
+.navbar-nav.navbar-nav-float > li {
+    float: left;
+}
+.navbar-nav.navbar-nav-float > li > a {
+    padding-top: 19.5px;
+    padding-bottom: 19.5px;
+}
+
 @media (min-width: 768px){
     .navbar-nav > li > .navbar-btn {
         padding-top: 9.5px;

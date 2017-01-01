@@ -36,6 +36,7 @@ var EmployeeDetailComponent = (function () {
             _this.organizationMessage = details.organizationMessage;
             _this.conflicts = details.conflicts;
             _this.shifts = details.shifts;
+            _this.employeeName = details.employeeName;
         });
     };
     EmployeeDetailComponent.prototype.ngOnInit = function () {

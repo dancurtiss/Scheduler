@@ -1,10 +1,10 @@
 ﻿<div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h2>Organizations</h2>
     </div>
-    <div class="col-md-6">
-        <div class="navbar-collapse collapse pull-right">
-            <ul class="nav navbar-nav">
+    <div class="col-sm-6">
+        <div class="navbar pull-right">
+            <ul class="nav navbar-nav navbar-nav-float">
                 <li><a routerLink="/organizations">Organizations</a></li>
             </ul>
         </div>
@@ -26,20 +26,18 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Name</th>
                     <th>Contact Name</th>
-                    <th>Contact Phone</th>
+                    <th class="hidden-xs">Contact Phone</th>
                     <th>Action</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let organization of organizations" (click)="goToDetail(organization.organizationId)" [class.selected]="organization === selectedOrganization">
-                    <th scope="row">{{organization.organizationId}}</th>
                     <td>{{organization.name}}</td>
                     <td>{{organization.contactName}}</td>
-                    <td>{{organization.contactPhone}}</td>
+                    <td class="hidden-xs">{{organization.contactPhone}}</td>
                     <td><button class="btn btn-default" (click)="onSelect(organization); $event.stopPropagation()">Edit</button></td>
                     <td><button class="btn btn-danger" (click)="onDeleteOrganization(organization.organizationId); $event.stopPropagation()">Delete</button></td>
                 </tr>

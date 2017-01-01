@@ -11,6 +11,7 @@ namespace Scheduler.Web.ApiModels
     {
         public int OrganizationId { get; set; }
         public string OrganizationMessage { get; set; }
+        public string EmployeeName { get; set; }
         public List<EmployeeConflictModel> Conflicts { get; set; }
         public List<EmployeeShiftDisplayModel> Shifts { get; set; }
     }

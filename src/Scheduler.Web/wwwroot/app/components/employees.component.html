@@ -1,10 +1,10 @@
 ﻿<div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h2>Employees</h2>
     </div>
-    <div class="col-md-6">
-        <div class="navbar-collapse collapse pull-right">
-            <ul class="nav navbar-nav">
+    <div class="col-sm-6">
+        <div class="navbar pull-right">
+            <ul class="nav navbar-nav navbar-nav-float">
                 <li><a [routerLink]="['/organization','schedule', organizationId]">Schedule</a></li>
                 <li><a [routerLink]="['/organization','employees', organizationId]">Employees</a></li>
                 <li><a [routerLink]="['/organization','detail', organizationId]">Setup</a></li>
@@ -28,20 +28,18 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Phone Number</th>
+                    <th class="hidden-xs">Phone Number</th>
                     <th>Action</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let employee of employees" (click)="goToDetail(employee.employeeId)" [class.selected]="employee === selectedEmployee">
-                    <th scope="row">{{employee.employeeId}}</th>
                     <td>{{employee.firstName}}</td>
                     <td>{{employee.lastName}}</td>
-                    <td>{{employee.phoneNumber}}</td>
+                    <td class="hidden-xs">{{employee.phoneNumber}}</td>
                     <td><button class="btn btn-default" (click)="onSelect(employee); $event.stopPropagation()">Edit</button></td>
                     <td><button class="btn btn-danger" (click)="onDeleteEmployee(employee.employeeId); $event.stopPropagation()">Delete</button></td>
                 </tr>

@@ -53,6 +53,7 @@ export class CancelEmployeeShift {
 export class EmployeeDetails {
     organizationId: number;
     organizationMessage: string;
+    employeeName: string;
     conflicts: EmployeeConflict[];
     shifts: EmployeeShiftDisplay[];
 }
