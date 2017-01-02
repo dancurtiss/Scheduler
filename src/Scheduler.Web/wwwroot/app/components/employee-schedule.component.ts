@@ -138,9 +138,11 @@ export class EmployeeScheduleComponent implements OnInit {
     added(employeeId: number, shiftId: number) {
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then((employeeShiftId) => {
             var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
-            employeeShiftObject.employeeShiftId = employeeShiftId;
-            employeeShiftObject.canceled = false;
-            employeeShiftObject.reason = '';
+            if (employeeShiftObject) {
+                employeeShiftObject.employeeShiftId = employeeShiftId;
+                employeeShiftObject.canceled = false;
+                employeeShiftObject.reason = '';
+            }
             console.log('shift added', employeeShiftId);
         });
     }
@@ -193,7 +195,7 @@ export class EmployeeScheduleComponent implements OnInit {
 
     dragulaSetup() {
         if (this.dragulaService.find('schedule-bag')) {
-            return;
+            this.dragulaService.destroy('schedule-bag');
         }
 
         this.dragulaService.setOptions('schedule-bag', {
@@ -203,7 +205,7 @@ export class EmployeeScheduleComponent implements OnInit {
             accepts: this.dragAccepts,
             invalid: this.dragInvalid
         });
-
+        this.dragulaService.dropModel.observers = [];
         this.dragulaService.dropModel.subscribe((value) => {
             this.onDropModel(value.slice(1));
         });

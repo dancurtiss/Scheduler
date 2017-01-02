@@ -189,9 +189,11 @@ var EmployeeScheduleComponent = (function () {
         var _this = this;
         this.employeeScheduleService.create(this.organizationId, { employeeId: employeeId, shiftId: shiftId, shiftDate: moment(this.scheduleDate, 'MMDDYYYY').toDate() }).then(function (employeeShiftId) {
             var employeeShiftObject = _this.getEmployeeShiftObject(employeeId, shiftId);
-            employeeShiftObject.employeeShiftId = employeeShiftId;
-            employeeShiftObject.canceled = false;
-            employeeShiftObject.reason = '';
+            if (employeeShiftObject) {
+                employeeShiftObject.employeeShiftId = employeeShiftId;
+                employeeShiftObject.canceled = false;
+                employeeShiftObject.reason = '';
+            }
             console.log('shift added', employeeShiftId);
         });
     };
@@ -237,7 +239,7 @@ var EmployeeScheduleComponent = (function () {
     EmployeeScheduleComponent.prototype.dragulaSetup = function () {
         var _this = this;
         if (this.dragulaService.find('schedule-bag')) {
-            return;
+            this.dragulaService.destroy('schedule-bag');
         }
         this.dragulaService.setOptions('schedule-bag', {
             removeOnSpill: true,
@@ -246,6 +248,7 @@ var EmployeeScheduleComponent = (function () {
             accepts: this.dragAccepts,
             invalid: this.dragInvalid
         });
+        this.dragulaService.dropModel.observers = [];
         this.dragulaService.dropModel.subscribe(function (value) {
             _this.onDropModel(value.slice(1));
         });
