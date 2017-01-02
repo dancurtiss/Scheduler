@@ -27,9 +27,9 @@ namespace Scheduler.Web.ApiModels
         {
             EmployeeConflictId = employeeConflict.EmployeeConflictId;
             EmployeeId = employeeConflict.Employee.EmployeeId;
-            ConflictDate = employeeConflict.ConflictStart.ToLocalTime().Date;
-            StartHour = employeeConflict.ConflictStart.Hour;
-            EndHour = employeeConflict.ConflictEnd.Hour;
+            ConflictDate = employeeConflict.ConflictStart.Date.ToUniversalTime();
+            StartHour = employeeConflict.ConflictStart.Convert().Hour;
+            EndHour = employeeConflict.ConflictEnd.Convert().Hour;
             Reason = employeeConflict.Reason;
         }
 
@@ -53,13 +53,16 @@ namespace Scheduler.Web.ApiModels
         public EmployeeConflict Export(EmployeeConflict employeeConflict)
         {
             employeeConflict.EmployeeConflictId = this.EmployeeConflictId;
-            employeeConflict.ConflictStart = this.ConflictDate.Date.AddHours(StartHour.HasValue ? StartHour.Value : 0);
-            employeeConflict.ConflictEnd = this.ConflictDate.Date.AddHours(EndHour.HasValue ? EndHour.Value : 24);
+
+            var universalConflictDate = this.ConflictDate.ToUniversalTime();
+
+            employeeConflict.ConflictStart = universalConflictDate.AddHours(StartHour.HasValue ? StartHour.Value : 0);
+            employeeConflict.ConflictEnd = universalConflictDate.AddHours(EndHour.HasValue ? EndHour.Value : 24);
+
             employeeConflict.Reason = this.Reason;
 
             return employeeConflict;
         }
-
     }
 
     public class EmployeeShiftDisplayModel
@@ -70,8 +73,8 @@ namespace Scheduler.Web.ApiModels
             ShiftId = employeeShift.Shift.ShiftId;
             PositionName = employeeShift.Shift.Position.Name;
             PositionCategory = employeeShift.Shift.Position.Category;
-            ShiftStartTime = DateTime.SpecifyKind(employeeShift.ShiftStartTime, DateTimeKind.Local);
-            ShiftEndTime = DateTime.SpecifyKind(employeeShift.ShiftEndTime, DateTimeKind.Local);
+            ShiftStartTime = employeeShift.ShiftStartTime;
+            ShiftEndTime = employeeShift.ShiftEndTime;
             Cancelled = employeeShift.Canceled;
             CancelReason = employeeShift.CancelReason;
         }

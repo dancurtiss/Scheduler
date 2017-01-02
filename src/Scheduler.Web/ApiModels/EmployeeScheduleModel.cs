@@ -65,10 +65,10 @@ namespace Scheduler.Web.ApiModels
             TimeSpan startSpan = TimeSpan.Parse(shift.StartTime);
             TimeSpan endSpan = TimeSpan.Parse(shift.EndTime);
 
-            DateTime timeStart = DateTime.Today.Add(startSpan);
-            DateTime timeEnd = DateTime.Today.Add(endSpan);
+            DateTime timeStart = DateTime.UtcNow.Date.Add(startSpan);
+            DateTime timeEnd = DateTime.UtcNow.Date.Add(endSpan);
 
-            ShiftTime = timeStart.ToString("hh:mm tt") + "-" + timeEnd.ToString("hh:mm tt");
+            ShiftTime = timeStart.Convert().ToString("hh:mm tt") + "-" + timeEnd.Convert().ToString("hh:mm tt");
 
             ShiftStartMinute = startSpan.TotalMinutes;
             ShiftEndMinute = endSpan.TotalMinutes;

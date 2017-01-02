@@ -36,7 +36,7 @@ namespace Scheduler.Web.Controllers
                 .Include(es => es.Employee.Organization)
                 .Include(es => es.Shift)
                 .Include(es => es.Shift.Position)
-                .Where(es => es.Employee.Organization.OrganizationId == organizationId && es.ShiftStartTime > startTime && es.ShiftEndTime < endTime)
+                .Where(es => es.Employee.Organization.OrganizationId == organizationId && es.ShiftStartTime > startTime.ToUniversalTime() && es.ShiftEndTime < endTime.ToUniversalTime())
                 .ToList();
 
             var employees = employeeShifts.GroupBy(employeeGroup => employeeGroup.Employee);
