@@ -28,9 +28,9 @@ namespace Scheduler.Web.Api
         {
             UserCanAccessOrganization(id);
 
-            var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture);
+            var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture).ConvertToUTC();
 
-            var endScheduleDate = scheduleDate.AddDays(1);
+            var endScheduleDate = scheduleDate.AddDays(1).ConvertToUTC();
 
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es=>es.Shift)

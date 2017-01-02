@@ -8,11 +8,23 @@ namespace Scheduler.Web
     public static class TimeZoneHelper
     {
 
-        public static DateTime Convert(this DateTime fromTime)
+        public static DateTime ConvertToUTC(this DateTime date)
         {
+            if (date.Kind == DateTimeKind.Utc) return date;
+
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            DateTime convertTime = TimeZoneInfo.ConvertTime(fromTime, TimeZoneInfo.Utc, convertZone);
+            DateTime convertTime = TimeZoneInfo.ConvertTime(date, convertZone, TimeZoneInfo.Utc);
             return convertTime;
         }
+
+        public static DateTime ConvertFromUTC(this DateTime date)
+        {
+            if (date.Kind == DateTimeKind.Local) return date;
+
+            TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            DateTime convertTime = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Utc, convertZone);
+            return convertTime;
+        }
+
     }
 }

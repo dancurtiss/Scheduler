@@ -23,8 +23,8 @@ namespace Scheduler.Web.ApiModels
             TimeSpan startTime = TimeSpan.Parse(shift.StartTime);
             TimeSpan endTime = TimeSpan.Parse(shift.EndTime);
 
-            StartTime = DateTime.Today.ToUniversalTime().Date.Add(startTime);
-            EndTime = DateTime.Today.ToUniversalTime().Date.Add(endTime);
+            StartTime = DateTime.UtcNow.Date.Add(startTime);
+            EndTime = DateTime.UtcNow.Date.Add(endTime);
 
             PositionId = shift.Position.PositionId;
         }

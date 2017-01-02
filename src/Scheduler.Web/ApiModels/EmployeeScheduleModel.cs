@@ -68,7 +68,7 @@ namespace Scheduler.Web.ApiModels
             DateTime timeStart = DateTime.UtcNow.Date.Add(startSpan);
             DateTime timeEnd = DateTime.UtcNow.Date.Add(endSpan);
 
-            ShiftTime = timeStart.Convert().ToString("hh:mm tt") + "-" + timeEnd.Convert().ToString("hh:mm tt");
+            ShiftTime = timeStart.ConvertFromUTC().ToString("hh:mm tt") + "-" + timeEnd.ConvertFromUTC().ToString("hh:mm tt");
 
             ShiftStartMinute = startSpan.TotalMinutes;
             ShiftEndMinute = endSpan.TotalMinutes;

@@ -64,7 +64,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <small>@shift.StartTime.Convert().ToString("t")<text> - </text>@shift.EndTime.Convert().ToString("t")</small>
+                            <small>@shift.StartTime.ConvertFromUTC().ToString("t")<text> - </text>@shift.EndTime.ConvertFromUTC().ToString("t")</small>
                         </div>
                     </div>
                 }
