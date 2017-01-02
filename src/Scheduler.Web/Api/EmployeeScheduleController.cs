@@ -113,8 +113,21 @@ namespace Scheduler.Web.Api
             Employee employeeEntity = _schedulerContext.Employees.Single(e => e.EmployeeId == employeeShift.EmployeeId);
             Shift shiftEntity = _schedulerContext.Shifts.Single(s => s.ShiftId == employeeShift.ShiftId);
 
-            DateTime startTime = employeeShift.ShiftDate.ToUniversalTime().Date + TimeSpan.Parse(shiftEntity.StartTime);
-            DateTime endTime = employeeShift.ShiftDate.ToUniversalTime().Date + TimeSpan.Parse(shiftEntity.EndTime);
+            TimeSpan parsedStartTime = TimeSpan.Parse(shiftEntity.StartTime);
+            DateTime startTime = employeeShift.ShiftDate.ToUniversalTime().Date;
+            if (parsedStartTime.IsUtcTimeNextLocalDay())
+            {
+                startTime = startTime.AddDays(1);
+            }
+            startTime = startTime.Add(parsedStartTime);
+
+            TimeSpan parsedEndTime = TimeSpan.Parse(shiftEntity.EndTime);
+            DateTime endTime = employeeShift.ShiftDate.ToUniversalTime().Date;
+            if (parsedEndTime.IsUtcTimeNextLocalDay())
+            {
+                endTime = endTime.AddDays(1);
+            }
+            endTime = endTime.Add(parsedEndTime);
 
             EmployeeShift employeeShiftEntity = new EmployeeShift
             {

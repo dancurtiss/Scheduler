@@ -26,5 +26,14 @@ namespace Scheduler.Web
             return convertTime;
         }
 
+        public static bool IsUtcTimeNextLocalDay(this TimeSpan time)
+        {
+            DateTime utcDateTime = DateTime.UtcNow.Date.Add(time);
+            TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            DateTime convertedTime = TimeZoneInfo.ConvertTime(utcDateTime, TimeZoneInfo.Utc, convertZone);
+
+            return utcDateTime.Day != convertedTime.Day;
+        }
+
     }
 }
