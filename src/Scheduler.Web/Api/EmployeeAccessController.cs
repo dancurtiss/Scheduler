@@ -52,7 +52,7 @@ namespace Scheduler.Web.Api
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post([FromQuery]int organizationId, [FromBody]CreateEmployeeAccessModel employee)
+        public async Task<IActionResult> Post([FromQuery]int id, [FromBody]CreateEmployeeAccessModel employee)
         {
             if (employee == null)
             {
@@ -64,7 +64,7 @@ namespace Scheduler.Web.Api
                 return new ObjectResult(ModelState);
             }
 
-            UserCanAccessOrganization(organizationId);
+            UserCanAccessOrganization(id);
 
             // do saving and role creation
             var user = await _userManager.FindByNameAsync(employee.PhoneNumber);
@@ -75,7 +75,7 @@ namespace Scheduler.Web.Api
                 throw new InvalidOperationException("User already exists.");
             }
 
-            user = new ApplicationUser { UserName = employee.PhoneNumber, EmployeeId = employee.EmployeeId, OrganizationId = organizationId,
+            user = new ApplicationUser { UserName = employee.PhoneNumber, EmployeeId = employee.EmployeeId, OrganizationId = id,
                 Phone = employee.PhoneNumber, PhoneNumber = employee.PhoneNumber, Email = employee.PhoneNumber + "@test.com" };
             IdentityResult identity = await _userManager.CreateAsync(user, employee.Password);
 
