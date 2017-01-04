@@ -52,7 +52,7 @@ namespace Scheduler.Web.Api
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post([FromQuery]int id, [FromBody]CreateEmployeeAccessModel employee)
+        public async Task<IActionResult> Post(int id, [FromBody]CreateEmployeeAccessModel employee)
         {
             if (employee == null)
             {
