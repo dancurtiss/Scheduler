@@ -23,6 +23,7 @@ var EmployeeScheduleComponent = (function () {
         this.router = router;
         this.route = route;
         this.dragulaService = dragulaService;
+        this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
             return el.className.toLowerCase() === 'employee-item';
@@ -105,6 +106,25 @@ var EmployeeScheduleComponent = (function () {
             return false; // don't prevent any drags from initiating by default
         };
     }
+    EmployeeScheduleComponent.prototype.showCopyDay = function () {
+        this.copyToDay = this.scheduleDate.format('dddd');
+    };
+    EmployeeScheduleComponent.prototype.onCopyDay = function () {
+        var _this = this;
+        this.copyDayErrors = [];
+        if (!this.copyFromDay) {
+            this.copyDayErrors.push('Copy From Day is required.');
+        }
+        if (!this.copyToDay) {
+            this.copyDayErrors.push('Copy To Day is required.');
+        }
+        if (this.copyDayErrors.length > 0) {
+            return;
+        }
+        this.employeeScheduleService.copyDay(this.organizationId, this.scheduleDate.toDate(), this.copyFromDay).then(function (success) {
+            _this.getSchedule();
+        });
+    };
     EmployeeScheduleComponent.prototype.getSchedule = function () {
         var _this = this;
         var dateString = this.scheduleDate.format('MMDDYYYY');

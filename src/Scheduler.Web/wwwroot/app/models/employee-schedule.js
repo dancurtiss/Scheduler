@@ -35,6 +35,12 @@ var CopyWeek = (function () {
     return CopyWeek;
 }());
 exports.CopyWeek = CopyWeek;
+var CopyDay = (function () {
+    function CopyDay() {
+    }
+    return CopyDay;
+}());
+exports.CopyDay = CopyDay;
 var CancelEmployeeShift = (function () {
     function CancelEmployeeShift() {
     }

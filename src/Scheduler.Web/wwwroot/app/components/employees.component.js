@@ -25,6 +25,18 @@ var EmployeesComponent = (function () {
         this.employeeService.getEmployees(this.organizationId).then(function (model) {
             _this.employees = model.employees;
             _this.availablePositions = model.availablePositions;
+            _this.employees.forEach(function (e) {
+                var concatPositions = '';
+                _this.availablePositions.filter(function (p) {
+                    return e.employeePositionIds.indexOf(p.positionId) > -1;
+                }).forEach(function (p, i) {
+                    if (i > 0) {
+                        concatPositions = concatPositions + ', ';
+                    }
+                    concatPositions = concatPositions + p.name;
+                });
+                e.positionsDisplay = concatPositions;
+            });
         });
     };
     EmployeesComponent.prototype.ngOnInit = function () {

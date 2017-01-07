@@ -15,6 +15,8 @@
 
 <div class="row">
     <div class="col-xs-12">
+        <!--<a (click)="showCopyDay()" href="javascript:;">Copy Day</a>
+        &nbsp;|&nbsp;-->
         <a (click)="copyWeek()" href="javascript:;">Copy Week</a>
         &nbsp;|&nbsp;
         <a target="_blank" href="/report/week?organizationId={{organizationId}}&date={{scheduleDate.format('MM/DD/YYYY')}}">Print</a>
@@ -78,6 +80,38 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div *ngIf="copyToDay" class="modal fade show in danger" id="copyModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="copyToDay = null;$event.stopPropagation()">&times;</button>
+                <h4 class="modal-title">Copy Schedule Day</h4>
+            </div>
+            <div class="modal-body">
+                <my-errors [errors]="copyDayErrors"></my-errors>
+                <form class="form-inline" name="copyDayForm" novalidate>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Copy To: {{copyToDay}}</h5>
+                            <div class="form-group">
+                                <label for="position" style="width: 100px;">Copy From</label>
+                                <select class="form-control" id="day" [(ngModel)]="copyFromDay" name="day" required>
+                                    <option value="">Please Select</option>
+                                    <option [value]="i" *ngFor="let i of days">{{i}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="onCopyDay();">Copy</button>
+                <button type="reset" class="btn btn-default" (click)="copyToDay = null;$event.stopPropagation()">Cancel</button>
+            </div>
         </div>
     </div>
 </div>

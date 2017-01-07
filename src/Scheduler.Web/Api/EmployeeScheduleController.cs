@@ -60,6 +60,54 @@ namespace Scheduler.Web.Api
 
             return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, employeeConflicts, shifts, employees);
         }
+        private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = dt.DayOfWeek - startOfWeek;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+            return dt.AddDays(-1 * diff).Date;
+        }
+
+
+        [HttpPost("copyday/{id}")]
+        public IActionResult CopyDay(int id, [FromBody]CopyDayModel copyDay)
+        {
+            UserCanAccessOrganization(id);
+
+            DayOfWeek fromDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), copyDay.FromDay);
+            DateTime copyStartDate = StartOfWeek(copyDay.ScheduleDate, fromDay);
+            DateTime copyEndDate = copyStartDate.AddDays(1);
+
+            int copyDaysForward = copyDay.ScheduleDate.Subtract(copyStartDate).Days;
+
+            var employeeShifts = _schedulerContext.EmployeeShifts
+                .Include(es => es.Employee)
+                .Include(es => es.Employee.Organization)
+                .Include(es => es.Shift)
+                .Where(es => es.Employee.Organization.OrganizationId == id && es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
+                .ToList();
+
+            //foreach (var sourceShift in employeeShifts)
+            //{
+            //    EmployeeShift employeeShiftEntity = new EmployeeShift
+            //    {
+            //        Employee = sourceShift.Employee,
+            //        Shift = sourceShift.Shift,
+            //        ShiftStartTime = sourceShift.ShiftStartTime.AddDays(copyDaysForward),
+            //        ShiftEndTime = sourceShift.ShiftEndTime.AddDays(copyDaysForward),
+            //        ConfirmationNumber = 1
+            //    };
+
+            //    _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
+            //}
+
+            //_schedulerContext.SaveChanges();
+
+            return new ObjectResult(true);
+        }
+
 
         [HttpPost("copyweek/{id}")]
         public IActionResult CopyWeek(int id, [FromBody]CopyWeekModel copyWeek)

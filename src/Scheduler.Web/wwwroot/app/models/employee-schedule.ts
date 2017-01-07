@@ -47,6 +47,11 @@ export class CopyWeek {
     startDate: Date;
 }
 
+export class CopyDay {
+    scheduleDate: Date;
+    fromDay: string;
+}
+
 export class CancelEmployeeShift {
     employeeShiftId: number;
     reason: string;
@@ -56,6 +61,7 @@ export class EmployeeDetails {
     organizationId: number;
     organizationMessage: string;
     employeeName: string;
+    employeeDetails: string;
     conflicts: EmployeeConflict[];
     shifts: EmployeeShiftDisplay[];
 }

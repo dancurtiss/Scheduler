@@ -19,6 +19,7 @@ export class EmployeeDetailComponent implements OnInit {
 
     employeeId: number;
     employeeName: string;
+    employeeDetails: string;
     organizationId: number;
     organizationMessage: string;
 
@@ -51,9 +52,10 @@ export class EmployeeDetailComponent implements OnInit {
         this.employeeConflictService.getEmployeeDetails(this.employeeId).then((details) => {
             this.organizationId = details.organizationId;
             this.organizationMessage = details.organizationMessage;
-            this.conflicts = details.conflicts;
+            this.conflicts = details.conflicts; 
             this.shifts = details.shifts;
             this.employeeName = details.employeeName;
+            this.employeeDetails = details.employeeDetails;
         });
     }
 

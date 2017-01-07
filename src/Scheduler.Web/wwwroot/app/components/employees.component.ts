@@ -36,6 +36,19 @@ export class EmployeesComponent implements OnInit {
         this.employeeService.getEmployees(this.organizationId).then((model) => {
             this.employees = model.employees;
             this.availablePositions = model.availablePositions;
+
+            this.employees.forEach((e) => {
+                var concatPositions = '';
+                this.availablePositions.filter((p) => {
+                    return e.employeePositionIds.indexOf(p.positionId) > -1;
+                }).forEach((p, i) => {
+                    if (i > 0) {
+                        concatPositions = concatPositions + ', ';
+                    }
+                    concatPositions = concatPositions + p.name;
+                });
+                e.positionsDisplay = concatPositions;
+            });
         });
     }
 

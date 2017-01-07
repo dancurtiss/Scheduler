@@ -108,6 +108,12 @@ namespace Scheduler.Web.ApiModels
         public DateTime StartDate { get; set; }
     }
 
+    public class CopyDayModel
+    {
+        public DateTime ScheduleDate { get; set; }
+        public string FromDay { get; set; }
+    }
+
     public class AddEmployeeShiftModel
     {
         public int EmployeeId { get; set; }

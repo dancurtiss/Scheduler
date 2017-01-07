@@ -14,6 +14,7 @@ export class Employee {
     isActive: boolean;
 
     employeePositionIds: number[];
+    positionsDisplay?: string;
 }
 
 

@@ -24,7 +24,8 @@ namespace Scheduler.Web.Api
         {
             UserCanAccessEmployee(id);
 
-            var employee = _schedulerContext.Employees.Include(e => e.Organization).Single(e => e.EmployeeId == id);
+            var employee = _schedulerContext.Employees.Include(p => p.Positions).ThenInclude(ep => ep.Position)
+                .Include(e => e.Organization).Single(e => e.EmployeeId == id);
 
             List<EmployeeConflictModel> employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee)
                 .Where(ec => ec.Employee.EmployeeId == id).ToList()
@@ -35,7 +36,12 @@ namespace Scheduler.Web.Api
                 .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > DateTime.Today).ToList()
                 .Select(es => new EmployeeShiftDisplayModel(es)).ToList();
 
-            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message, EmployeeName = employee.FirstName + " " + employee.LastName, Conflicts = employeeConflicts, Shifts = employeeShifts };
+            string positionsDisplay = string.Join(", ", employee.Positions.Select(ep => ep.Position.Name));
+            string employeeNameDisplay = $"{employee.FirstName} {employee.LastName}";
+            string employeeDetailsDisplay = $"{positionsDisplay} ({employee.PhoneNumber})";
+
+            return new EmployeeDetailModel { OrganizationId = employee.Organization.OrganizationId, OrganizationMessage = employee.Organization.Message,
+                EmployeeName = employeeNameDisplay, EmployeeDetails = employeeDetailsDisplay, Conflicts = employeeConflicts, Shifts = employeeShifts };
         }
 
         [HttpPost("{id}")]

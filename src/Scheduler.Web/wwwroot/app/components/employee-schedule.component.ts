@@ -35,6 +35,12 @@ export class EmployeeScheduleComponent implements OnInit {
     message: string;
     successMessage: string;
     scheduleDate: moment.Moment;
+
+    copyDayErrors: string[];
+    copyFromDay: string;
+    copyToDay: string;
+    days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
     
     constructor(
         private employeeScheduleService: EmployeeScheduleService,
@@ -42,6 +48,27 @@ export class EmployeeScheduleComponent implements OnInit {
         private route: ActivatedRoute,
         private dragulaService: DragulaService
     ) { }
+
+    showCopyDay() {
+        this.copyToDay = this.scheduleDate.format('dddd');
+    }
+
+    onCopyDay() {
+        this.copyDayErrors = [];
+        if (!this.copyFromDay) {
+            this.copyDayErrors.push('Copy From Day is required.');
+        }
+        if (!this.copyToDay) {
+            this.copyDayErrors.push('Copy To Day is required.');
+        }
+        if (this.copyDayErrors.length > 0) {
+            return;
+        }
+
+        this.employeeScheduleService.copyDay(this.organizationId, this.scheduleDate.toDate(), this.copyFromDay).then((success) => {
+            this.getSchedule();
+        });
+    }
 
     getSchedule(): void {
         var dateString = this.scheduleDate.format('MMDDYYYY');
