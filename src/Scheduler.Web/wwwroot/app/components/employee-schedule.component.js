@@ -123,6 +123,7 @@ var EmployeeScheduleComponent = (function () {
         }
         this.employeeScheduleService.copyDay(this.organizationId, this.scheduleDate.toDate(), this.copyFromDay).then(function (success) {
             _this.getSchedule();
+            _this.copyToDay = null;
         });
     };
     EmployeeScheduleComponent.prototype.getSchedule = function () {

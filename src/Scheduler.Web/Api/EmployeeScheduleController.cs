@@ -67,7 +67,7 @@ namespace Scheduler.Web.Api
             {
                 diff += 7;
             }
-            return dt.AddDays(-1 * diff).Date;
+            return dt.AddDays(-1 * diff);
         }
 
 
@@ -86,24 +86,42 @@ namespace Scheduler.Web.Api
                 .Include(es => es.Employee)
                 .Include(es => es.Employee.Organization)
                 .Include(es => es.Shift)
+                .ThenInclude(es => es.Schedule)
                 .Where(es => es.Employee.Organization.OrganizationId == id && es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
                 .ToList();
 
-            //foreach (var sourceShift in employeeShifts)
-            //{
-            //    EmployeeShift employeeShiftEntity = new EmployeeShift
-            //    {
-            //        Employee = sourceShift.Employee,
-            //        Shift = sourceShift.Shift,
-            //        ShiftStartTime = sourceShift.ShiftStartTime.AddDays(copyDaysForward),
-            //        ShiftEndTime = sourceShift.ShiftEndTime.AddDays(copyDaysForward),
-            //        ConfirmationNumber = 1
-            //    };
+            var fromSchedule = employeeShifts.First().Shift.Schedule;
 
-            //    _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
-            //}
+            // need to figure out how to translate shifts across
+            foreach (var sourceShift in employeeShifts)
+            {
+                string targetDay = copyDay.ScheduleDate.DayOfWeek.ToString();
+                Shift targetShift = _schedulerContext.Shifts
+                    .Include(s => s.Schedule)
+                    .SingleOrDefault(s =>
+                        s.Schedule.ScheduleId == fromSchedule.ScheduleId &&
+                        s.Day == targetDay &&
+                        s.StartTime == sourceShift.Shift.StartTime &&
+                        s.EndTime == sourceShift.Shift.EndTime);
 
-            //_schedulerContext.SaveChanges();
+                if (targetShift == null)
+                {
+                    throw new InvalidOperationException("Could not find matching shifts to copy to.");
+                }
+
+                EmployeeShift employeeShiftEntity = new EmployeeShift
+                {
+                    Employee = sourceShift.Employee,
+                    Shift = targetShift,
+                    ShiftStartTime = sourceShift.ShiftStartTime.AddDays(copyDaysForward),
+                    ShiftEndTime = sourceShift.ShiftEndTime.AddDays(copyDaysForward),
+                    ConfirmationNumber = 1
+                };
+
+                _schedulerContext.EmployeeShifts.Add(employeeShiftEntity);
+            }
+
+            _schedulerContext.SaveChanges();
 
             return new ObjectResult(true);
         }
@@ -117,6 +135,8 @@ namespace Scheduler.Web.Api
             DateTime copyStartDate = copyWeek.StartDate.Date;
             DateTime copyEndDate = copyStartDate.AddDays(7);
 
+            ValidateScheduleCopy(id, copyStartDate);
+
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Employee)
                 .Include(es => es.Employee.Organization)
@@ -124,7 +144,7 @@ namespace Scheduler.Web.Api
                 .Where(es => es.Employee.Organization.OrganizationId == id && es.ShiftStartTime > copyStartDate && es.ShiftEndTime < copyEndDate)
                 .ToList();
 
-            foreach(var sourceShift in employeeShifts)
+            foreach (var sourceShift in employeeShifts)
             {
                 EmployeeShift employeeShiftEntity = new EmployeeShift
                 {
@@ -141,6 +161,27 @@ namespace Scheduler.Web.Api
             _schedulerContext.SaveChanges();
 
             return new ObjectResult(true);
+        }
+
+        private void ValidateScheduleCopy(int id, DateTime copyStartDate)
+        {
+            DateTime copyEndTargetDate = copyStartDate.AddDays(14);
+
+            int copyFromScheduleId = _schedulerContext.Schedules
+                .Include(s => s.Organization)
+                .Single(s => s.Organization.OrganizationId == id && s.StartDate <= copyStartDate && s.EndDate >= copyStartDate)
+                .ScheduleId;
+
+            Schedule copyToSchedule = _schedulerContext.Schedules
+                .Include(s => s.Organization)
+                .SingleOrDefault(s => s.Organization.OrganizationId == id && s.StartDate <= copyEndTargetDate && s.EndDate >= copyEndTargetDate);
+
+            int copyToScheduleId = copyToSchedule == null ? 0 : copyToSchedule.ScheduleId;
+
+            if (copyToScheduleId != copyFromScheduleId)
+            {
+                throw new InvalidOperationException("Cannot copy across schedules.");
+            }
         }
 
         [HttpPost("{id}")]

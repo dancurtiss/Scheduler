@@ -67,6 +67,7 @@ export class EmployeeScheduleComponent implements OnInit {
 
         this.employeeScheduleService.copyDay(this.organizationId, this.scheduleDate.toDate(), this.copyFromDay).then((success) => {
             this.getSchedule();
+            this.copyToDay = null;
         });
     }
 
