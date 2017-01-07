@@ -96,10 +96,15 @@ namespace Scheduler.Web.Api
             foreach (var sourceShift in employeeShifts)
             {
                 string targetDay = copyDay.ScheduleDate.DayOfWeek.ToString();
+                int sourcePositionId = _schedulerContext.Shifts.Include(s => s.Position)
+                    .Single(s => s.ShiftId == sourceShift.Shift.ShiftId).Position.PositionId;
+
                 Shift targetShift = _schedulerContext.Shifts
+                    .Include(s => s.Position)
                     .Include(s => s.Schedule)
                     .SingleOrDefault(s =>
                         s.Schedule.ScheduleId == fromSchedule.ScheduleId &&
+                        s.Position.PositionId == sourcePositionId &&
                         s.Day == targetDay &&
                         s.StartTime == sourceShift.Shift.StartTime &&
                         s.EndTime == sourceShift.Shift.EndTime);
