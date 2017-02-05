@@ -57,7 +57,7 @@ namespace Scheduler.Web.Controllers
                 employeeModel.TotalShifts = employeeGroup.Count();
                 employeeModel.TotalHours = employeeGroup.Sum(es => es.ShiftEndTime.Subtract(es.ShiftStartTime).TotalMinutes)/60;
 
-                var days = employeeGroup.GroupBy(es => es.ShiftStartTime.Date);
+                var days = employeeGroup.GroupBy(es => es.ShiftStartTime.ConvertFromUTC().Date);
                 employeeModel.Days = new List<EmployeeDayReportViewModel>();
                 foreach(var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
                 {
