@@ -120,7 +120,7 @@
                     <th class="hidden-xs">Postion Category</th>
                     <th>Shift Start</th>
                     <th class="hidden-xs">Shift End</th>
-                    <th>Action</th>
+                    <th *ngIf="false">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,7 +129,7 @@
                     <td class="hidden-xs">{{shift.positionCategory}}</td>
                     <td>{{shift.shiftStartTime | date:'short'}}</td>
                     <td class="hidden-xs">{{shift.shiftEndTime | date:'shortTime'}}</td>
-                    <td>
+                    <td *ngIf="false">
                         <button class="btn btn-danger" *ngIf="!shift.cancelled" (click)="onShiftSelect(shift); $event.stopPropagation()">Cancel</button>
                         <span *ngIf="shift.cancelled">Cancelled: {{shift.cancelReason}}</span>
                     </td>

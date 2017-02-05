@@ -55,11 +55,12 @@ namespace Scheduler.Web.Controllers
                 var phone = employeeGroup.Key.PhoneNumber;
                 employeeModel.PhoneNumber = string.Format("{0}-{1}-{2}", phone.Substring(0, 3), phone.Substring(3, 3), phone.Substring(6, 4));
                 employeeModel.TotalShifts = employeeGroup.Count();
-                employeeModel.TotalHours = employeeGroup.Sum(es => es.ShiftEndTime.Subtract(es.ShiftStartTime).TotalMinutes)/60;
+
+                employeeModel.TotalHours = CalculateTotalHours(employeeGroup.ToList());
 
                 var days = employeeGroup.GroupBy(es => es.ShiftStartTime.ConvertFromUTC().Date);
                 employeeModel.Days = new List<EmployeeDayReportViewModel>();
-                foreach(var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
+                foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
                 {
                     var dayGroup = days.SingleOrDefault(dg => dg.Key.DayOfWeek == (DayOfWeek)dayOfWeek);
 
@@ -91,6 +92,53 @@ namespace Scheduler.Web.Controllers
             }
 
             return View(model);
+        }
+
+        private static double CalculateTotalHours(List<EmployeeShift> shifts)
+        {
+            double totalMinutes = 0;
+            List<EmployeeShift> countedShifts = new List<EmployeeShift>();
+
+            foreach(EmployeeShift shift in shifts)
+            {
+                double maxShiftMinutes = shift.ShiftEndTime.Subtract(shift.ShiftStartTime).TotalMinutes;
+
+                // Need to figure out how to deal with overlapping shifts when they occur
+                if (countedShifts.Count > 0)
+                {
+                    DateTime minStartTime = countedShifts.Min(s => s.ShiftStartTime);
+                    DateTime maxEndTime = countedShifts.Max(s => s.ShiftEndTime);
+
+                    bool startOverlapExists = shift.ShiftStartTime >= minStartTime && shift.ShiftStartTime <= maxEndTime;
+                    bool endOverlapExists = shift.ShiftEndTime >= minStartTime && shift.ShiftEndTime <= maxEndTime;
+
+                    if (startOverlapExists || endOverlapExists)
+                    {
+                        double addedStartMinutes = minStartTime.Subtract(shift.ShiftStartTime).TotalMinutes;
+                        addedStartMinutes = addedStartMinutes < 0 ? 0 : addedStartMinutes;
+
+                        double addedEndMinutes = shift.ShiftEndTime.Subtract(maxEndTime).TotalMinutes;
+                        addedEndMinutes = addedEndMinutes < 0 ? 0 : addedEndMinutes;
+
+                        double addedMinutes = addedStartMinutes + addedEndMinutes;
+                        addedMinutes = addedMinutes < maxShiftMinutes ? addedMinutes : maxShiftMinutes;
+
+                        totalMinutes = totalMinutes + addedMinutes;
+                    }
+                    else
+                    {
+                        totalMinutes = totalMinutes + maxShiftMinutes;
+                    }
+                }
+                else
+                {
+                    totalMinutes = totalMinutes + maxShiftMinutes;
+                }
+
+                countedShifts.Add(shift);
+            }
+
+            return totalMinutes / 60;
         }
 
         private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)

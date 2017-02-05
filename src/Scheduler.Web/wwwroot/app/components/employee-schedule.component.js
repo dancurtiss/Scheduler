@@ -36,6 +36,8 @@ var EmployeeScheduleComponent = (function () {
             }
             var employeeId = el.getAttribute('data-employee-id');
             var shiftId = target.getAttribute('data-shift-id');
+            _this.denyEmployeeId = employeeId;
+            _this.denyShiftId = shiftId;
             var employee = _this.availableEmployees.filter(function (e) { return e.employeeId == employeeId; })[0];
             var shift = _this.availableShifts.filter(function (s) { return s.shiftId == shiftId; })[0];
             if (!employee || !shift) {
@@ -286,6 +288,18 @@ var EmployeeScheduleComponent = (function () {
         this.employeeScheduleService.delete(employeeShiftId).then(function () {
             _this.getSchedule();
         });
+    };
+    EmployeeScheduleComponent.prototype.onCancelOverride = function () {
+        this.message = null;
+        this.denyEmployeeId = null;
+        this.denyShiftId = null;
+    };
+    EmployeeScheduleComponent.prototype.onOverrideAddShift = function () {
+        if (this.denyEmployeeId && this.denyShiftId) {
+            this.added(this.denyEmployeeId, this.denyShiftId);
+            this.getSchedule();
+        }
+        this.message = null;
     };
     EmployeeScheduleComponent = __decorate([
         core_1.Component({

@@ -32,6 +32,9 @@ export class EmployeeScheduleComponent implements OnInit {
     employeeConflicts: EmployeeConflict[];
     positionCategories: string[];
 
+    denyEmployeeId: number;
+    denyShiftId: number;
+
     message: string;
     successMessage: string;
     scheduleDate: moment.Moment;
@@ -254,6 +257,9 @@ export class EmployeeScheduleComponent implements OnInit {
         var employeeId = el.getAttribute('data-employee-id');
         var shiftId = target.getAttribute('data-shift-id');
 
+        this.denyEmployeeId = employeeId;
+        this.denyShiftId = shiftId;
+
         var employee = this.availableEmployees.filter((e) => { return e.employeeId == employeeId; })[0];
         var shift = this.availableShifts.filter((s) => { return s.shiftId == shiftId; })[0];
 
@@ -360,5 +366,20 @@ export class EmployeeScheduleComponent implements OnInit {
         this.employeeScheduleService.delete(employeeShiftId).then(() => {
             this.getSchedule();
         });
+    }
+
+    onCancelOverride() {
+        this.message = null;
+        this.denyEmployeeId = null;
+        this.denyShiftId = null;
+    }
+
+    onOverrideAddShift() {
+        if (this.denyEmployeeId && this.denyShiftId) {
+            this.added(this.denyEmployeeId, this.denyShiftId);
+            this.getSchedule();
+        }
+
+        this.message = null;
     }
 }
