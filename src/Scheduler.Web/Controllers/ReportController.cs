@@ -18,8 +18,75 @@ namespace Scheduler.Web.Controllers
         {
         }
 
+        [HttpPost]
+        [Authorize("Manage Organization Details")]
+        public IActionResult SendWeekSMS(int organizationId, string date)
+        {
+            WeekScheduleReportViewModel model = CalculateWeekModel(organizationId, date);
+
+            foreach(EmployeeScheduleReportViewModel employee in model.Employees)
+            {
+                if (employee.TotalHours == 0)
+                {
+                    continue;
+                }
+
+                string message = null;
+
+                int dayIndex = 0;
+                foreach(var day in employee.Days)
+                {
+                    if (day.Shifts.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    if (dayIndex > 0)
+                    {
+                        message += "\n---------------\n";
+                        message += "\n---------------\n";
+                    }
+
+                    message += day.Day;
+                    message += "\n---------------\n";
+
+                    int shiftIndex = 0;
+                    foreach(var shift in day.Shifts)
+                    {
+                        if (shiftIndex > 1)
+                        {
+                            message += "\n---------------\n";
+                        }
+
+                        message += shift.Name + "-" + shift.Category;
+                        message += shift.Name + "-" + shift.Category;
+
+                        message += "\n---------------\n";
+
+                        message += shift.StartTime.ConvertFromUTC().ToString("t") + "-" + shift.EndTime.ConvertFromUTC().ToString("t");
+                        shiftIndex++;
+                    }
+
+                    dayIndex++;
+                }
+
+                // send for employee
+                System.Diagnostics.Debug.Write(message);
+            }
+
+            return View(true);
+        }
+
+
         [Authorize]
         public IActionResult Week(int organizationId, string date)
+        {
+            WeekScheduleReportViewModel model = CalculateWeekModel(organizationId, date);
+
+            return View(model);
+        }
+
+        private WeekScheduleReportViewModel CalculateWeekModel(int organizationId, string date)
         {
             WeekScheduleReportViewModel model = new WeekScheduleReportViewModel();
 
@@ -45,7 +112,7 @@ namespace Scheduler.Web.Controllers
             model.WeekDescription = startTime.ToString("MM/dd/yyyy") + " - " + endTime.ToString("MM/dd/yyyy");
 
             model.Employees = new List<EmployeeScheduleReportViewModel>();
-            foreach(var employeeGroup in employees)
+            foreach (var employeeGroup in employees)
             {
                 EmployeeScheduleReportViewModel employeeModel = new EmployeeScheduleReportViewModel();
                 employeeModel.EmployeeNumber = employeeGroup.Key.EmployeeNumber;
@@ -91,7 +158,7 @@ namespace Scheduler.Web.Controllers
                 model.Employees.Add(employeeModel);
             }
 
-            return View(model);
+            return model;
         }
 
         private static double CalculateTotalHours(List<EmployeeShift> shifts)
