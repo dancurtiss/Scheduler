@@ -52,6 +52,10 @@ export class CopyDay {
     fromDay: string;
 }
 
+export class SendSMS {
+    scheduleDate: Date;
+}
+
 export class CancelEmployeeShift {
     employeeShiftId: number;
     reason: string;

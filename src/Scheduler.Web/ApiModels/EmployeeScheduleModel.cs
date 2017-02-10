@@ -108,6 +108,11 @@ namespace Scheduler.Web.ApiModels
         public DateTime StartDate { get; set; }
     }
 
+    public class SendSMSModel
+    {
+        public DateTime ScheduleDate { get; set; }
+    }
+
     public class CopyDayModel
     {
         public DateTime ScheduleDate { get; set; }

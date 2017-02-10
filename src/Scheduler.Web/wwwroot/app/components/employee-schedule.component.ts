@@ -39,6 +39,7 @@ export class EmployeeScheduleComponent implements OnInit {
     successMessage: string;
     scheduleDate: moment.Moment;
 
+    sendSmsPrompt: boolean = false;
     copyDayErrors: string[];
     copyFromDay: string;
     copyToDay: string;
@@ -372,6 +373,12 @@ export class EmployeeScheduleComponent implements OnInit {
         this.message = null;
         this.denyEmployeeId = null;
         this.denyShiftId = null;
+    }
+
+    onSendSMS() {
+        this.employeeScheduleService.sendSms(this.organizationId, this.scheduleDate.toDate()).then(() => {
+            this.sendSmsPrompt = false;
+        });
     }
 
     onOverrideAddShift() {

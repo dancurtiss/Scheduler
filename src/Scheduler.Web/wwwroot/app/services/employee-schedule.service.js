@@ -37,6 +37,16 @@ var EmployeeScheduleService = (function () {
             .then(function () { return null; })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    EmployeeScheduleService.prototype.sendSms = function (organizationId, scheduleDate) {
+        var _this = this;
+        var url = this.employeesUrl + "/sendsms/" + organizationId;
+        var sendSMS = { scheduleDate: scheduleDate };
+        return this.http
+            .post(url, JSON.stringify(sendSMS), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
     EmployeeScheduleService.prototype.copyDay = function (organizationId, scheduleDate, copyFromDay) {
         var _this = this;
         var url = this.employeesUrl + "/copyday/" + organizationId;

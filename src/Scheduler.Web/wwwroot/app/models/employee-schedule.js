@@ -41,6 +41,12 @@ var CopyDay = (function () {
     return CopyDay;
 }());
 exports.CopyDay = CopyDay;
+var SendSMS = (function () {
+    function SendSMS() {
+    }
+    return SendSMS;
+}());
+exports.SendSMS = SendSMS;
 var CancelEmployeeShift = (function () {
     function CancelEmployeeShift() {
     }

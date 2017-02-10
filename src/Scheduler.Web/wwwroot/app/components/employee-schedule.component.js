@@ -23,6 +23,7 @@ var EmployeeScheduleComponent = (function () {
         this.router = router;
         this.route = route;
         this.dragulaService = dragulaService;
+        this.sendSmsPrompt = false;
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
@@ -293,6 +294,12 @@ var EmployeeScheduleComponent = (function () {
         this.message = null;
         this.denyEmployeeId = null;
         this.denyShiftId = null;
+    };
+    EmployeeScheduleComponent.prototype.onSendSMS = function () {
+        var _this = this;
+        this.employeeScheduleService.sendSms(this.organizationId, this.scheduleDate.toDate()).then(function () {
+            _this.sendSmsPrompt = false;
+        });
     };
     EmployeeScheduleComponent.prototype.onOverrideAddShift = function () {
         if (this.denyEmployeeId && this.denyShiftId) {

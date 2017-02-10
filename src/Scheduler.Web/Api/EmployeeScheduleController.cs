@@ -10,12 +10,13 @@ using Scheduler.Web.ApiModels;
 using System.Globalization;
 using Scheduler.Web.Data;
 using Scheduler.Web.Services;
+using Scheduler.Web.Models.ReportViewModels;
 
 namespace Scheduler.Web.Api
 {
     [Route("api/[controller]")]
     [Authorize("Manage Organization Details")]
-    public class EmployeeScheduleController : BaseController
+    public class EmployeeScheduleController : WeekRollupController
     {
         private ISmsSender _smsSender;
         public EmployeeScheduleController(ApplicationDbContext appDbContext, SchedulerContext schedulerContext, ISmsSender smsSender) : base(appDbContext, schedulerContext)
@@ -70,6 +71,51 @@ namespace Scheduler.Web.Api
             return dt.AddDays(-1 * diff);
         }
 
+        [HttpPost("sendsms/{id}")]
+        public IActionResult SendWeekSMS(int id, [FromBody] SendSMSModel sendModel)
+        {
+            UserCanAccessOrganization(id);
+
+            WeekScheduleReportViewModel model = CalculateWeekModel(id, sendModel.ScheduleDate.ToString("MM/dd/yyyy"));
+
+            foreach (EmployeeScheduleReportViewModel employee in model.Employees)
+            {
+                if (employee.TotalHours == 0)
+                {
+                    continue;
+                }
+
+                string message = null;
+
+                foreach (var day in employee.Days)
+                {
+                    if (day.Shifts.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    message += "---------------\n";
+                    message += day.Day;
+                    message += "\n---------------\n";
+
+                    foreach (var shift in day.Shifts)
+                    {
+                        message += shift.Name + " - ";
+                        message += shift.StartTime.ConvertFromUTC().ToString("t") + "-" + shift.EndTime.ConvertFromUTC().ToString("t");
+                        message += "\n";
+                    }
+                }
+
+                // send for employee
+                if (!string.IsNullOrEmpty(employee.PhoneNumber) && employee.PhoneNumber.Length == 10)
+                {
+                    _smsSender.SendSmsAsync(employee.PhoneNumber, message);
+                    System.Diagnostics.Debug.Write(message);
+                }
+            }
+
+            return new ObjectResult(true);
+        }
 
         [HttpPost("copyday/{id}")]
         public IActionResult CopyDay(int id, [FromBody]CopyDayModel copyDay)

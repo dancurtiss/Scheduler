@@ -21,6 +21,8 @@
         &nbsp;|&nbsp;
         <a target="_blank" href="/report/week?organizationId={{organizationId}}&date={{scheduleDate.format('MM/DD/YYYY')}}">Print</a>
         &nbsp;|&nbsp;
+        <a href="javascript:;" (click)="sendSmsPrompt = true;">Send SMS</a>
+        &nbsp;|&nbsp;
         <a href="javascript:;" (click)="previousDay()">Previous Day</a>
         &nbsp;|&nbsp;
         <a href="javascript:;" (click)="nextDay()">Next Day</a>
@@ -39,7 +41,7 @@
     </div>
     <div class="col-sm-2">
         <button class="btn" (click)="message=null">Cancel</button>
-        <button class="btn btn-primary" (click)="onOverrideAddShift()">Override</button>
+        <button class="btn btn-primary" (click)="onOverrideAddShift()">Add Anyways</button>
     </div>
 </div>
 
@@ -115,6 +117,24 @@
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" (click)="onCopyDay();">Copy</button>
                 <button type="reset" class="btn btn-default" (click)="copyToDay = null;$event.stopPropagation()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="sendSmsPrompt" class="modal fade show in danger" id="sendSMSModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="sendSmsPrompt = null;$event.stopPropagation()">&times;</button>
+                <h4 class="modal-title">Send SMS?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Clicking Send SMS will send this weeks schedule to each employee that is scheduled.  Only do this when the schedule is ready for the week.  Are you sure you want to send?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="onSendSMS();">Send SMS</button>
+                <button type="reset" class="btn btn-default" (click)="sendSmsPrompt = null;$event.stopPropagation()">Cancel</button>
             </div>
         </div>
     </div>
