@@ -51,6 +51,7 @@ namespace Scheduler.Web.Api
 
                 var phone = employeeGroup.Key.PhoneNumber;
                 employeeModel.PhoneNumber = string.Format("{0}-{1}-{2}", phone.Substring(0, 3), phone.Substring(3, 3), phone.Substring(6, 4));
+                employeeModel.SendPhoneNumber = phone;
                 employeeModel.TotalShifts = employeeGroup.Count();
 
                 employeeModel.TotalHours = CalculateTotalHours(employeeGroup.ToList());

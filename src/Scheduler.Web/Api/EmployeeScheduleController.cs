@@ -107,9 +107,9 @@ namespace Scheduler.Web.Api
                 }
 
                 // send for employee
-                if (!string.IsNullOrEmpty(employee.PhoneNumber) && employee.PhoneNumber.Length == 10)
+                if (!string.IsNullOrEmpty(employee.SendPhoneNumber) && employee.SendPhoneNumber.Length == 10)
                 {
-                    _smsSender.SendSmsAsync(employee.PhoneNumber, message);
+                    _smsSender.SendSmsAsync(employee.SendPhoneNumber, message);
                     System.Diagnostics.Debug.Write(message);
                 }
             }

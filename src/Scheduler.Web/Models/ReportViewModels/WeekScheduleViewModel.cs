@@ -19,6 +19,7 @@ namespace Scheduler.Web.Models.ReportViewModels
         public string LastName { get; set; }
         public string EmployeeNumber { get; set; }
         public string PhoneNumber { get; set; }
+        public string SendPhoneNumber { get; set; }
 
         public double TotalHours { get; set; }
         public int TotalShifts { get; set; }
