@@ -49,7 +49,9 @@ namespace Scheduler.Web.Api
             var employees = _schedulerContext.Employees
                 .Include(e => e.Positions)
                 .ThenInclude(p => p.Position)
-                .Where(e => e.Organization.OrganizationId == id && e.IsActive == true).ToList();
+                .Where(e => e.Organization.OrganizationId == id && e.IsActive == true)
+                .OrderBy(e => e.FirstName).ThenBy(e => e.LastName)
+                .ToList();
 
             var shifts = _schedulerContext.Shifts
                 .Include(s => s.Schedule)

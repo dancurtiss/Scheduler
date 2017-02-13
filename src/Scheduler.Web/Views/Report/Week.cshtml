@@ -19,61 +19,65 @@
 
     var shiftHeight = 50 + ((maxShifts-1) * 70);
 
-    <div class="row">
+    <div class="row" style="page-break-inside:avoid; page-break-after:auto;">
         <div class="col-xs-12">
-            <h4 class="pull-left">
-                @employee.FirstName @employee.LastName <small>(@employee.PhoneNumber)</small>
-            </h4>
-            <h4 class="pull-right">
-                @employee.TotalShifts Shifts / @employee.TotalHours Hours
-            </h4>
-        </div>
-    </div>
-
-    <div class="row">
-        @foreach (var day in employee.Days)
-        {
-            <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver;">
-                @day.Day
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 class="pull-left">
+                        @employee.FirstName @employee.LastName <small>(@employee.PhoneNumber)</small>
+                    </h4>
+                    <h4 class="pull-right">
+                        @employee.TotalShifts Shifts / @employee.TotalHours Hours
+                    </h4>
+                </div>
             </div>
-        }
-    </div>
-    <div class="row">
-        @foreach (var day in employee.Days)
-        {
-            var shiftIndex = 0;
-            <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver; min-height: @(shiftHeight)px;">
-                @if (day.Shifts.Count == 0)
+            <div class="row">
+                @foreach (var day in employee.Days)
                 {
-                    <text>&nbsp;</text>
+                    <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver;">
+                        @day.Day
+                    </div>
                 }
-                @foreach (var shift in day.Shifts)
+            </div>
+            <div class="row">
+                @foreach (var day in employee.Days)
                 {
-                    shiftIndex++;
-                    if (shiftIndex > 1){
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                --------------
+                    var shiftIndex = 0;
+                    <div class="col-xs-2" style="width: 14.28571428571429%; border: 1px solid silver; min-height: @(shiftHeight)px;">
+                        @if (day.Shifts.Count == 0)
+                        {
+                            <text>&nbsp;</text>
+                        }
+                        @foreach (var shift in day.Shifts)
+                        {
+                            shiftIndex++;
+                            if (shiftIndex > 1)
+                            {
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        --------------
+                                    </div>
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <small>@shift.Name<text> - </text>@shift.Category</small>
+                                </div>
                             </div>
-                        </div>
-                    }
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <small>@shift.Name<text> - </text>@shift.Category</small>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <small>@shift.StartTime.ConvertFromUTC().ToString("t")<text> - </text>@shift.EndTime.ConvertFromUTC().ToString("t")</small>
-                        </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <small>@shift.StartTime.ConvertFromUTC().ToString("t")<text> - </text>@shift.EndTime.ConvertFromUTC().ToString("t")</small>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
-        }
-    </div>
-    <div class="row" style="height:15px;">
-        <div class="col-xs-12">
-            &nbsp;
+            <div class="row" style="height:15px;">
+                <div class="col-xs-12">
+                    &nbsp;
+                </div>
+            </div>
         </div>
     </div>
 }

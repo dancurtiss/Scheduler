@@ -89,6 +89,8 @@ namespace Scheduler.Web.Api
                 model.Employees.Add(employeeModel);
             }
 
+            model.Employees = model.Employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName).ToList();
+
             return model;
         }
 
