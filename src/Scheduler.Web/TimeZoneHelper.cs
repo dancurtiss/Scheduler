@@ -14,6 +14,13 @@ namespace Scheduler.Web
 
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
             DateTime convertTime = TimeZoneInfo.ConvertTime(date, convertZone, TimeZoneInfo.Utc);
+
+            // taking dst out of it
+            if (convertZone.IsDaylightSavingTime(convertTime))
+            {
+                convertTime = convertTime.AddHours(1);
+            }
+
             return convertTime;
         }
 
@@ -23,6 +30,13 @@ namespace Scheduler.Web
 
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
             DateTime convertTime = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Utc, convertZone);
+
+            // taking dst out of it
+            if (convertZone.IsDaylightSavingTime(convertTime))
+            {
+                convertTime = convertTime.AddHours(-1);
+            }
+
             return convertTime;
         }
 
@@ -30,9 +44,16 @@ namespace Scheduler.Web
         {
             DateTime utcDateTime = DateTime.UtcNow.Date.Add(time);
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            DateTime convertedTime = TimeZoneInfo.ConvertTime(utcDateTime, TimeZoneInfo.Utc, convertZone);
+            DateTime convertTime = TimeZoneInfo.ConvertTime(utcDateTime, TimeZoneInfo.Utc, convertZone);
 
-            return utcDateTime.Day != convertedTime.Day;
+            // taking dst out of it
+            if (convertZone.IsDaylightSavingTime(convertTime))
+            {
+                convertTime = convertTime.AddHours(-1);
+            }
+
+
+            return utcDateTime.Day != convertTime.Day;
         }
 
     }
