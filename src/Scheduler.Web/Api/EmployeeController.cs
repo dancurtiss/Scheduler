@@ -132,6 +132,15 @@ namespace Scheduler.Web.Api
             UserCanAccessEmployee(id);
 
             var employeeEntity = _schedulerContext.Employees.Single(o => o.EmployeeId == id);
+
+            var conflicts = _schedulerContext.EmployeeConflicts.Where(c => c.Employee.EmployeeId == id).ToList();
+            var positions = _schedulerContext.EmployeePositions.Where(c => c.Employee.EmployeeId == id).ToList();
+            var shifts = _schedulerContext.EmployeeShifts.Where(c => c.Employee.EmployeeId == id).ToList();
+
+            _schedulerContext.EmployeeConflicts.RemoveRange(conflicts);
+            _schedulerContext.EmployeePositions.RemoveRange(positions);
+            _schedulerContext.EmployeeShifts.RemoveRange(shifts);
+
             _schedulerContext.Employees.Remove(employeeEntity);
             _schedulerContext.SaveChanges();
         }
