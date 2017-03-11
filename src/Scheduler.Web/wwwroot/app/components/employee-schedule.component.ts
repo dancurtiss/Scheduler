@@ -25,6 +25,7 @@ export class EmployeeScheduleComponent implements OnInit {
     availableEmployees: EmployeeDisplay[];
 
     shiftBags: any;
+    maxHeight: number;
 
     availableGroupedShifts: any;
     availableShifts: ShiftDisplay[];
@@ -44,14 +45,16 @@ export class EmployeeScheduleComponent implements OnInit {
     copyFromDay: string;
     copyToDay: string;
     days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
+    heightOffset: number = 250;
     
     constructor(
         private employeeScheduleService: EmployeeScheduleService,
         private router: Router,
         private route: ActivatedRoute,
         private dragulaService: DragulaService
-    ) { }
+    ) { 
+        this.maxHeight = window.innerHeight - this.heightOffset;
+    }
 
     showCopyDay() {
         this.copyToDay = this.scheduleDate.format('dddd');
@@ -148,6 +151,10 @@ export class EmployeeScheduleComponent implements OnInit {
 
         this.dragulaSetup();
         this.getSchedule();
+    }
+
+    onResize(event) {
+        this.maxHeight = event.target.innerHeight - this.heightOffset;
     }
 
     previousDay() {

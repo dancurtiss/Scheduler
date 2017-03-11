@@ -25,6 +25,7 @@ var EmployeeScheduleComponent = (function () {
         this.dragulaService = dragulaService;
         this.sendSmsPrompt = false;
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        this.heightOffset = 250;
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
             return el.className.toLowerCase() === 'employee-item';
@@ -108,6 +109,7 @@ var EmployeeScheduleComponent = (function () {
         this.dragInvalid = function (el, handle) {
             return false; // don't prevent any drags from initiating by default
         };
+        this.maxHeight = window.innerHeight - this.heightOffset;
     }
     EmployeeScheduleComponent.prototype.showCopyDay = function () {
         this.copyToDay = this.scheduleDate.format('dddd');
@@ -193,6 +195,9 @@ var EmployeeScheduleComponent = (function () {
         });
         this.dragulaSetup();
         this.getSchedule();
+    };
+    EmployeeScheduleComponent.prototype.onResize = function (event) {
+        this.maxHeight = event.target.innerHeight - this.heightOffset;
     };
     EmployeeScheduleComponent.prototype.previousDay = function () {
         this.scheduleDate = this.scheduleDate.add(-1, 'days');

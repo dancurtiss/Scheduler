@@ -186,3 +186,7 @@ timepicker btn {
 input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
     border: 2px solid darkred;
 }
+
+.overflow-y {
+    overflow-y: auto !important;
+}
