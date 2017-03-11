@@ -26,6 +26,7 @@ var EmployeeScheduleComponent = (function () {
         this.sendSmsPrompt = false;
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         this.heightOffset = 250;
+        this.employeeSort = 'First';
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
             return el.className.toLowerCase() === 'employee-item';
@@ -111,6 +112,30 @@ var EmployeeScheduleComponent = (function () {
         };
         this.maxHeight = window.innerHeight - this.heightOffset;
     }
+    EmployeeScheduleComponent.prototype.toggleEmployeeSort = function () {
+        if (this.employeeSort == 'Last') {
+            this.employeeSort = 'First';
+            this.availableEmployees.sort(function (a, b) {
+                if (a.firstName < b.firstName)
+                    return -1;
+                else if (a.firstName > b.firstName)
+                    return 1;
+                else
+                    return 0;
+            });
+        }
+        else {
+            this.employeeSort = 'Last';
+            this.availableEmployees.sort(function (a, b) {
+                if (a.lastName < b.lastName)
+                    return -1;
+                else if (a.lastName > b.lastName)
+                    return 1;
+                else
+                    return 0;
+            });
+        }
+    };
     EmployeeScheduleComponent.prototype.showCopyDay = function () {
         this.copyToDay = this.scheduleDate.format('dddd');
     };

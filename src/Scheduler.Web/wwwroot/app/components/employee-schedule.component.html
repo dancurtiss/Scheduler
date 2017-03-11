@@ -36,10 +36,10 @@
 </div>
 
 <div class="row" *ngIf="message">
-    <div class="col-sm-10">
+    <div class="col-sm-9">
         <label style="color:red;">{{message}}</label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <button class="btn" (click)="message=null">Cancel</button>
         <button class="btn btn-primary" (click)="onOverrideAddShift()">Add Anyways</button>
     </div>
@@ -48,13 +48,14 @@
 <div class="row" (window:resize)="onResize($event)">
     <div class="col-md-2 overflow-y" [style.height.px]="maxHeight">
         <div class="row">
-            <div class="col-sm-12">
-                <span class="h3">Employees</span>
+            <div class="col-sm-12" style="padding-left:2px;">
+                <span class="h4">Employees |</span>&nbsp;Sort:&nbsp;
+                <a href="javascript:;" (click)="toggleEmployeeSort()">{{employeeSort}}</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
+            <div class="col-sm-12 employee-container">
+                <div class='container drag-drop-container' [dragula]='"schedule-bag"' [dragulaModel]='availableEmployees'>
                     <div class="employee-item" [ngClass]="{'bg-conflicts': employee.conflictSummary}" *ngFor='let employee of availableEmployees' title="{{employee.conflictSummary}}" attr.data-employee-id="{{employee.employeeId}}">{{employee.firstName}} {{employee.lastName}}</div>
                 </div>
             </div>
@@ -74,7 +75,7 @@
                             <h4>{{ shift.positionName}} </h4>
                             <span class="small">{{shift.shiftTime}}</span>
 
-                            <div class='container' [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
+                            <div class='container drag-drop-container' [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
                                 <div>Drop Here</div>
                                 <div *ngFor='let employee of shiftBags[shift.shiftId]' [ngClass]="{'bg-canceled': employee.canceled}" title="{{employee.canceled?'Canceled: '+employee.reason:''}}" >
                                     {{employee.firstName}} {{employee.lastName}}

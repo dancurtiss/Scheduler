@@ -56,6 +56,25 @@ export class EmployeeScheduleComponent implements OnInit {
         this.maxHeight = window.innerHeight - this.heightOffset;
     }
 
+    employeeSort: string = 'First';
+    toggleEmployeeSort() {
+        if (this.employeeSort == 'Last'){
+            this.employeeSort = 'First';
+            this.availableEmployees.sort((a, b) => {
+                if (a.firstName < b.firstName) return -1;
+                else if (a.firstName > b.firstName) return 1;
+                else return 0;
+            });
+        } else {
+            this.employeeSort = 'Last';
+            this.availableEmployees.sort((a, b) => {
+                if (a.lastName < b.lastName) return -1;
+                else if (a.lastName > b.lastName) return 1;
+                else return 0;
+            });
+        }
+    }
+
     showCopyDay() {
         this.copyToDay = this.scheduleDate.format('dddd');
     }
