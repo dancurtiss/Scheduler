@@ -8,11 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var ng2_dragula_1 = require("ng2-dragula/ng2-dragula");
-var employee_schedule_service_1 = require("../services/employee-schedule.service");
-var moment = require("moment");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
+var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var moment = require('moment');
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
  */
@@ -338,19 +338,16 @@ var EmployeeScheduleComponent = (function () {
         }
         this.message = null;
     };
+    EmployeeScheduleComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-employee-schedules',
+            templateUrl: 'employee-schedule.component.html',
+            styleUrls: ['employee-schedule.component.css']
+        }), 
+        __metadata('design:paramtypes', [employee_schedule_service_1.EmployeeScheduleService, router_1.Router, router_1.ActivatedRoute, ng2_dragula_1.DragulaService])
+    ], EmployeeScheduleComponent);
     return EmployeeScheduleComponent;
 }());
-EmployeeScheduleComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-employee-schedules',
-        templateUrl: 'employee-schedule.component.html',
-        styleUrls: ['employee-schedule.component.css']
-    }),
-    __metadata("design:paramtypes", [employee_schedule_service_1.EmployeeScheduleService,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        ng2_dragula_1.DragulaService])
-], EmployeeScheduleComponent);
 exports.EmployeeScheduleComponent = EmployeeScheduleComponent;
 //# sourceMappingURL=employee-schedule.component.js.map

@@ -13,7 +13,7 @@ exports.Schedule = Schedule;
 var CopySchedule = (function (_super) {
     __extends(CopySchedule, _super);
     function CopySchedule() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     return CopySchedule;
 }(Schedule));
@@ -39,7 +39,7 @@ exports.Position = Position;
 var SelectedPosition = (function (_super) {
     __extends(SelectedPosition, _super);
     function SelectedPosition() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     return SelectedPosition;
 }(Position));

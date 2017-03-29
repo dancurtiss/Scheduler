@@ -1,15 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0D4BFF16-7A39-4619-99C9-43BA3393A195}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFCDE3A2-5899-47B7-B960-AA8ECB709ED1}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scheduler.Web", "src\Scheduler.Web\Scheduler.Web.csproj", "{47FAAE9E-06FF-4225-87B8-BA6F087AD303}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Scheduler.Web", "src\Scheduler.Web\Scheduler.Web.xproj", "{47FAAE9E-06FF-4225-87B8-BA6F087AD303}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scheduler.Data", "src\Scheduler.Data\Scheduler.Data.csproj", "{0E4418A0-52C7-460D-8B76-731D50FDBDF6}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Scheduler.Data", "src\Scheduler.Data\Scheduler.Data.xproj", "{0E4418A0-52C7-460D-8B76-731D50FDBDF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,10 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-require("rxjs/add/operator/toPromise");
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var handle_error_service_1 = require("../services/handle-error.service");
+require('rxjs/add/operator/toPromise');
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var EmployeeAccessService = (function () {
     function EmployeeAccessService(http, handleErrorService) {
         this.http = http;
@@ -55,11 +55,11 @@ var EmployeeAccessService = (function () {
             .then(function (res) { return res.json(); })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    EmployeeAccessService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
+    ], EmployeeAccessService);
     return EmployeeAccessService;
 }());
-EmployeeAccessService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http, handle_error_service_1.HandleErrorService])
-], EmployeeAccessService);
 exports.EmployeeAccessService = EmployeeAccessService;
 //# sourceMappingURL=employee-access.service.js.map
