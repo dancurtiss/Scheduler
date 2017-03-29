@@ -207,7 +207,13 @@ var EmployeeScheduleComponent = (function () {
             employee['employeeShiftId'] = es.employeeShiftId;
             employee['canceled'] = es.canceled;
             employee['reason'] = es.reason;
-            _this.shiftBags[es.shiftId].push(employee);
+            var shiftBag = _this.shiftBags[es.shiftId];
+            if (shiftBag) {
+                shiftBag.push(employee);
+            }
+            else {
+                console.log("Shift not found " + es.shiftId + " for employee shift " + es.employeeShiftId);
+            }
         });
     };
     EmployeeScheduleComponent.prototype.ngOnInit = function () {
