@@ -22,8 +22,8 @@ namespace Scheduler.Web.Api
 
             DateTime startTime = DateTime.Parse(date);
             startTime = StartOfWeek(startTime, DayOfWeek.Sunday);
-            startTime = TimeZoneHelper.ConvertFromUTC(startTime);
             DateTime endTime = startTime.AddDays(7);
+            endTime = endTime.AddHours(6);
 
             UserCanAccessOrganization(organizationId);
 
