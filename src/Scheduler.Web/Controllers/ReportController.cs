@@ -26,5 +26,32 @@ namespace Scheduler.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public IActionResult Employees(int organizationId)
+        {
+            UserCanAccessOrganization(organizationId);
+
+            EmployeesReportViewModel model = new EmployeesReportViewModel();
+
+            model.Organization = _schedulerContext.Organizations.Single(o => o.OrganizationId == organizationId).Name;
+            var employees = _schedulerContext.Employees.Where(e => e.Organization.OrganizationId == organizationId && e.IsActive == true);
+            model.Employees = employees.Select(e => new EmployeeReportViewModel {
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                EmployeeNumber = e.EmployeeNumber,
+                PhoneNumber = e.PhoneNumber,
+                Active = e.IsActive ? "Active" : "Inactive"
+            }).ToList();
+
+            model.Employees.ForEach(e => {
+                if (!string.IsNullOrEmpty(e.PhoneNumber) && e.PhoneNumber.Length == 10)
+                {
+                    e.PhoneNumber = string.Format("({0}) {1}-{2}", e.PhoneNumber.Substring(0, 3), e.PhoneNumber.Substring(3,3), e.PhoneNumber.Substring(6,4));
+                }
+            });
+
+            return View(model);
+        }
+
     }
 }

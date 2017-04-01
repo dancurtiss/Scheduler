@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var moment = require('moment');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var moment = require("moment");
 var OrganizationScheduleComponent = (function () {
     function OrganizationScheduleComponent(router, route) {
         this.router = router;
@@ -27,16 +27,17 @@ var OrganizationScheduleComponent = (function () {
         var dateString = moment(this.calendarDate).format('MMDDYYYY');
         this.router.navigate(['employeeschedule/detail/', this.organizationId, dateString]);
     };
-    OrganizationScheduleComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-organization-schedule',
-            templateUrl: 'organization-schedule.component.html',
-            styleUrls: ['organization-schedule.component.css']
-        }), 
-        __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute])
-    ], OrganizationScheduleComponent);
     return OrganizationScheduleComponent;
 }());
+OrganizationScheduleComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-organization-schedule',
+        templateUrl: 'organization-schedule.component.html',
+        styleUrls: ['organization-schedule.component.css']
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        router_1.ActivatedRoute])
+], OrganizationScheduleComponent);
 exports.OrganizationScheduleComponent = OrganizationScheduleComponent;
 //# sourceMappingURL=organization-schedule.component.js.map

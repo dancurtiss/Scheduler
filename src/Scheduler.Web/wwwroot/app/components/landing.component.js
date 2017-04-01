@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var LandingComponent = (function () {
     function LandingComponent(router, elementRef) {
         this.router = router;
@@ -19,16 +19,17 @@ var LandingComponent = (function () {
         var defaultRouteUrl = this.elementRef.nativeElement.parentElement.getAttribute('default-route-url');
         this.router.navigate([defaultRouteUrl]);
     };
-    LandingComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-landing',
-            templateUrl: 'landing.component.html',
-            styleUrls: ['landing.component.css']
-        }), 
-        __metadata('design:paramtypes', [router_1.Router, core_1.ElementRef])
-    ], LandingComponent);
     return LandingComponent;
 }());
+LandingComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-landing',
+        templateUrl: 'landing.component.html',
+        styleUrls: ['landing.component.css']
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        core_1.ElementRef])
+], LandingComponent);
 exports.LandingComponent = LandingComponent;
 //# sourceMappingURL=landing.component.js.map

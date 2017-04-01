@@ -1,0 +1,39 @@
+﻿@model Scheduler.Web.Models.ReportViewModels.EmployeesReportViewModel
+@{
+    Layout = "_ReportLayout";
+} 
+
+<div class="row">
+    <div class="col-md-12 h3"><h3>@Model.Organization</h3></div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <hr style="margin-top: 0px; margin-bottom: 20px;" />
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model.Employees)
+        {
+            <tr>
+                <td>
+                    @employee.FirstName @employee.LastName
+                </td>
+                <td>
+                    @employee.PhoneNumber
+                </td>
+                <td>
+                    @employee.EmployeeNumber
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
