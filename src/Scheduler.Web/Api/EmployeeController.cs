@@ -31,6 +31,7 @@ namespace Scheduler.Web.Api
             List<EmployeeModel> employees = _schedulerContext.Employees
                 .Include(e => e.Positions).ThenInclude(p => p.Position)
                 .Where(p => p.Organization.OrganizationId == id).ToList()
+                .OrderBy(e => e.FirstName)
                 .Select(o => new EmployeeModel(o)).ToList();
 
             return new EmployeeListModel { AvailablePositions = availablePositions, Employees = employees };

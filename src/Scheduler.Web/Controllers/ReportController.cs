@@ -41,7 +41,7 @@ namespace Scheduler.Web.Controllers
                 EmployeeNumber = e.EmployeeNumber,
                 PhoneNumber = e.PhoneNumber,
                 Active = e.IsActive ? "Active" : "Inactive"
-            }).ToList();
+            }).OrderBy(e => e.FirstName).ToList();
 
             model.Employees.ForEach(e => {
                 if (!string.IsNullOrEmpty(e.PhoneNumber) && e.PhoneNumber.Length == 10)
