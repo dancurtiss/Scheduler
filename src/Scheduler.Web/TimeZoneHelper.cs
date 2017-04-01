@@ -8,34 +8,49 @@ namespace Scheduler.Web
     public static class TimeZoneHelper
     {
 
-        public static DateTime ConvertToUTC(this DateTime date)
+        public static DateTime ConvertToUTC(this DateTime date, bool adjustForStaticShift)
         {
-            if (date.Kind == DateTimeKind.Utc) return date;
-
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            DateTime convertTime = TimeZoneInfo.ConvertTime(date, convertZone, TimeZoneInfo.Utc);
 
             // taking dst out of it
-            if (convertZone.IsDaylightSavingTime(convertTime))
+            if (adjustForStaticShift && convertZone.IsDaylightSavingTime(date))
             {
-                convertTime = convertTime.AddHours(1);
+                date = date.AddHours(1);
             }
+
+            if (date.Kind == DateTimeKind.Utc) return date;
+
+            DateTime convertTime = TimeZoneInfo.ConvertTime(date, convertZone, TimeZoneInfo.Utc);
 
             return convertTime;
         }
 
-        public static DateTime ConvertFromUTC(this DateTime date)
+        public static DateTime ConvertStaticShift(this DateTime date)
         {
-            if (date.Kind == DateTimeKind.Local) return date;
-
             TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            DateTime convertTime = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Utc, convertZone);
 
             // taking dst out of it
-            if (convertZone.IsDaylightSavingTime(convertTime))
+            if (convertZone.IsDaylightSavingTime(date))
             {
-                convertTime = convertTime.AddHours(-1);
+                date = date.AddHours(-1);
             }
+
+            return date;
+        }
+
+        public static DateTime ConvertFromUTC(this DateTime date, bool adjustForStaticShift)
+        {
+            TimeZoneInfo convertZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+
+            // taking dst out of it
+            if (adjustForStaticShift && convertZone.IsDaylightSavingTime(date))
+            {
+                date = date.AddHours(-1);
+            }
+
+            if (date.Kind == DateTimeKind.Local) return date;
+
+            DateTime convertTime = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Utc, convertZone);
 
             return convertTime;
         }

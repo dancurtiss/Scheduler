@@ -51,8 +51,8 @@ namespace Scheduler.Web.ApiModels
         public Schedule Export(Schedule schedule)
         {
             schedule.Name = this.Name;
-            schedule.StartDate = this.StartDate.Date.ConvertToUTC();
-            schedule.EndDate = this.EndDate.Date.ConvertToUTC();
+            schedule.StartDate = this.StartDate.Date.ConvertToUTC(true);
+            schedule.EndDate = this.EndDate.Date.ConvertToUTC(true);
             schedule.IsActive = this.IsActive;
 
             return schedule;

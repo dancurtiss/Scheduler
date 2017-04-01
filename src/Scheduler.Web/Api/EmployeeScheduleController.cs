@@ -29,9 +29,9 @@ namespace Scheduler.Web.Api
         {
             UserCanAccessOrganization(id);
 
-            var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture).ConvertToUTC();
+            var scheduleDate = DateTime.ParseExact(date, "MMddyyyy", CultureInfo.InvariantCulture).ConvertToUTC(false);
 
-            var endScheduleDate = scheduleDate.AddDays(1).ConvertToUTC();
+            var endScheduleDate = scheduleDate.AddDays(1).ConvertToUTC(false);
 
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es=>es.Shift)
@@ -103,7 +103,7 @@ namespace Scheduler.Web.Api
                     foreach (var shift in day.Shifts)
                     {
                         message += shift.Name + " - ";
-                        message += shift.StartTime.ConvertFromUTC().ToString("t") + "-" + shift.EndTime.ConvertFromUTC().ToString("t");
+                        message += shift.StartTime.ConvertFromUTC(false).ToString("t") + "-" + shift.EndTime.ConvertFromUTC(false).ToString("t");
                         message += "\n";
                     }
                 }
@@ -261,7 +261,7 @@ namespace Scheduler.Web.Api
             {
                 startTime = startTime.AddDays(1);
             }
-            startTime = startTime.Add(parsedStartTime);
+            startTime = startTime.Add(parsedStartTime).ConvertStaticShift();
 
             TimeSpan parsedEndTime = TimeSpan.Parse(shiftEntity.EndTime);
             DateTime endTime = employeeShift.ShiftDate.ToUniversalTime().Date;
@@ -269,7 +269,7 @@ namespace Scheduler.Web.Api
             {
                 endTime = endTime.AddDays(1);
             }
-            endTime = endTime.Add(parsedEndTime);
+            endTime = endTime.Add(parsedEndTime).ConvertStaticShift();
 
             EmployeeShift employeeShiftEntity = new EmployeeShift
             {

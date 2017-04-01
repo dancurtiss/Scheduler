@@ -23,8 +23,8 @@ namespace Scheduler.Web.ApiModels
             TimeSpan startTime = TimeSpan.Parse(shift.StartTime);
             TimeSpan endTime = TimeSpan.Parse(shift.EndTime);
 
-            StartTime = DateTime.UtcNow.Date.Add(startTime);
-            EndTime = DateTime.UtcNow.Date.Add(endTime);
+            StartTime = DateTime.UtcNow.Date.Add(startTime).ConvertStaticShift();
+            EndTime = DateTime.UtcNow.Date.Add(endTime).ConvertStaticShift();
 
             PositionId = shift.Position.PositionId;
         }
@@ -48,8 +48,8 @@ namespace Scheduler.Web.ApiModels
 
         public Shift Export(Shift shift, List<Position> positions)
         {
-            shift.StartTime = StartTime.ToUniversalTime().TimeOfDay.ToString(@"hh\:mm");
-            shift.EndTime = EndTime.ToUniversalTime().TimeOfDay.ToString(@"hh\:mm");
+            shift.StartTime = StartTime.ConvertToUTC(true).TimeOfDay.ToString(@"hh\:mm");
+            shift.EndTime = EndTime.ConvertToUTC(true).TimeOfDay.ToString(@"hh\:mm");
 
             shift.Position = positions.Single(p => p.PositionId == PositionId);
 
