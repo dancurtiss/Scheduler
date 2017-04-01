@@ -13,6 +13,7 @@ gulp.task('restore', function () {
         './node_modules/reflect-metadata/reflect.js',
         './node_modules/jquery/dist/*.js',
         './node_modules/bootstrap/dist/**/*.*',
+        './node_modules/ng2-coookies/src/**/*.*',
         './node_modules/moment/moment.js'
     ]).pipe(gulp.dest('./wwwroot/libs'));
 
@@ -57,6 +58,10 @@ gulp.task('restore', function () {
     gulp.src([
     './node_modules/ng2-bootstrap/**/*.js',
     ]).pipe(gulp.dest('./wwwroot/libs/ng2-bootstrap'));
+
+    gulp.src([
+    './node_modules/ng2-cookies/**/*.js',
+    ]).pipe(gulp.dest('./wwwroot/libs/ng2-cookies'));
 
     gulp.src([
     './node_modules/font-awesome/**/*.css',

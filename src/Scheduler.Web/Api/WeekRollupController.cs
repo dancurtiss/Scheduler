@@ -97,6 +97,8 @@ namespace Scheduler.Web.Api
 
         private static double CalculateTotalHours(List<EmployeeShift> shifts)
         {
+            shifts = shifts.OrderBy(s => s.ShiftStartTime).ToList();
+
             double totalMinutes = 0;
             List<EmployeeShift> countedShifts = new List<EmployeeShift>();
 
