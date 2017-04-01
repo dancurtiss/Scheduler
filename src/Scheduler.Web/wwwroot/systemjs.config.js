@@ -70,6 +70,7 @@
                 defaultExtension: 'js'
             },
             'ng2-cookies': {
+                main: './src/ng2-cookies.js',
                 defaultExtension: 'js'
             },
             'angular-in-memory-web-api': {

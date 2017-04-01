@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit }        from '@angular/core';
 import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, EmployeeConflict, ShiftDisplay } from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
@@ -54,19 +55,32 @@ export class EmployeeScheduleComponent implements OnInit {
         private dragulaService: DragulaService
     ) { 
         this.maxHeight = window.innerHeight - this.heightOffset;
+        this.employeeSort = 'First';
+        var employeeSortCookie = Cookie.get('employeeSort');
+        if (employeeSortCookie) {
+            this.employeeSort = employeeSortCookie;
+        }
     }
 
-    employeeSort: string = 'First';
+    employeeSort: string;
     toggleEmployeeSort() {
         if (this.employeeSort == 'Last'){
             this.employeeSort = 'First';
+        } else {
+            this.employeeSort = 'Last';
+        }
+        Cookie.set('employeeSort', this.employeeSort);
+        this.sortEmployees();
+    }
+
+    sortEmployees() {
+        if (this.employeeSort == 'First') {
             this.availableEmployees.sort((a, b) => {
                 if (a.firstName < b.firstName) return -1;
                 else if (a.firstName > b.firstName) return 1;
                 else return 0;
             });
         } else {
-            this.employeeSort = 'Last';
             this.availableEmployees.sort((a, b) => {
                 if (a.lastName < b.lastName) return -1;
                 else if (a.lastName > b.lastName) return 1;
@@ -139,6 +153,7 @@ export class EmployeeScheduleComponent implements OnInit {
                 this.availableGroupedShifts[pc] = this.availableShifts.filter((s) => { return s.positionCategory == pc; });
             });
 
+            this.sortEmployees();
             this.setupShiftBags();
         });
     }

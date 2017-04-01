@@ -6,6 +6,7 @@ import { RouterModule }  from '@angular/router';
 import { DragulaModule, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AlertModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { Cookie } from 'ng2-cookies/ng2-cookies'
 
 import { AppComponent }         from './app.component';
 

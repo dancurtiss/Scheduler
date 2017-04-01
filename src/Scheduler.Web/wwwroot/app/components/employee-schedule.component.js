@@ -8,11 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var ng2_dragula_1 = require("ng2-dragula/ng2-dragula");
-var employee_schedule_service_1 = require("../services/employee-schedule.service");
-var moment = require("moment");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
+var ng2_cookies_1 = require('ng2-cookies/ng2-cookies');
+var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var moment = require('moment');
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
  */
@@ -26,7 +27,6 @@ var EmployeeScheduleComponent = (function () {
         this.sendSmsPrompt = false;
         this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         this.heightOffset = 250;
-        this.employeeSort = 'First';
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
             return el.className.toLowerCase() === 'employee-item';
@@ -111,10 +111,24 @@ var EmployeeScheduleComponent = (function () {
             return false; // don't prevent any drags from initiating by default
         };
         this.maxHeight = window.innerHeight - this.heightOffset;
+        this.employeeSort = 'First';
+        var employeeSortCookie = ng2_cookies_1.Cookie.get('employeeSort');
+        if (employeeSortCookie) {
+            this.employeeSort = employeeSortCookie;
+        }
     }
     EmployeeScheduleComponent.prototype.toggleEmployeeSort = function () {
         if (this.employeeSort == 'Last') {
             this.employeeSort = 'First';
+        }
+        else {
+            this.employeeSort = 'Last';
+        }
+        ng2_cookies_1.Cookie.set('employeeSort', this.employeeSort);
+        this.sortEmployees();
+    };
+    EmployeeScheduleComponent.prototype.sortEmployees = function () {
+        if (this.employeeSort == 'First') {
             this.availableEmployees.sort(function (a, b) {
                 if (a.firstName < b.firstName)
                     return -1;
@@ -125,7 +139,6 @@ var EmployeeScheduleComponent = (function () {
             });
         }
         else {
-            this.employeeSort = 'Last';
             this.availableEmployees.sort(function (a, b) {
                 if (a.lastName < b.lastName)
                     return -1;
@@ -192,6 +205,7 @@ var EmployeeScheduleComponent = (function () {
             _this.positionCategories.forEach(function (pc) {
                 _this.availableGroupedShifts[pc] = _this.availableShifts.filter(function (s) { return s.positionCategory == pc; });
             });
+            _this.sortEmployees();
             _this.setupShiftBags();
         });
     };
@@ -344,19 +358,16 @@ var EmployeeScheduleComponent = (function () {
         }
         this.message = null;
     };
+    EmployeeScheduleComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-employee-schedules',
+            templateUrl: 'employee-schedule.component.html',
+            styleUrls: ['employee-schedule.component.css']
+        }), 
+        __metadata('design:paramtypes', [employee_schedule_service_1.EmployeeScheduleService, router_1.Router, router_1.ActivatedRoute, ng2_dragula_1.DragulaService])
+    ], EmployeeScheduleComponent);
     return EmployeeScheduleComponent;
 }());
-EmployeeScheduleComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-employee-schedules',
-        templateUrl: 'employee-schedule.component.html',
-        styleUrls: ['employee-schedule.component.css']
-    }),
-    __metadata("design:paramtypes", [employee_schedule_service_1.EmployeeScheduleService,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        ng2_dragula_1.DragulaService])
-], EmployeeScheduleComponent);
 exports.EmployeeScheduleComponent = EmployeeScheduleComponent;
 //# sourceMappingURL=employee-schedule.component.js.map

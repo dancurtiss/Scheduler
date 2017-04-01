@@ -8,10 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-require("rxjs/add/operator/toPromise");
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var handle_error_service_1 = require("../services/handle-error.service");
+require('rxjs/add/operator/toPromise');
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
+var handle_error_service_1 = require('../services/handle-error.service');
 var AuthorizationService = (function () {
     function AuthorizationService(http, handleErrorService) {
         this.http = http;
@@ -28,11 +28,11 @@ var AuthorizationService = (function () {
         })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    AuthorizationService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http, handle_error_service_1.HandleErrorService])
+    ], AuthorizationService);
     return AuthorizationService;
 }());
-AuthorizationService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http, handle_error_service_1.HandleErrorService])
-], AuthorizationService);
 exports.AuthorizationService = AuthorizationService;
 //# sourceMappingURL=authorization.service.js.map
