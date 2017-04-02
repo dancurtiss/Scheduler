@@ -8,12 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var position_service_1 = require("../services/position.service");
-var schedule_service_1 = require("../services/schedule.service");
-var organization_service_1 = require("../services/organization.service");
-var organization_manager_service_1 = require("../services/organization-manager.service");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var position_service_1 = require('../services/position.service');
+var schedule_service_1 = require('../services/schedule.service');
+var organization_service_1 = require('../services/organization.service');
+var organization_manager_service_1 = require('../services/organization-manager.service');
 var OrganizationDetailComponent = (function () {
     function OrganizationDetailComponent(organizationService, organizationManagerService, positionService, scheduleService, router, route) {
         this.organizationService = organizationService;
@@ -248,21 +248,16 @@ var OrganizationDetailComponent = (function () {
     OrganizationDetailComponent.prototype.onScheduleSelect = function (schedule) {
         this.router.navigate(['/schedule/detail', schedule.scheduleId]);
     };
+    OrganizationDetailComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-organization-detail',
+            templateUrl: 'organization-detail.component.html',
+            styleUrls: ['organization-detail.component.css']
+        }), 
+        __metadata('design:paramtypes', [organization_service_1.OrganizationService, organization_manager_service_1.OrganizationManagerService, position_service_1.PositionService, schedule_service_1.ScheduleService, router_1.Router, router_1.ActivatedRoute])
+    ], OrganizationDetailComponent);
     return OrganizationDetailComponent;
 }());
-OrganizationDetailComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-organization-detail',
-        templateUrl: 'organization-detail.component.html',
-        styleUrls: ['organization-detail.component.css']
-    }),
-    __metadata("design:paramtypes", [organization_service_1.OrganizationService,
-        organization_manager_service_1.OrganizationManagerService,
-        position_service_1.PositionService,
-        schedule_service_1.ScheduleService,
-        router_1.Router,
-        router_1.ActivatedRoute])
-], OrganizationDetailComponent);
 exports.OrganizationDetailComponent = OrganizationDetailComponent;
 //# sourceMappingURL=organization-detail.component.js.map

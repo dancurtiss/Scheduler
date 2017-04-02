@@ -28,7 +28,7 @@ namespace Scheduler.Web.ApiModels
         {
             EmployeeConflictId = employeeConflict.EmployeeConflictId;
             EmployeeId = employeeConflict.Employee.EmployeeId;
-            ConflictDate = employeeConflict.ConflictStart.Date.ConvertFromUTC(false);
+            ConflictDate = employeeConflict.ConflictStart.ConvertFromUTC(false).Date.AddMinutes(1);
             StartHour = employeeConflict.ConflictStart.ConvertFromUTC(false).Hour;
             EndHour = employeeConflict.ConflictEnd.ConvertFromUTC(false).Hour;
             Reason = employeeConflict.Reason;
@@ -55,10 +55,10 @@ namespace Scheduler.Web.ApiModels
         {
             employeeConflict.EmployeeConflictId = this.EmployeeConflictId;
 
-            var universalConflictDate = this.ConflictDate.ToUniversalTime();
+            var conflictDate = this.ConflictDate.ToUniversalTime();
 
-            employeeConflict.ConflictStart = universalConflictDate.AddHours(StartHour.HasValue ? StartHour.Value : 0);
-            employeeConflict.ConflictEnd = universalConflictDate.AddHours(EndHour.HasValue ? EndHour.Value : 24);
+            employeeConflict.ConflictStart = conflictDate.AddHours(StartHour.HasValue ? StartHour.Value : 0).ConvertToUTC(false);
+            employeeConflict.ConflictEnd = conflictDate.AddHours(EndHour.HasValue ? EndHour.Value : 24).ConvertToUTC(false);
 
             employeeConflict.Reason = this.Reason;
 

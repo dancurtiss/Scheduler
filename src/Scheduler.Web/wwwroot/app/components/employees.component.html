@@ -51,79 +51,90 @@
     </div>
 </div>
 
-<div class="row" *ngIf="selectedEmployee">
-    <div class="col-md-6">
-        <my-errors [errors]="errors"></my-errors>
-        <form name="employeeForm" novalidate>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="employeeFirstName">First Name</label>
-                        <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="employeeLastName">Last Name</label>
-                        <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="employeeNumber">Employee Number</label>
-                        <input type="text" class="form-control" id="employeeNumber" placeholder="" name="employeeNumber" [(ngModel)]="selectedEmployee.employeeNumber">
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Active</label>
-                        <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive" required>
-                            <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Positions</label>
-                        <div *ngFor="let position of selectedEmployeePositions">
-                            <label>
-                                <input type="checkbox"
-                                       name="employeePositions"
-                                       value="{{position.positionId}}"
-                                       [checked]="position.checked"
-                                       (change)="selectPosition(position)" />
-                                {{position.name}}
-                            </label>
+<div *ngIf="selectedEmployee" class="modal modal-xl fade show in danger" id="employeeSetupModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="selectedEmployee = null;$event.stopPropagation()">&times;</button>
+                <h4 class="modal-title">Employee Setup</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-7">
+                    <my-errors [errors]="errors"></my-errors>
+                    <form name="employeeForm" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="employeeFirstName">First Name</label>
+                                    <input type="text" class="form-control" id="employeeFirstName" placeholder="" name="firstName" [(ngModel)]="selectedEmployee.firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeeLastName">Last Name</label>
+                                    <input type="text" class="form-control" id="employeeLastName" placeholder="" name="lastName" [(ngModel)]="selectedEmployee.lastName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeeNumber">Employee Number</label>
+                                    <input type="text" class="form-control" id="employeeNumber" placeholder="" name="employeeNumber" [(ngModel)]="selectedEmployee.employeeNumber">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneNumber">Phone Number</label>
+                                    <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" [(ngModel)]="selectedEmployee.phoneNumber" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Active</label>
+                                    <select class="form-control" id="isActive" [(ngModel)]="selectedEmployee.isActive" name="isActive" required>
+                                        <option [value]="i" *ngFor="let i of [true,false]">{{i ? "Active" : "Inactive"}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Positions</label>
+                                    <div *ngFor="let position of selectedEmployeePositions">
+                                        <label>
+                                            <input type="checkbox"
+                                                   name="employeePositions"
+                                                   value="{{position.positionId}}"
+                                                   [checked]="position.checked"
+                                                   (change)="selectPosition(position)" />
+                                            {{position.name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                        <button type="submit" class="btn btn-primary" (click)="onSaveEmployee();">Submit</button>
+                        <button type="reset" class="btn btn-default" (click)="selectedEmployee = null;$event.stopPropagation()">Cancel</button>
+                    </form>
+                </div>
+                <div class="col-md-5" *ngIf="selectedEmployee.employeeId">
+                    <my-errors [errors]="accessErrors"></my-errors>
+                    <form name="accessForm" *ngIf="!selectedEmployeeAccess" novalidate>
+                        <div class="form-group">
+                            <label for="employeePassword">Password</label>
+                            <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" (click)="onAddEmployeeAccess(selectedEmployee.password);">Add Access</button>
+                    </form>
+                    <form name="resetForm" *ngIf="selectedEmployeeAccess" novalidate>
+                        <div class="form-group">
+                            <label for="employeePassword">Password</label>
+                            <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" (click)="onResetEmployeePassword(selectedEmployee.password);">Reset Password</button>
+                    </form>
+                    <br />
+                    <br />
+                    <form name="removeForm" *ngIf="selectedEmployeeAccess" novalidate>
+                        <button type="submit" class="btn btn-danger" (click)="onRemoveEmployeeAccess();">Remove Access</button>
+                    </form>
                 </div>
             </div>
-
-            <button type="submit" class="btn btn-primary" (click)="onSaveEmployee();">Submit</button>
-            <button type="reset" class="btn btn-default" (click)="selectedEmployee = null;$event.stopPropagation()">Cancel</button>
-        </form>
-    </div>
-    <div class="col-md-6" *ngIf="selectedEmployee.employeeId">
-        <my-errors [errors]="accessErrors"></my-errors>
-        <form name="accessForm" *ngIf="!selectedEmployeeAccess" novalidate>
-            <div class="form-group">
-                <label for="employeePassword">Password</label>
-                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
+            <div class="modal-footer">
             </div>
-
-            <button type="submit" class="btn btn-primary" (click)="onAddEmployeeAccess(selectedEmployee.password);">Add Access</button>
-        </form>
-        <form name="resetForm" *ngIf="selectedEmployeeAccess" novalidate>
-            <div class="form-group">
-                <label for="employeePassword">Password</label>
-                <input type="text" class="form-control" id="employeePassword" placeholder="" name="employeePassword" [(ngModel)]="selectedEmployee.password" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary" (click)="onResetEmployeePassword(selectedEmployee.password);">Reset Password</button>
-        </form>
-        <br />
-        <br />
-        <form name="removeForm" *ngIf="selectedEmployeeAccess" novalidate>
-            <button type="submit" class="btn btn-danger" (click)="onRemoveEmployeeAccess();">Remove Access</button>
-        </form>
+        </div>
     </div>
 </div>
-

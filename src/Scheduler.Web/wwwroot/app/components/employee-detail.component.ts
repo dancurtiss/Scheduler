@@ -53,6 +53,11 @@ export class EmployeeDetailComponent implements OnInit {
             this.organizationId = details.organizationId;
             this.organizationMessage = details.organizationMessage;
             this.conflicts = details.conflicts; 
+
+            this.conflicts.forEach((c) => {
+                c.conflictDate = moment(c.conflictDate).toDate();
+            });
+
             this.shifts = details.shifts;
             this.employeeName = details.employeeName;
             this.employeeDetails = details.employeeDetails;
