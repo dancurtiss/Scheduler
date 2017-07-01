@@ -30,6 +30,7 @@ namespace Scheduler.Web.Models.ReportViewModels
     public class EmployeeDayReportViewModel
     {
         public string Day { get; set; }
+        public DateTime DayDate { get; set; }
         public List<EmployeeShiftReportViewModel> Shifts { get; set; }
     }
 

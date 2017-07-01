@@ -64,6 +64,7 @@ namespace Scheduler.Web.Api
                     var dayGroup = days.SingleOrDefault(dg => dg.Key.DayOfWeek == (DayOfWeek)dayOfWeek);
 
                     EmployeeDayReportViewModel dayModel = new EmployeeDayReportViewModel();
+                    dayModel.DayDate = GetDateOfDay((DayOfWeek)dayOfWeek, startTime);
                     dayModel.Day = dayOfWeek.ToString();
                     dayModel.Shifts = new List<EmployeeShiftReportViewModel>();
 
@@ -93,6 +94,11 @@ namespace Scheduler.Web.Api
             model.Employees = model.Employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName).ToList();
 
             return model;
+        }
+
+        private DateTime GetDateOfDay(DayOfWeek dayOfWeek, DateTime startTime)
+        {
+            return startTime.AddDays((int)dayOfWeek);
         }
 
         private static double CalculateTotalHours(List<EmployeeShift> shifts)
