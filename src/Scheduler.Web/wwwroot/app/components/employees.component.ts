@@ -116,6 +116,9 @@ export class EmployeesComponent implements OnInit {
     }
 
     onDeleteEmployee(employeeId: number) {
+        var sure = confirm('Are you sure you want to delete this employee?');
+        if (!sure) return;
+
         this.employeeService.delete(employeeId).then(() => {
             this.selectedEmployee = null;
             this.getEmployees();

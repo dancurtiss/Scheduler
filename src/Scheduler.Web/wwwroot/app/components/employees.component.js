@@ -96,6 +96,9 @@ var EmployeesComponent = (function () {
     };
     EmployeesComponent.prototype.onDeleteEmployee = function (employeeId) {
         var _this = this;
+        var sure = confirm('Are you sure you want to delete this employee?');
+        if (!sure)
+            return;
         this.employeeService.delete(employeeId).then(function () {
             _this.selectedEmployee = null;
             _this.getEmployees();
