@@ -22,6 +22,7 @@ export class ScheduleDetailComponent implements OnInit {
     scheduleStart: Date;
     scheduleEnd: Date;
 
+    copyAllDays: boolean;
     copyFromDay: string;
     copyToDay: string;
 
@@ -86,7 +87,7 @@ export class ScheduleDetailComponent implements OnInit {
         this.selectedShift = { shiftId: 0, day: day, startTime: startTime, endTime: endTime, positionId: 0 };
     }
 
-    onSaveShift(): void {
+    onSaveShift(copyAllDays: boolean): void {
         this.shiftErrors = [];
         if (!this.selectedShift.day) {
             this.shiftErrors.push('Day is required.');
@@ -104,13 +105,15 @@ export class ScheduleDetailComponent implements OnInit {
             return;
         }
 
+        this.copyAllDays = false;
+
         if (this.selectedShift.shiftId) {
             this.shiftService.update(this.selectedShift).then((shift) => {
                 this.selectedShift = null;
                 this.getScheduleDetails();
             });
         } else {
-            this.shiftService.create(this.scheduleId, this.selectedShift).then((shift) => {
+            this.shiftService.create(this.scheduleId, this.selectedShift, copyAllDays).then((shift) => {
                 this.selectedShift = null;
                 this.getScheduleDetails();
             });

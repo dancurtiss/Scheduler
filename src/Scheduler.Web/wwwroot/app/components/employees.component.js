@@ -8,10 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var employee_service_1 = require('../services/employee.service');
-var employee_access_service_1 = require('../services/employee-access.service');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var employee_service_1 = require("../services/employee.service");
+var employee_access_service_1 = require("../services/employee-access.service");
 var EmployeesComponent = (function () {
     function EmployeesComponent(employeeService, employeeAccessService, router, route) {
         this.employeeService = employeeService;
@@ -159,16 +159,19 @@ var EmployeesComponent = (function () {
     EmployeesComponent.prototype.goToDetail = function (id) {
         this.router.navigate(['employee/detail/', id]);
     };
-    EmployeesComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-employees',
-            templateUrl: 'employees.component.html',
-            styleUrls: ['employees.component.css']
-        }), 
-        __metadata('design:paramtypes', [employee_service_1.EmployeeService, employee_access_service_1.EmployeeAccessService, router_1.Router, router_1.ActivatedRoute])
-    ], EmployeesComponent);
     return EmployeesComponent;
 }());
+EmployeesComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-employees',
+        templateUrl: 'employees.component.html',
+        styleUrls: ['employees.component.css']
+    }),
+    __metadata("design:paramtypes", [employee_service_1.EmployeeService,
+        employee_access_service_1.EmployeeAccessService,
+        router_1.Router,
+        router_1.ActivatedRoute])
+], EmployeesComponent);
 exports.EmployeesComponent = EmployeesComponent;
 //# sourceMappingURL=employees.component.js.map

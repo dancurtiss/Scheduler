@@ -35,7 +35,7 @@ namespace Scheduler.Web.Api
         }
 
         [HttpPost("{id}")]
-        public IActionResult Post(int id, [FromBody]ShiftModel shift)
+        public IActionResult Post(int id, [FromQuery]bool? copyAllDays, [FromBody]ShiftModel shift)
         {
             if (shift == null)
             {
@@ -52,10 +52,26 @@ namespace Scheduler.Web.Api
             UserCanAccessOrganization(schedule.Organization.OrganizationId);
 
             var positions = GetAvailableSchedulePositions(schedule);
-            var shiftEntity = shift.Export(positions);
-            shiftEntity.Schedule = schedule;
 
-            _schedulerContext.Shifts.Add(shiftEntity);
+            if (copyAllDays.HasValue && copyAllDays.Value)
+            {
+                foreach(DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                {
+                    var shiftEntity = shift.Export(positions);
+                    shiftEntity.Day = day.ToString();
+                    shiftEntity.Schedule = schedule;
+
+                    _schedulerContext.Shifts.Add(shiftEntity);
+                }
+            }
+            else
+            {
+                var shiftEntity = shift.Export(positions);
+                shiftEntity.Schedule = schedule;
+
+                _schedulerContext.Shifts.Add(shiftEntity);
+            }
+
             _schedulerContext.SaveChanges();
 
             return new ObjectResult(shift);

@@ -31,8 +31,9 @@ export class ShiftService {
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 
-    create(scheduleId: number, shift: Shift): Promise<Shift> {
-        const url = `${this.shiftsUrl}/${scheduleId}`;
+    create(scheduleId: number, shift: Shift, copyAllDays: boolean): Promise<Shift> {
+        var copy = copyAllDays ? `?copyAllDays=${copyAllDays}` : null;
+        const url = `${this.shiftsUrl}/${scheduleId}${copy}`;
         return this.http
             .post(url, JSON.stringify(shift), { headers: this.headers })
             .toPromise()

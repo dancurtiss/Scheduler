@@ -8,10 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var organization_service_1 = require('../services/organization.service');
-var organization_manager_service_1 = require('../services/organization-manager.service');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var organization_service_1 = require("../services/organization.service");
+var organization_manager_service_1 = require("../services/organization-manager.service");
 var OrganizationsComponent = (function () {
     function OrganizationsComponent(organizationService, organizationManagerService, router) {
         this.organizationService = organizationService;
@@ -120,16 +120,18 @@ var OrganizationsComponent = (function () {
     OrganizationsComponent.prototype.goToEmployees = function (id) {
         this.router.navigate(['/organization/employees', id]);
     };
-    OrganizationsComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-organizations',
-            templateUrl: 'organizations.component.html',
-            styleUrls: ['organizations.component.css']
-        }), 
-        __metadata('design:paramtypes', [organization_service_1.OrganizationService, organization_manager_service_1.OrganizationManagerService, router_1.Router])
-    ], OrganizationsComponent);
     return OrganizationsComponent;
 }());
+OrganizationsComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-organizations',
+        templateUrl: 'organizations.component.html',
+        styleUrls: ['organizations.component.css']
+    }),
+    __metadata("design:paramtypes", [organization_service_1.OrganizationService,
+        organization_manager_service_1.OrganizationManagerService,
+        router_1.Router])
+], OrganizationsComponent);
 exports.OrganizationsComponent = OrganizationsComponent;
 //# sourceMappingURL=organizations.component.js.map

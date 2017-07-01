@@ -72,13 +72,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="position" style="width: 100px;">Day</label>
                                 <select class="form-control" id="day" [(ngModel)]="selectedShift.day" name="day" required>
                                     <option>Please Select</option>
                                     <option [value]="i" *ngFor="let i of days">{{i}}</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="!selectedShift.shiftId">
+                            <div class="form-group">
+                                <label for="copyAllDays" style="width: 100px;">Copy to All Days</label>
+                                <input class="form-control" id="copyAllDays" name="copyAllDays" type="checkbox" [(ngModel)]="copyAllDays" />
                             </div>
                         </div>
                     </div>
@@ -101,7 +107,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" (click)="onSaveShift();">Submit</button>
+                <button type="submit" class="btn btn-primary" (click)="onSaveShift(copyAllDays);">Submit</button>
                 <button type="reset" class="btn btn-default" (click)="selectedShift = null;$event.stopPropagation()">Cancel</button>
             </div>
         </div>
