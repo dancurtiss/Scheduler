@@ -8,12 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var ng2_dragula_1 = require("ng2-dragula/ng2-dragula");
-var ng2_cookies_1 = require("ng2-cookies/ng2-cookies");
-var employee_schedule_service_1 = require("../services/employee-schedule.service");
-var moment = require("moment");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var ng2_dragula_1 = require('ng2-dragula/ng2-dragula');
+var ng2_cookies_1 = require('ng2-cookies/ng2-cookies');
+var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var moment = require('moment');
 /**
  * Need to figure out the UI of picking a schedule for a day... need schema here..
  */
@@ -29,7 +29,7 @@ var EmployeeScheduleComponent = (function () {
         this.heightOffset = 250;
         this.dragMoves = function (el, source, handle, sibling) {
             // only move favorite items, not the icon element
-            return el.className.toLowerCase() === 'employee-item';
+            return el.className.toLowerCase() === 'employee-item' || el.className.toLowerCase() === 'employee-item bg-conflicts';
         };
         this.dragAccepts = function (el, target, source, sibling) {
             _this.message = "";
@@ -54,6 +54,26 @@ var EmployeeScheduleComponent = (function () {
             // employee already exists
             if (_this.getEmployeeShiftObject(employeeId, shiftId) != null) {
                 _this.message = "Employee is already working this shift.";
+                return false;
+            }
+            // employee has conflict on this day
+            var allEmployeeConflicts = employee.conflicts;
+            var hasEmployeeConflict = false;
+            allEmployeeConflicts.forEach(function (existingConflict) {
+                var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
+                var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
+                if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                    hasEmployeeConflict = true;
+                    return;
+                }
+                var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
+                if (existingConflictWithin) {
+                    hasEmployeeConflict = true;
+                    return;
+                }
+            });
+            if (hasEmployeeConflict) {
+                _this.message = "Employee has a personal conflict at this time: " + employee.conflictSummary + ".";
                 return false;
             }
             // employee time overlap
@@ -358,19 +378,16 @@ var EmployeeScheduleComponent = (function () {
         }
         this.message = null;
     };
+    EmployeeScheduleComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-employee-schedules',
+            templateUrl: 'employee-schedule.component.html',
+            styleUrls: ['employee-schedule.component.css']
+        }), 
+        __metadata('design:paramtypes', [employee_schedule_service_1.EmployeeScheduleService, router_1.Router, router_1.ActivatedRoute, ng2_dragula_1.DragulaService])
+    ], EmployeeScheduleComponent);
     return EmployeeScheduleComponent;
 }());
-EmployeeScheduleComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-employee-schedules',
-        templateUrl: 'employee-schedule.component.html',
-        styleUrls: ['employee-schedule.component.css']
-    }),
-    __metadata("design:paramtypes", [employee_schedule_service_1.EmployeeScheduleService,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        ng2_dragula_1.DragulaService])
-], EmployeeScheduleComponent);
 exports.EmployeeScheduleComponent = EmployeeScheduleComponent;
 //# sourceMappingURL=employee-schedule.component.js.map

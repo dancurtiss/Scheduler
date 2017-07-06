@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var handle_error_service_1 = require("./services/handle-error.service");
-var TimerObservable_1 = require("rxjs/Observable/TimerObservable");
+var core_1 = require('@angular/core');
+var handle_error_service_1 = require('./services/handle-error.service');
+var TimerObservable_1 = require('rxjs/Observable/TimerObservable');
 var AppComponent = (function () {
     function AppComponent(handleErrorService) {
         this.handleErrorService = handleErrorService;
@@ -35,16 +35,16 @@ var AppComponent = (function () {
             this.timerSubscription.unsubscribe();
         }
     };
+    AppComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-app',
+            templateUrl: 'app.component.html',
+            styleUrls: []
+        }), 
+        __metadata('design:paramtypes', [handle_error_service_1.HandleErrorService])
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-app',
-        templateUrl: 'app.component.html',
-        styleUrls: []
-    }),
-    __metadata("design:paramtypes", [handle_error_service_1.HandleErrorService])
-], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

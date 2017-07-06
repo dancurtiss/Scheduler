@@ -292,7 +292,7 @@ export class EmployeeScheduleComponent implements OnInit {
 
     private dragMoves = (el, source, handle, sibling): boolean => {
         // only move favorite items, not the icon element
-        return el.className.toLowerCase() === 'employee-item';
+        return el.className.toLowerCase() === 'employee-item' || el.className.toLowerCase() === 'employee-item bg-conflicts';
     }
 
     private dragAccepts = (el, target, source, sibling): boolean => {
@@ -324,6 +324,31 @@ export class EmployeeScheduleComponent implements OnInit {
         // employee already exists
         if (this.getEmployeeShiftObject(employeeId, shiftId) != null) {
             this.message = "Employee is already working this shift.";
+            return false;
+        }
+
+        // employee has conflict on this day
+        var allEmployeeConflicts = employee.conflicts;
+        var hasEmployeeConflict = false;
+        allEmployeeConflicts.forEach((existingConflict) => {
+            var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
+            var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
+
+            if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                hasEmployeeConflict = true;
+                return;
+            }
+
+            var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
+
+            if (existingConflictWithin) {
+                hasEmployeeConflict = true;
+                return;
+            }
+        });
+
+        if (hasEmployeeConflict) {
+            this.message = "Employee has a personal conflict at this time: " + employee.conflictSummary + ".";
             return false;
         }
 

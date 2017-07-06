@@ -8,12 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var employee_conflict_service_1 = require("../services/employee-conflict.service");
-var employee_schedule_service_1 = require("../services/employee-schedule.service");
-var authorization_service_1 = require("../services/authorization.service");
-var moment = require("moment");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var employee_conflict_service_1 = require('../services/employee-conflict.service');
+var employee_schedule_service_1 = require('../services/employee-schedule.service');
+var authorization_service_1 = require('../services/authorization.service');
+var moment = require('moment');
 var EmployeeDetailComponent = (function () {
     function EmployeeDetailComponent(authService, employeeScheduleService, employeeConflictService, router, route) {
         this.authService = authService;
@@ -112,20 +112,16 @@ var EmployeeDetailComponent = (function () {
     EmployeeDetailComponent.prototype.onShiftSelect = function (shift) {
         this.selectedShift = shift;
     };
+    EmployeeDetailComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-employee-detail',
+            templateUrl: 'employee-detail.component.html',
+            styleUrls: ['employee-detail.component.css']
+        }), 
+        __metadata('design:paramtypes', [authorization_service_1.AuthorizationService, employee_schedule_service_1.EmployeeScheduleService, employee_conflict_service_1.EmployeeConflictService, router_1.Router, router_1.ActivatedRoute])
+    ], EmployeeDetailComponent);
     return EmployeeDetailComponent;
 }());
-EmployeeDetailComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'my-employee-detail',
-        templateUrl: 'employee-detail.component.html',
-        styleUrls: ['employee-detail.component.css']
-    }),
-    __metadata("design:paramtypes", [authorization_service_1.AuthorizationService,
-        employee_schedule_service_1.EmployeeScheduleService,
-        employee_conflict_service_1.EmployeeConflictService,
-        router_1.Router,
-        router_1.ActivatedRoute])
-], EmployeeDetailComponent);
 exports.EmployeeDetailComponent = EmployeeDetailComponent;
 //# sourceMappingURL=employee-detail.component.js.map
