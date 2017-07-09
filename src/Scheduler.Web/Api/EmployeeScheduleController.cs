@@ -324,11 +324,22 @@ namespace Scheduler.Web.Api
 
             UserCanAccessEmployee(employeeShiftEntity.Employee.EmployeeId);
 
+            bool addDayStartTime = modifyShift.StartTime.TimeOfDay.IsUtcTimeNextLocalDay();
+            bool addDayEndTime = modifyShift.EndTime.TimeOfDay.IsUtcTimeNextLocalDay();
+
             TimeSpan startTime = modifyShift.StartTime.ConvertToUTC(false).TimeOfDay;
             TimeSpan endTime = modifyShift.EndTime.ConvertToUTC(false).TimeOfDay;
 
             employeeShiftEntity.AdjustedStartTime = employeeShiftEntity.ShiftStartTime.Date.Add(startTime);
+            if (addDayStartTime)
+            {
+                employeeShiftEntity.AdjustedStartTime = employeeShiftEntity.AdjustedStartTime.Value.AddDays(1);
+            }
             employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.ShiftEndTime.Date.Add(endTime);
+            if (addDayEndTime)
+            {
+                employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.AdjustedEndTime.Value.AddDays(1);
+            }
 
             _schedulerContext.SaveChanges();
 

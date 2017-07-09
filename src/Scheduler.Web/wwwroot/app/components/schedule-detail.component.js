@@ -8,11 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var shift_service_1 = require('../services/shift.service');
-var schedule_service_1 = require('../services/schedule.service');
-var moment = require('moment');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var shift_service_1 = require("../services/shift.service");
+var schedule_service_1 = require("../services/schedule.service");
+var moment = require("moment");
 var ScheduleDetailComponent = (function () {
     function ScheduleDetailComponent(scheduleService, shiftService, router, route) {
         this.scheduleService = scheduleService;
@@ -123,16 +123,19 @@ var ScheduleDetailComponent = (function () {
     ScheduleDetailComponent.prototype.onShiftSelect = function (shift) {
         this.selectedShift = shift;
     };
-    ScheduleDetailComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-schedule-detail',
-            templateUrl: 'schedule-detail.component.html',
-            styleUrls: ['schedule-detail.component.css']
-        }), 
-        __metadata('design:paramtypes', [schedule_service_1.ScheduleService, shift_service_1.ShiftService, router_1.Router, router_1.ActivatedRoute])
-    ], ScheduleDetailComponent);
     return ScheduleDetailComponent;
 }());
+ScheduleDetailComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-schedule-detail',
+        templateUrl: 'schedule-detail.component.html',
+        styleUrls: ['schedule-detail.component.css']
+    }),
+    __metadata("design:paramtypes", [schedule_service_1.ScheduleService,
+        shift_service_1.ShiftService,
+        router_1.Router,
+        router_1.ActivatedRoute])
+], ScheduleDetailComponent);
 exports.ScheduleDetailComponent = ScheduleDetailComponent;
 //# sourceMappingURL=schedule-detail.component.js.map

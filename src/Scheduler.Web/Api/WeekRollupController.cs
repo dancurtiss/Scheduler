@@ -80,8 +80,8 @@ namespace Scheduler.Web.Api
 
                         shiftModel.Name = shift.Shift.Position.Name;
                         shiftModel.Category = shift.Shift.Position.Category;
-                        shiftModel.StartTime = shift.ShiftStartTime;
-                        shiftModel.EndTime = shift.ShiftEndTime;
+                        shiftModel.StartTime = shift.AdjustedStartTime ?? shift.ShiftStartTime;
+                        shiftModel.EndTime = shift.AdjustedEndTime ?? shift.ShiftEndTime;
 
                         dayModel.Shifts.Add(shiftModel);
                     }
@@ -101,32 +101,33 @@ namespace Scheduler.Web.Api
             return startTime.AddDays((int)dayOfWeek);
         }
 
-        private static double CalculateTotalHours(List<EmployeeShift> shifts)
+        private static double CalculateTotalHours(List<EmployeeShift> employeeShifts)
         {
-            shifts = shifts.OrderBy(s => s.ShiftStartTime).ToList();
+            List<CalcShift> shifts = employeeShifts.Select(es => new CalcShift(es)).ToList();
+            shifts = shifts.OrderBy(s => s.StartTime).ToList();
 
             double totalMinutes = 0;
-            List<EmployeeShift> countedShifts = new List<EmployeeShift>();
+            List<CalcShift> countedShifts = new List<CalcShift>();
 
-            foreach (EmployeeShift shift in shifts)
+            foreach (CalcShift shift in shifts)
             {
-                double maxShiftMinutes = shift.ShiftEndTime.Subtract(shift.ShiftStartTime).TotalMinutes;
+                double maxShiftMinutes = shift.EndTime.Subtract(shift.StartTime).TotalMinutes;
 
                 // Need to figure out how to deal with overlapping shifts when they occur
                 if (countedShifts.Count > 0)
                 {
-                    DateTime minStartTime = countedShifts.Min(s => s.ShiftStartTime);
-                    DateTime maxEndTime = countedShifts.Max(s => s.ShiftEndTime);
+                    DateTime minStartTime = countedShifts.Min(s => s.StartTime);
+                    DateTime maxEndTime = countedShifts.Max(s => s.EndTime);
 
-                    bool startOverlapExists = shift.ShiftStartTime >= minStartTime && shift.ShiftStartTime <= maxEndTime;
-                    bool endOverlapExists = shift.ShiftEndTime >= minStartTime && shift.ShiftEndTime <= maxEndTime;
+                    bool startOverlapExists = shift.StartTime >= minStartTime && shift.StartTime <= maxEndTime;
+                    bool endOverlapExists = shift.EndTime >= minStartTime && shift.EndTime <= maxEndTime;
 
                     if (startOverlapExists || endOverlapExists)
                     {
-                        double addedStartMinutes = minStartTime.Subtract(shift.ShiftStartTime).TotalMinutes;
+                        double addedStartMinutes = minStartTime.Subtract(shift.StartTime).TotalMinutes;
                         addedStartMinutes = addedStartMinutes < 0 ? 0 : addedStartMinutes;
 
-                        double addedEndMinutes = shift.ShiftEndTime.Subtract(maxEndTime).TotalMinutes;
+                        double addedEndMinutes = shift.EndTime.Subtract(maxEndTime).TotalMinutes;
                         addedEndMinutes = addedEndMinutes < 0 ? 0 : addedEndMinutes;
 
                         double addedMinutes = addedStartMinutes + addedEndMinutes;
@@ -160,5 +161,16 @@ namespace Scheduler.Web.Api
             return dt.AddDays(-1 * diff).Date;
         }
 
+        private class CalcShift
+        {
+            public CalcShift(EmployeeShift es)
+            {
+                StartTime = es.AdjustedStartTime ?? es.ShiftStartTime;
+                EndTime = es.AdjustedEndTime ?? es.ShiftEndTime;
+            }
+
+            public DateTime StartTime { get; set; }
+            public DateTime EndTime { get; set; }
+        }
     }
 }
