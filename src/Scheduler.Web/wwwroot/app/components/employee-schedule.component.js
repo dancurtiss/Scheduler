@@ -59,19 +59,21 @@ var EmployeeScheduleComponent = (function () {
             // employee has conflict on this day
             var allEmployeeConflicts = employee.conflicts;
             var hasEmployeeConflict = false;
-            allEmployeeConflicts.forEach(function (existingConflict) {
-                var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
-                var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
-                if (shiftStartWithinConflict || shiftEndWithinConflict) {
-                    hasEmployeeConflict = true;
-                    return;
-                }
-                var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
-                if (existingConflictWithin) {
-                    hasEmployeeConflict = true;
-                    return;
-                }
-            });
+            if (allEmployeeConflicts) {
+                allEmployeeConflicts.forEach(function (existingConflict) {
+                    var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
+                    var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
+                    if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                        hasEmployeeConflict = true;
+                        return;
+                    }
+                    var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
+                    if (existingConflictWithin) {
+                        hasEmployeeConflict = true;
+                        return;
+                    }
+                });
+            }
             if (hasEmployeeConflict) {
                 _this.message = "Employee has a personal conflict at this time: " + employee.conflictSummary + ".";
                 return false;
@@ -241,6 +243,10 @@ var EmployeeScheduleComponent = (function () {
             employee['employeeShiftId'] = es.employeeShiftId;
             employee['canceled'] = es.canceled;
             employee['reason'] = es.reason;
+            if (es.adjustedStartTime) {
+                employee['customShift'] = true;
+                employee['customShiftDisplay'] = moment(es.adjustedStartTime).format('LT') + '-' + moment(es.adjustedEndTime).format('LT');
+            }
             var shiftBag = _this.shiftBags[es.shiftId];
             if (shiftBag) {
                 shiftBag.push(employee);
@@ -287,8 +293,34 @@ var EmployeeScheduleComponent = (function () {
                 employeeShiftObject.employeeShiftId = employeeShiftId;
                 employeeShiftObject.canceled = false;
                 employeeShiftObject.reason = '';
+                employeeShiftObject.customShift = false;
+                employeeShiftObject.customShiftDisplay = null;
             }
             console.log('shift added', employeeShiftId);
+        });
+    };
+    EmployeeScheduleComponent.prototype.edit = function (employeeId, shiftId) {
+        var _this = this;
+        var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
+        this.employeeScheduleService.getEmployeeShift(employeeShiftObject.employeeShiftId).then(function (employeeShiftDetails) {
+            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.adjustedStartTime : employeeShiftDetails.shiftStartTime;
+            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.adjustedEndTime : employeeShiftDetails.shiftEndTime;
+            _this.customizeShift = JSON.parse(JSON.stringify(employeeShiftObject));
+            _this.customizeShiftObject = employeeShiftObject;
+        });
+    };
+    EmployeeScheduleComponent.prototype.onCustomizeShift = function () {
+        var _this = this;
+        var modifyShift = {
+            employeeShiftId: this.customizeShift.employeeShiftId,
+            startTime: this.customizeShift.startTime,
+            endTime: this.customizeShift.endTime
+        };
+        console.log('edit shift', this.customizeShift);
+        this.employeeScheduleService.modify(modifyShift).then(function () {
+            _this.customizeShift = null;
+            _this.customizeShiftObject.customShift = true;
+            _this.customizeShiftObject.customShiftDisplay = moment(modifyShift.startTime).format('LT') + '-' + moment(modifyShift.endTime).format('LT');
         });
     };
     EmployeeScheduleComponent.prototype.remove = function (employeeId, shiftId) {

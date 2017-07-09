@@ -14,6 +14,10 @@ export class EmployeeShift {
     shiftId: number;
     canceled: boolean;
     reason: string;
+    shiftStartTime: Date;
+    shiftEndTime: Date;
+    adjustedStartTime: Date;
+    adjustedEndTime: Date;
 }
 
 export class ShiftDisplay {
@@ -54,6 +58,12 @@ export class CopyDay {
 
 export class SendSMS {
     scheduleDate: Date;
+}
+
+export class ModifyEmployeeShift {
+    employeeShiftId: number;
+    startTime: Date;
+    endTime: Date;
 }
 
 export class CancelEmployeeShift {

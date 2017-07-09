@@ -17,8 +17,8 @@ namespace Scheduler.Data
         [Required]
         public DateTime ShiftEndTime { get; set; }
 
-        public DateTime AdjustedStartTime { get; set; }
-        public DateTime AdjustedEndTime { get; set; }
+        public DateTime? AdjustedStartTime { get; set; }
+        public DateTime? AdjustedEndTime { get; set; }
 
         public bool Canceled { get; set; }
         public string CancelReason { get; set; }

@@ -63,6 +63,22 @@ namespace Scheduler.Web.Api
 
             return new EmployeeScheduleModel(scheduleDate, endScheduleDate, employeeShifts, employeeConflicts, shifts, employees);
         }
+
+        [HttpGet("employeeshift/{id}")]
+        public EmployeeShiftModel GetEmployeeShift(int id)
+        {
+            UserCanAccessOrganization(id);
+
+            var employeeShifts = _schedulerContext.EmployeeShifts
+                .Include(es => es.Shift)
+                .Include(es => es.Employee)
+                .Include(es => es.Employee.Organization)
+                .Where(es => es.EmployeeShiftId == id)
+                .ToList();
+
+            return employeeShifts.Select(es => new EmployeeShiftModel(es)).SingleOrDefault();
+        }
+
         private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
         {
             int diff = dt.DayOfWeek - startOfWeek;
@@ -288,6 +304,35 @@ namespace Scheduler.Web.Api
             //_smsSender.SendSmsAsync("9529131633", $"Shift added {startTime.ToString("MM/dd/yyyy")}");
 
             return new ObjectResult(employeeShiftEntity.EmployeeShiftId);
+        }
+
+        [HttpPut("modify/{id}")]
+        [Authorize("Manage Employee Details")]
+        public IActionResult ModifyShift(int id, [FromBody]ModifyEmployeeShiftModel modifyShift)
+        {
+            if (modifyShift == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new ObjectResult(ModelState);
+            }
+
+            var employeeShiftEntity = _schedulerContext.EmployeeShifts.Include(es => es.Employee).Single(es => es.EmployeeShiftId == id);
+
+            UserCanAccessEmployee(employeeShiftEntity.Employee.EmployeeId);
+
+            TimeSpan startTime = modifyShift.StartTime.ConvertToUTC(false).TimeOfDay;
+            TimeSpan endTime = modifyShift.EndTime.ConvertToUTC(false).TimeOfDay;
+
+            employeeShiftEntity.AdjustedStartTime = employeeShiftEntity.ShiftStartTime.Date.Add(startTime);
+            employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.ShiftEndTime.Date.Add(endTime);
+
+            _schedulerContext.SaveChanges();
+
+            return new ObjectResult(employeeShiftEntity);
         }
 
         [HttpPut("{id}")]

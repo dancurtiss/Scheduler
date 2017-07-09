@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params }      from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
-import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, EmployeeConflict, ShiftDisplay } from '../models/employee-schedule';
+import { EmployeeSchedule, EmployeeDisplay, EmployeeShift, EmployeeConflict, ShiftDisplay, ModifyEmployeeShift } from '../models/employee-schedule';
 import { Position }             from '../models/schedule';
 import { EmployeeScheduleService }      from '../services/employee-schedule.service';
 import * as moment from 'moment'
@@ -47,6 +47,9 @@ export class EmployeeScheduleComponent implements OnInit {
     copyToDay: string;
     days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     heightOffset: number = 250;
+
+    customizeShift: any;
+    customizeShiftObject: any;
     
     constructor(
         private employeeScheduleService: EmployeeScheduleService,
@@ -171,6 +174,12 @@ export class EmployeeScheduleComponent implements OnInit {
             employee['employeeShiftId'] = es.employeeShiftId;
             employee['canceled'] = es.canceled;
             employee['reason'] = es.reason;
+
+            if (es.adjustedStartTime) {
+                employee['customShift'] = true;
+                employee['customShiftDisplay'] = moment(es.adjustedStartTime).format('LT') + '-' + moment(es.adjustedEndTime).format('LT');
+            }
+
             var shiftBag = this.shiftBags[es.shiftId];
 
             if (shiftBag) {
@@ -221,8 +230,38 @@ export class EmployeeScheduleComponent implements OnInit {
                 employeeShiftObject.employeeShiftId = employeeShiftId;
                 employeeShiftObject.canceled = false;
                 employeeShiftObject.reason = '';
+                employeeShiftObject.customShift = false;
+                employeeShiftObject.customShiftDisplay = null;
             }
+
             console.log('shift added', employeeShiftId);
+        });
+    }
+
+    edit(employeeId: number, shiftId: number) {
+        var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
+
+        this.employeeScheduleService.getEmployeeShift(employeeShiftObject.employeeShiftId).then((employeeShiftDetails) => {
+            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.adjustedStartTime : employeeShiftDetails.shiftStartTime;
+            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.adjustedEndTime : employeeShiftDetails.shiftEndTime;
+
+            this.customizeShift = JSON.parse(JSON.stringify(employeeShiftObject));
+            this.customizeShiftObject = employeeShiftObject;
+        });
+    }
+
+    onCustomizeShift() {
+        var modifyShift: ModifyEmployeeShift = {
+            employeeShiftId: this.customizeShift.employeeShiftId,
+            startTime: this.customizeShift.startTime,
+            endTime: this.customizeShift.endTime
+        };
+
+        console.log('edit shift', this.customizeShift);
+        this.employeeScheduleService.modify(modifyShift).then(() => {
+            this.customizeShift = null;
+            this.customizeShiftObject.customShift = true;
+            this.customizeShiftObject.customShiftDisplay = moment(modifyShift.startTime).format('LT') + '-' + moment(modifyShift.endTime).format('LT');
         });
     }
 
@@ -330,22 +369,24 @@ export class EmployeeScheduleComponent implements OnInit {
         // employee has conflict on this day
         var allEmployeeConflicts = employee.conflicts;
         var hasEmployeeConflict = false;
-        allEmployeeConflicts.forEach((existingConflict) => {
-            var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
-            var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
+        if (allEmployeeConflicts) {
+            allEmployeeConflicts.forEach((existingConflict) => {
+                var shiftStartWithinConflict = shift.shiftStartMinute >= (existingConflict.startHour * 60) && shift.shiftStartMinute < (existingConflict.endHour * 60);
+                var shiftEndWithinConflict = shift.shiftEndMinute > (existingConflict.startHour * 60) && shift.shiftEndMinute <= (existingConflict.endHour * 60);
 
-            if (shiftStartWithinConflict || shiftEndWithinConflict) {
-                hasEmployeeConflict = true;
-                return;
-            }
+                if (shiftStartWithinConflict || shiftEndWithinConflict) {
+                    hasEmployeeConflict = true;
+                    return;
+                }
 
-            var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
+                var existingConflictWithin = (existingConflict.startHour * 60) >= shift.shiftStartMinute && (existingConflict.startHour * 60) < shift.shiftEndMinute;
 
-            if (existingConflictWithin) {
-                hasEmployeeConflict = true;
-                return;
-            }
-        });
+                if (existingConflictWithin) {
+                    hasEmployeeConflict = true;
+                    return;
+                }
+            });
+        }
 
         if (hasEmployeeConflict) {
             this.message = "Employee has a personal conflict at this time: " + employee.conflictSummary + ".";

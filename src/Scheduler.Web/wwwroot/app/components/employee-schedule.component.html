@@ -76,9 +76,11 @@
 
                             <div class='container drag-drop-container' [dragula]='"schedule-bag"' [dragulaModel]='shiftBags[shift.shiftId]' attr.data-shift-id="{{shift.shiftId}}">
                                 <div>Drop Here</div>
-                                <div *ngFor='let employee of shiftBags[shift.shiftId]' [ngClass]="{'bg-canceled': employee.canceled}" title="{{employee.canceled?'Canceled: '+employee.reason:''}}" >
+                                <div *ngFor='let employee of shiftBags[shift.shiftId]' [ngClass]="{'bg-canceled': employee.canceled}" title="{{employee.canceled?'Canceled: '+employee.reason:employee.customShiftDisplay}}" >
                                     {{employee.firstName}} {{employee.lastName}}
+                                    <span *ngIf="employee.customShift">*</span>
                                     <button class="btn btn-danger btn-xs pull-right" (click)="remove(employee.employeeId, shift.shiftId)">X</button>
+                                    <button class="btn btn-danger btn-xs pull-right" style="margin-right: 5px;" (click)="edit(employee.employeeId, shift.shiftId)">Edit</button>
                                 </div>
                             </div>
                         </div>
@@ -89,6 +91,41 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="customizeShift" class="modal fade show in danger" id="customizeShiftModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="customizeShift = null;$event.stopPropagation()">&times;</button>
+                <h4 class="modal-title">Modify Shift</h4>
+            </div>
+            <div class="modal-body">
+                <my-errors [errors]="customizeShiftErrors"></my-errors>
+                <form class="form-inline" name="customizeShiftForm" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="startTime" class="pull-left" style="width: 100px; margin-top:40px;">Start Time</label>
+                                <timepicker class="pull-left" name="startTime" [(ngModel)]="customizeShift.startTime" [minuteStep]="15"></timepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="endTime" class="pull-left" style="width: 100px; margin-top:40px;">End Time</label>
+                                <timepicker class="pull-left" name="endTime" [(ngModel)]="customizeShift.endTime" [minuteStep]="15"></timepicker>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="onCustomizeShift();">Save</button>
+                <button type="reset" class="btn btn-default" (click)="customizeShift = null;$event.stopPropagation()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div *ngIf="copyToDay" class="modal fade show in danger" id="copyModal" role="dialog">
     <div class="modal-dialog">

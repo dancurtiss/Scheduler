@@ -29,6 +29,25 @@ var EmployeeScheduleService = (function () {
         })
             .catch(function (err) { _this.handleErrorService.handleError(err); });
     };
+    EmployeeScheduleService.prototype.getEmployeeShift = function (employeeShiftId) {
+        var _this = this;
+        var url = this.employeesUrl + "/employeeshift/" + employeeShiftId;
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) {
+            return response.json();
+        })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
+    EmployeeScheduleService.prototype.modify = function (modifyShift) {
+        var _this = this;
+        var url = this.employeesUrl + "/modify/" + modifyShift.employeeShiftId;
+        return this.http
+            .put(url, JSON.stringify(modifyShift), { headers: this.headers })
+            .toPromise()
+            .then(function () { return modifyShift; })
+            .catch(function (err) { _this.handleErrorService.handleError(err); });
+    };
     EmployeeScheduleService.prototype.delete = function (id) {
         var _this = this;
         var url = this.employeesUrl + "/" + id;

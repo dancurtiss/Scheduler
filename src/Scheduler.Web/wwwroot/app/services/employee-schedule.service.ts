@@ -2,7 +2,7 @@
 
 import { Injectable }    from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
-import { ShiftDisplay, EmployeeDisplay, EmployeeSchedule, AddEmployeeShift, CancelEmployeeShift, CopyWeek, CopyDay, SendSMS } from '../models/employee-schedule';
+import { ShiftDisplay, EmployeeDisplay, EmployeeSchedule, EmployeeShift, AddEmployeeShift, CancelEmployeeShift, ModifyEmployeeShift, CopyWeek, CopyDay, SendSMS } from '../models/employee-schedule';
 import { HandleErrorService } from '../services/handle-error.service'
 
 @Injectable()
@@ -20,6 +20,25 @@ export class EmployeeScheduleService {
             .then((response) => {
                 return response.json() as EmployeeSchedule;
             })
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
+    getEmployeeShift(employeeShiftId: number): Promise<EmployeeShift> {
+        const url = `${this.employeesUrl}/employeeshift/${employeeShiftId}`;
+        return this.http.get(url)
+            .toPromise()
+            .then((response) => {
+                return response.json() as EmployeeShift;
+            })
+            .catch((err) => { this.handleErrorService.handleError(err); });
+    }
+
+    modify(modifyShift: ModifyEmployeeShift): Promise<ModifyEmployeeShift> {
+        const url = `${this.employeesUrl}/modify/${modifyShift.employeeShiftId}`;
+        return this.http
+            .put(url, JSON.stringify(modifyShift), { headers: this.headers })
+            .toPromise()
+            .then(() => modifyShift)
             .catch((err) => { this.handleErrorService.handleError(err); });
     }
 

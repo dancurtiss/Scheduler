@@ -47,6 +47,12 @@ var SendSMS = (function () {
     return SendSMS;
 }());
 exports.SendSMS = SendSMS;
+var ModifyEmployeeShift = (function () {
+    function ModifyEmployeeShift() {
+    }
+    return ModifyEmployeeShift;
+}());
+exports.ModifyEmployeeShift = ModifyEmployeeShift;
 var CancelEmployeeShift = (function () {
     function CancelEmployeeShift() {
     }

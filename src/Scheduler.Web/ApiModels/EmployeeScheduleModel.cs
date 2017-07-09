@@ -42,6 +42,10 @@ namespace Scheduler.Web.ApiModels
             ShiftId = employeeShift.Shift.ShiftId;
             Canceled = employeeShift.Canceled;
             Reason = employeeShift.CancelReason;
+            ShiftStartTime = employeeShift.ShiftStartTime;
+            ShiftEndTime = employeeShift.ShiftEndTime;
+            AdjustedStartTime = employeeShift.AdjustedStartTime;
+            AdjustedEndTime = employeeShift.AdjustedEndTime;
         }
 
         public int EmployeeShiftId { get; set; }
@@ -49,6 +53,10 @@ namespace Scheduler.Web.ApiModels
         public int ShiftId { get; set; }
         public bool Canceled { get; set; }
         public string Reason { get; set; }
+        public DateTime ShiftStartTime { get; set; }
+        public DateTime ShiftEndTime { get; set; }
+        public DateTime? AdjustedStartTime { get; set; }
+        public DateTime? AdjustedEndTime { get; set; }
     }
 
     public class ShiftDisplayModel
@@ -130,6 +138,13 @@ namespace Scheduler.Web.ApiModels
     {
         public int EmployeeShiftId { get; set; }
         public string Reason { get; set; }
+    }
+
+    public class ModifyEmployeeShiftModel
+    {
+        public int EmployeeShiftId { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 
 }
