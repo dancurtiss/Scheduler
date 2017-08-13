@@ -324,18 +324,19 @@ namespace Scheduler.Web.Api
 
             UserCanAccessEmployee(employeeShiftEntity.Employee.EmployeeId);
 
-            bool addDayStartTime = modifyShift.StartTime.TimeOfDay.IsUtcTimeNextLocalDay();
-            bool addDayEndTime = modifyShift.EndTime.TimeOfDay.IsUtcTimeNextLocalDay();
+            bool addDayStartTime = modifyShift.StartTime.TimeOfDay.IsUtcTimeNextLocalDay() && !employeeShiftEntity.ShiftStartTime.TimeOfDay.IsUtcTimeNextLocalDay();
+            bool addDayEndTime = modifyShift.EndTime.TimeOfDay.IsUtcTimeNextLocalDay() && !employeeShiftEntity.ShiftEndTime.TimeOfDay.IsUtcTimeNextLocalDay();
 
             TimeSpan startTime = modifyShift.StartTime.ConvertToUTC(false).TimeOfDay;
             TimeSpan endTime = modifyShift.EndTime.ConvertToUTC(false).TimeOfDay;
 
             employeeShiftEntity.AdjustedStartTime = employeeShiftEntity.ShiftStartTime.Date.Add(startTime);
+            employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.ShiftEndTime.Date.Add(endTime);
+
             if (addDayStartTime)
             {
                 employeeShiftEntity.AdjustedStartTime = employeeShiftEntity.AdjustedStartTime.Value.AddDays(1);
             }
-            employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.ShiftEndTime.Date.Add(endTime);
             if (addDayEndTime)
             {
                 employeeShiftEntity.AdjustedEndTime = employeeShiftEntity.AdjustedEndTime.Value.AddDays(1);

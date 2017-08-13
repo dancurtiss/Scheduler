@@ -18,6 +18,10 @@ export class EmployeeShift {
     shiftEndTime: Date;
     adjustedStartTime: Date;
     adjustedEndTime: Date;
+    localShiftStartTime: Date;
+    localShiftEndTime: Date;
+    localAdjustedStartTime: Date;
+    localAdjustedEndTime: Date;
 }
 
 export class ShiftDisplay {

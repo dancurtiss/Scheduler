@@ -46,6 +46,18 @@ namespace Scheduler.Web.ApiModels
             ShiftEndTime = employeeShift.ShiftEndTime;
             AdjustedStartTime = employeeShift.AdjustedStartTime;
             AdjustedEndTime = employeeShift.AdjustedEndTime;
+
+            LocalShiftStartTime = ShiftStartTime.ConvertFromUTC(false);
+            LocalShiftEndTime = ShiftEndTime.ConvertFromUTC(false);
+
+            if (AdjustedStartTime.HasValue)
+            {
+                LocalAdjustedStartTime = AdjustedStartTime.Value.ConvertFromUTC(false);
+            }
+            if (AdjustedEndTime.HasValue)
+            {
+                LocalAdjustedEndTime = AdjustedEndTime.Value.ConvertFromUTC(false);
+            }
         }
 
         public int EmployeeShiftId { get; set; }
@@ -57,6 +69,10 @@ namespace Scheduler.Web.ApiModels
         public DateTime ShiftEndTime { get; set; }
         public DateTime? AdjustedStartTime { get; set; }
         public DateTime? AdjustedEndTime { get; set; }
+        public DateTime LocalShiftStartTime { get; set; }
+        public DateTime LocalShiftEndTime { get; set; }
+        public DateTime? LocalAdjustedStartTime { get; set; }
+        public DateTime? LocalAdjustedEndTime { get; set; }
     }
 
     public class ShiftDisplayModel

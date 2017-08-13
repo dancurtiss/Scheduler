@@ -177,7 +177,7 @@ export class EmployeeScheduleComponent implements OnInit {
 
             if (es.adjustedStartTime) {
                 employee['customShift'] = true;
-                employee['customShiftDisplay'] = moment(es.adjustedStartTime).format('LT') + '-' + moment(es.adjustedEndTime).format('LT');
+                employee['customShiftDisplay'] = moment(es.localAdjustedStartTime).format('LT') + '-' + moment(es.localAdjustedEndTime).format('LT');
             }
 
             var shiftBag = this.shiftBags[es.shiftId];
@@ -242,8 +242,8 @@ export class EmployeeScheduleComponent implements OnInit {
         var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
 
         this.employeeScheduleService.getEmployeeShift(employeeShiftObject.employeeShiftId).then((employeeShiftDetails) => {
-            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.adjustedStartTime : employeeShiftDetails.shiftStartTime;
-            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.adjustedEndTime : employeeShiftDetails.shiftEndTime;
+            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.localAdjustedStartTime : employeeShiftDetails.localShiftStartTime;
+            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.localAdjustedEndTime : employeeShiftDetails.localShiftEndTime;
 
             this.customizeShift = JSON.parse(JSON.stringify(employeeShiftObject));
             this.customizeShiftObject = employeeShiftObject;

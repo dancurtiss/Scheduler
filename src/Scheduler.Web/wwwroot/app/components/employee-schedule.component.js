@@ -245,7 +245,7 @@ var EmployeeScheduleComponent = (function () {
             employee['reason'] = es.reason;
             if (es.adjustedStartTime) {
                 employee['customShift'] = true;
-                employee['customShiftDisplay'] = moment(es.adjustedStartTime).format('LT') + '-' + moment(es.adjustedEndTime).format('LT');
+                employee['customShiftDisplay'] = moment(es.localAdjustedStartTime).format('LT') + '-' + moment(es.localAdjustedEndTime).format('LT');
             }
             var shiftBag = _this.shiftBags[es.shiftId];
             if (shiftBag) {
@@ -303,8 +303,8 @@ var EmployeeScheduleComponent = (function () {
         var _this = this;
         var employeeShiftObject = this.getEmployeeShiftObject(employeeId, shiftId);
         this.employeeScheduleService.getEmployeeShift(employeeShiftObject.employeeShiftId).then(function (employeeShiftDetails) {
-            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.adjustedStartTime : employeeShiftDetails.shiftStartTime;
-            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.adjustedEndTime : employeeShiftDetails.shiftEndTime;
+            employeeShiftObject.startTime = employeeShiftDetails.adjustedStartTime ? employeeShiftDetails.localAdjustedStartTime : employeeShiftDetails.localShiftStartTime;
+            employeeShiftObject.endTime = employeeShiftDetails.adjustedEndTime ? employeeShiftDetails.localAdjustedEndTime : employeeShiftDetails.localShiftEndTime;
             _this.customizeShift = JSON.parse(JSON.stringify(employeeShiftObject));
             _this.customizeShiftObject = employeeShiftObject;
         });
