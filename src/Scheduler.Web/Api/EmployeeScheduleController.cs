@@ -67,8 +67,6 @@ namespace Scheduler.Web.Api
         [HttpGet("employeeshift/{id}")]
         public EmployeeShiftModel GetEmployeeShift(int id)
         {
-            UserCanAccessOrganization(id);
-
             var employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Shift)
                 .Include(es => es.Employee)
@@ -76,7 +74,11 @@ namespace Scheduler.Web.Api
                 .Where(es => es.EmployeeShiftId == id)
                 .ToList();
 
-            return employeeShifts.Select(es => new EmployeeShiftModel(es)).SingleOrDefault();
+            var model = employeeShifts.Select(es => new EmployeeShiftModel(es)).SingleOrDefault();
+
+            UserCanAccessEmployee(model.EmployeeId);
+
+            return model;
         }
 
         private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
