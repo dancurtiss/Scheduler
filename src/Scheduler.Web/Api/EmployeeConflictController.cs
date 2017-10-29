@@ -29,11 +29,14 @@ namespace Scheduler.Web.Api
 
             List<EmployeeConflictModel> employeeConflicts = _schedulerContext.EmployeeConflicts.Include(ec => ec.Employee)
                 .Where(ec => ec.Employee.EmployeeId == id).ToList()
+                .OrderBy(es => es.ConflictStart)
                 .Select(ec => new EmployeeConflictModel(ec)).ToList();
 
+            DateTime fromDate = DateTime.Today.AddDays(-1);
             List<EmployeeShiftDisplayModel> employeeShifts = _schedulerContext.EmployeeShifts
                 .Include(es => es.Shift).ThenInclude(s => s.Position)
-                .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > DateTime.Today).ToList()
+                .Where(es => es.Employee.EmployeeId == id && es.ShiftStartTime > fromDate).ToList()
+                .OrderBy(es => es.AdjustedStartTime ?? es.ShiftStartTime)
                 .Select(es => new EmployeeShiftDisplayModel(es)).ToList();
 
             string positionsDisplay = string.Join(", ", employee.Positions.Select(ep => ep.Position.Name));

@@ -74,8 +74,8 @@ namespace Scheduler.Web.ApiModels
             ShiftId = employeeShift.Shift.ShiftId;
             PositionName = employeeShift.Shift.Position.Name;
             PositionCategory = employeeShift.Shift.Position.Category;
-            ShiftStartTime = employeeShift.AdjustedStartTime ?? employeeShift.ShiftStartTime;
-            ShiftEndTime = employeeShift.AdjustedEndTime ?? employeeShift.ShiftEndTime;
+            ShiftStartTime = (employeeShift.AdjustedStartTime ?? employeeShift.ShiftStartTime).ConvertFromUTC(false);
+            ShiftEndTime = (employeeShift.AdjustedEndTime ?? employeeShift.ShiftEndTime).ConvertFromUTC(false);
             Cancelled = employeeShift.Canceled;
             CancelReason = employeeShift.CancelReason;
         }
