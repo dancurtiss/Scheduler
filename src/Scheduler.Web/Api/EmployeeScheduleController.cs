@@ -115,8 +115,8 @@ namespace Scheduler.Web.Api
                     }
 
                     message += "---------------\n";
-                    message += day.Day;
-                    message += "\n---------------\n";
+                    message += day.Day + " " + day.DayDate.ToString("MM/dd/yyyy");
+                    message += "\n";
 
                     foreach (var shift in day.Shifts)
                     {
